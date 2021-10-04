@@ -2,14 +2,14 @@ import React from 'react'
 import { Text, View, ScrollView, StyleSheet } from 'react-native'
 import { Input, FAB, Divider, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Entypo';
+import loginStyles from './../style/LoginStyles'
+import * as constants from  './../Constants'
 
-const baseColor = '#145A32'
-
-export default LoginUserScreen = (props) => {
+export default LoginScreen = (props) => {
 	return (
-		<View style={styles.container}>
+		<View style={loginStyles.container}>
 			<View>
-				<Text style={styles.tittle}>Ubademy</Text>
+				<Text style={loginStyles.tittle}>Ubademy</Text>
 			</View>
 			<View>
 				<Input
@@ -18,7 +18,7 @@ export default LoginUserScreen = (props) => {
 						<Icon
 							name='user'
 							size={24}
-							color={baseColor}
+							color={constants.BASE_COLOR}
 						/>
 					}
 				/>
@@ -31,7 +31,7 @@ export default LoginUserScreen = (props) => {
 						<Icon
 							name='lock'
 							size={24}
-							color={baseColor}
+							color={constants.BASE_COLOR}
 						/>
 					}
 				/>
@@ -39,7 +39,7 @@ export default LoginUserScreen = (props) => {
 			<View>
 				<Button 
 					buttonStyle={{
-						backgroundColor: baseColor
+						backgroundColor: constants.BASE_COLOR
 					}}
           title="Sign in"
 				/>
@@ -48,7 +48,7 @@ export default LoginUserScreen = (props) => {
 				<Text style={{textAlign: 'center'}}>
 					Don't have an account?
 					<Text 
-						style={styles.signUp} 
+						style={loginStyles.signUp} 
 						onPress={() => props.navigation.navigate('CreateUserScreen')}
 					> Sign up</Text>
 				</Text>
@@ -56,22 +56,3 @@ export default LoginUserScreen = (props) => {
 		</View>
 	)
 }
-
-const styles = StyleSheet.create({
-	container: {
-		justifyContent: 'center',
-		flex:1
-	},
-	
-	tittle: {
-		padding: 20,
-		fontWeight: "bold",
-		fontSize: 40,
-		textAlign: "center",
-	},
-
-	signUp: {
-		fontWeight: "bold", 
-		color: baseColor
-	}
-})
