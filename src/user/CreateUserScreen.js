@@ -1,53 +1,68 @@
-import React, { useState } from 'react'
-import { View, Text, ScrollView, Button } from 'react-native'
-import { Input } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import React from 'react'
+import { Text, View, ScrollView, StyleSheet } from 'react-native'
+import { Input, FAB, Divider, Button } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/Entypo';
+import createUserStyles from './../style/CreateUserStyles'
+import * as constants from  './../Constants'
 
-export default CreateUserScreen = () => {
+export default CreateUserScreen = (props) => {
 
 	return (
-		<ScrollView>
+		<View style={createUserStyles.container}>
 			<View>
 				<Input
-					placeholder='First name'
+					placeholder='Username'
 					leftIcon={
 						<Icon
 							name='user'
 							size={24}
-							color='black'
+							color={constants.BASE_COLOR}
 						/>
 					}
-					/>
+				/>
 			</View>
-			<View>
+      <View>
 				<Input
-					placeholder='Last name'
+					placeholder='Email'
 					leftIcon={
 						<Icon
-							name='user'
+							name='mail'
 							size={24}
-							color='black'
+							color={constants.BASE_COLOR}
 						/>
 					}
-					/>
-			</View>
-			<View>
-				<Input
-					placeholder='Mail'
-					leftIcon={{ name: 'mail' }}
 				/>
 			</View>
 			<View>
-				<Input
-					placeholder='INPUT WITH ERROR MESSAGE'
-					errorStyle={{ color: 'red' }}
-					errorMessage='ENTER A VALID ERROR HERE'
+				<Input 
+					placeholder="Password" 
+					secureTextEntry={true} 
+					leftIcon={
+						<Icon
+							name='lock'
+							size={24}
+							color={constants.BASE_COLOR}
+						/>
+					}
 				/>
 			</View>
 			<View>
-				<Input placeholder="Password" secureTextEntry={true} />
+				<Button 
+          buttonStyle={{ 
+            backgroundColor: constants.BASE_COLOR 
+          }}
+          title="Sign up"
+				/>
 			</View>
-	 
-		</ScrollView>
+			<View style={{padding: 20}}>
+				<Text style={{textAlign: 'center'}}>
+					Don't have an account?
+					<Text 
+						style={createUserStyles.signUp} 
+						onPress={() => props.navigation.navigate('CreateUserScreen')}
+					> Sign up</Text>
+				</Text>
+			</View>
+		</View>
 	)
 }
