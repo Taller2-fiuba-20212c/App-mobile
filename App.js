@@ -15,8 +15,8 @@ function MyStack() {
     <Stack.Navigator screenOptions={{
       headerShown: false
     }}>
-      <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="CreateUserScreen" component={CreateUserScreen} />
+      <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="ModifyUserScreen" component={ModifyUserScreen} />
       <Stack.Screen name="UserDetailScreen" component={UserDetailScreen} />
     </Stack.Navigator>

@@ -9,13 +9,13 @@ export default loginStyles = StyleSheet.create({
 	
 	tittle: {
 		padding: 20,
-		fontWeight: "bold",
+		fontWeight: 'bold',
 		fontSize: 40,
-		textAlign: "center",
+		textAlign: 'center',
 	},
 
 	signUp: {
-		fontWeight: "bold", 
+		fontWeight: 'bold', 
 		color: constants.BASE_COLOR
 	}
 })

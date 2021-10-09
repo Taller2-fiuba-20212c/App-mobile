@@ -1,9 +1,8 @@
 import React from 'react'
-import { Text, View, ScrollView, StyleSheet } from 'react-native'
-import { Input, FAB, Divider, Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/Entypo';
+import { Text, View } from 'react-native'
+import NormalButton from './../components/NormalButton'
+import NormalInput from './../components/inputs/NormalInput'
 import loginStyles from './../style/LoginStyles'
-import * as constants from  './../Constants'
 
 export default LoginScreen = (props) => {
 	return (
@@ -12,37 +11,13 @@ export default LoginScreen = (props) => {
 				<Text style={loginStyles.tittle}>Ubademy</Text>
 			</View>
 			<View>
-				<Input
-					placeholder='Username'
-					leftIcon={
-						<Icon
-							name='user'
-							size={24}
-							color={constants.BASE_COLOR}
-						/>
-					}
-				/>
+        <NormalInput placeholder='Name' iconName='user' />
 			</View>
 			<View>
-				<Input 
-					placeholder="Password" 
-					secureTextEntry={true} 
-					leftIcon={
-						<Icon
-							name='lock'
-							size={24}
-							color={constants.BASE_COLOR}
-						/>
-					}
-				/>
+        <NormalInput placeholder='Password' password={true} iconName='lock' />
 			</View>
 			<View>
-				<Button 
-					buttonStyle={{
-						backgroundColor: constants.BASE_COLOR
-					}}
-          title="Sign in"
-				/>
+				<NormalButton title="Sign in"/>
 			</View>
 			<View style={{padding: 20}}>
 				<Text style={{textAlign: 'center'}}>

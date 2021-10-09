@@ -1,66 +1,48 @@
 import React from 'react'
-import { Text, View, ScrollView, StyleSheet } from 'react-native'
-import { Input, FAB, Divider, Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/Entypo';
+import { Text, View } from 'react-native'
+import NormalInput from './../components/inputs/NormalInput'
+import EmailInput from './../components/inputs/EmailInput'
+import BirthdayInput from './../components/inputs/BirthdayInput'
+import NormalButton from './../components/NormalButton'
 import createUserStyles from './../style/CreateUserStyles'
-import * as constants from  './../Constants'
 
 export default CreateUserScreen = (props) => {
-
 	return (
 		<View style={createUserStyles.container}>
-			<View>
-				<Input
-					placeholder='Username'
-					leftIcon={
-						<Icon
-							name='user'
-							size={24}
-							color={constants.BASE_COLOR}
-						/>
-					}
-				/>
+      <View>
+				<Text style={createUserStyles.tittle}>Register</Text>
 			</View>
       <View>
-				<Input
-					placeholder='Email'
-					leftIcon={
-						<Icon
-							name='mail'
-							size={24}
-							color={constants.BASE_COLOR}
-						/>
-					}
-				/>
+        <NormalInput placeholder='Name' iconName='user' />
+			</View>
+      <View>
+        <NormalInput placeholder='Last name' iconName='user' />
 			</View>
 			<View>
-				<Input 
-					placeholder="Password" 
-					secureTextEntry={true} 
-					leftIcon={
-						<Icon
-							name='lock'
-							size={24}
-							color={constants.BASE_COLOR}
-						/>
-					}
-				/>
+        <NormalInput placeholder='Username' iconName='user' />
+			</View>
+      <View>
+				<EmailInput/>
+			</View>
+      <View>
+				<BirthdayInput/>
 			</View>
 			<View>
-				<Button 
-          buttonStyle={{ 
-            backgroundColor: constants.BASE_COLOR 
-          }}
-          title="Sign up"
-				/>
+        <NormalInput placeholder='Password' password={true} iconName='lock' />
 			</View>
-			<View style={{padding: 20}}>
+      <View>
+        <NormalInput placeholder='Confirm password' password={true} iconName='lock' />
+			</View>
+			<View>
+				<NormalButton title="Sign up"/>
+			</View>
+      <View style={{padding: 20}}>
 				<Text style={{textAlign: 'center'}}>
-					Don't have an account?
+					Have an account?
 					<Text 
-						style={createUserStyles.signUp} 
-						onPress={() => props.navigation.navigate('CreateUserScreen')}
-					> Sign up</Text>
+						style={createUserStyles.signIn} 
+						onPress={() => props.navigation.navigate('LoginScreen')}
+					> Sign in</Text>
 				</Text>
 			</View>
 		</View>
