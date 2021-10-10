@@ -3,7 +3,7 @@ import { Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Entypo';
 import * as constants from  './../../Constants'
 
-export default EmailInput = () => {
+export default EmailInput = (props) => {
   const [e, setE] = useState(null)
 
   const validate = (email) => {
@@ -13,12 +13,13 @@ export default EmailInput = () => {
     } else { 
       setE(null)
     }
+    props.onChangeText(email)
   }
 
   return (
     <Input
       placeholder='Email'
-      onChangeText={email => validate(email)}
+      onChangeText={email => {validate(email)}}
       errorStyle={{ color:'red' }}
       errorMessage={e}
       leftIcon={

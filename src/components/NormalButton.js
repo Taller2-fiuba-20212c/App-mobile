@@ -5,10 +5,10 @@ import * as constants from  './../Constants'
 export default NormalButton = (props) => {
   return (
     <Button 
+      {...props}
       buttonStyle={{ 
         backgroundColor: constants.BASE_COLOR 
       }}
-      title={props.title}
     />
   )
 }

@@ -6,8 +6,7 @@ import * as constants from  '../../Constants'
 export default PasswordInput = (props) => {
   return (
     <Input
-      placeholder={props.placeholder}
-      secureTextEntry={props.password}
+      {...props}
       leftIcon={
         <Icon
           name={props.iconName}

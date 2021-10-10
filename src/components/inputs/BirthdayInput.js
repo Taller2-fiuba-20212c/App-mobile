@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Entypo';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as constants from  './../../Constants'
 
-export default BirthdayInput = () => {
+export default BirthdayInput = (props) => {
   const [date, setDate] = useState(new Date(1598051730000));
   const [show, setShow] = useState(false);
   const [dateSelected, setDateSelected] = useState(null);
@@ -14,8 +14,9 @@ export default BirthdayInput = () => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
-    let newDateSelected = currentDate.getDate() + '/' + (currentDate.getMonth() + 1) + '/' + currentDate.getFullYear();
+    let newDateSelected = currentDate.getDate() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
     setDateSelected(newDateSelected);
+    props.onChangeText(newDateSelected)
   };
 
   const showDatepicker = () => {
