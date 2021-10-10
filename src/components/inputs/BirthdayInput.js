@@ -8,11 +8,14 @@ import * as constants from  './../../Constants'
 export default BirthdayInput = () => {
   const [date, setDate] = useState(new Date(1598051730000));
   const [show, setShow] = useState(false);
+  const [dateSelected, setDateSelected] = useState(null);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
+    let newDateSelected = currentDate.getDate() + '/' + (currentDate.getMonth() + 1) + '/' + currentDate.getFullYear();
+    setDateSelected(newDateSelected);
   };
 
   const showDatepicker = () => {
@@ -24,7 +27,7 @@ export default BirthdayInput = () => {
       <TouchableOpacity onPress={showDatepicker}>
         <Input
           placeholder='Birthday'
-          value=''
+          value={dateSelected}
           disabled={true}
           leftIcon={
             <Icon
