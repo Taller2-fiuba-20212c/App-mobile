@@ -8,7 +8,7 @@ import * as constants from  './../../Constants'
 export default BirthdayInput = (props) => {
   const [date, setDate] = useState(new Date(1598051730000));
   const [show, setShow] = useState(false);
-  const [dateSelected, setDateSelected] = useState(null);
+  const [dateSelected, setDateSelected] = useState(props.value);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -20,7 +20,7 @@ export default BirthdayInput = (props) => {
   };
 
   const showDatepicker = () => {
-    setShow(true)
+    setShow(true && !props.disabled)
   };
 
   return (

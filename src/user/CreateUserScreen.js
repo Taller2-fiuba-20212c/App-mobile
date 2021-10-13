@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
-import { Text, View } from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
 import NormalInput from './../components/inputs/NormalInput'
 import EmailInput from './../components/inputs/EmailInput'
 import BirthdayInput from './../components/inputs/BirthdayInput'
 import NormalButton from './../components/NormalButton'
-import createUserStyles from './../style/CreateUserStyles'
+import UserStyles from '../style/UserStyles'
 
-import axios from 'axios';
-
-export default CreateUserScreen = (props) => {
+export default CreateUserScreen = ({navigation}) => {
   const initialState = {
     name: '',
     lastname: '',
@@ -19,35 +17,28 @@ export default CreateUserScreen = (props) => {
   }
   const [userInfo, setUserInfo] = useState(initialState);
 
-  const saveNewUser = () => {
-    console.log(userInfo)
-    // axios({
-    //   method: "POST",
-    //   url: "http://localhost:3000/users/create",
-    //   data: {
-    //     name: userInfo.name,
-    //     lastname: userInfo.lastname,
-    //     email: userInfo.email,
-    //     birthday: userInfo.birthday
-    //   },
-    // })
-    // .then(response => console.log(response.data))
-    // .catch(err => console.log(err))
-    axios({
-      url: 'http://localhost:3000/users/ping'
+  const createNewUser = () => {
+    navigation.navigate('ProfileScreen', {
+      userInfo: {
+        name: "Alex",
+        lastname: "Arbieto",
+        username: "alex1161",
+        birthday: "20-02-1999",
+        email: "alexander@gmail.com",
+        password: "123456"
+      }
     })
-    .then(response => console.log(response))
-    .catch(err => console.log(err))
-  };
+  }
 
   const handleChangeText = (value, name) => {
     setUserInfo({ ...userInfo, [name]: value });
   };
 
 	return (
-		<View style={createUserStyles.container}>
+    <ScrollView>
+		<View style={UserStyles.container}>
       <View>
-				<Text style={createUserStyles.tittle}>Register</Text>
+				<Text style={UserStyles.tittle}>Register</Text>
 			</View>
       <View>
         <NormalInput 
@@ -88,17 +79,18 @@ export default CreateUserScreen = (props) => {
         <NormalInput placeholder='Confirm password' secureTextEntry={true} iconName='lock' />
 			</View>
 			<View>
-				<NormalButton onPress={() => saveNewUser()} title="Sign up"/>
+				<NormalButton title="Sign up" onPress={() => createNewUser()}/>
 			</View>
       <View style={{padding: 20}}>
 				<Text style={{textAlign: 'center'}}>
 					Have an account?
 					<Text 
-						style={createUserStyles.signIn} 
-						onPress={() => props.navigation.navigate('LoginScreen')}
+						style={UserStyles.signInUp} 
+						onPress={() => navigation.navigate('LoginScreen')}
 					> Sign in</Text>
 				</Text>
 			</View>
 		</View>
+    </ScrollView>
 	)
 }

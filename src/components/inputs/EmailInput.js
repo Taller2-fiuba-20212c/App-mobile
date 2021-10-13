@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/Entypo';
 import * as constants from  './../../Constants'
 
 export default EmailInput = (props) => {
-  const [e, setE] = useState(null)
+  const [e, setE] = useState(props.value)
 
   const validate = (email) => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
@@ -18,6 +18,8 @@ export default EmailInput = (props) => {
 
   return (
     <Input
+      value={props.value}
+      disabled={props.disabled}
       placeholder='Email'
       onChangeText={email => {validate(email)}}
       errorStyle={{ color:'red' }}

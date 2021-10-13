@@ -6,7 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import LoginScreen from './src/user/LoginScreen';
 import CreateUserScreen from './src/user/CreateUserScreen';
 import ModifyUserScreen from './src/user/ModifyUserScreen';
-import UserDetailScreen from './src/user/UserDetailScreen';
+import ProfileScreen from './src/user/ProfileScreen';
 
 const Stack = createNativeStackNavigator()
 
@@ -15,10 +15,10 @@ function MyStack() {
     <Stack.Navigator screenOptions={{
       headerShown: false
     }}>
-      <Stack.Screen name="CreateUserScreen" component={CreateUserScreen} />
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
+      <Stack.Screen name="CreateUserScreen" component={CreateUserScreen} />
       <Stack.Screen name="ModifyUserScreen" component={ModifyUserScreen} />
-      <Stack.Screen name="UserDetailScreen" component={UserDetailScreen} />
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
     </Stack.Navigator>
   )
 }

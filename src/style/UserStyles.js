@@ -1,7 +1,7 @@
 import {StyleSheet} from "react-native";
-import * as constants from  './../Constants'
+import * as constants from  '../Constants'
 
-export default createUserStyles = StyleSheet.create({
+export default UserStyles = StyleSheet.create({
 	container: {
     justifyContent: 'center',
 		flex: 1,
@@ -14,7 +14,7 @@ export default createUserStyles = StyleSheet.create({
 		textAlign: 'center',
 	},
   
-  signIn: {
+  signInUp: {
     fontWeight: 'bold', 
     color: constants.BASE_COLOR,
   }
