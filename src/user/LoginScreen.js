@@ -3,19 +3,24 @@ import { Text, View } from 'react-native'
 import NormalButton from './../components/NormalButton'
 import NormalInput from './../components/inputs/NormalInput'
 import UserStyles from './../style/UserStyles'
+import { login } from './../rest/UbademyAPI'
 
 export default LoginScreen = (props) => {
   const initialState = {
-    name: '',
+    email: '',
     password: '',
   }
-  const [login, setLogin] = useState(initialState);
+
+  const [user, setUser] = useState(initialState);
 
   const handleChangeText = (value, name) => {
-    setLogin({ ...login, [name]: value });
+    setUser({ ...user, [name]: value });
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
+    await login(user.email, user.password)
+    .then(response => console.log(response))
+
     props.navigation.navigate('ProfileScreen', {
       userInfo: {
         name: "Alex",
@@ -35,9 +40,9 @@ export default LoginScreen = (props) => {
 			</View>
 			<View>
         <NormalInput 
-          onChangeText={(value) => handleChangeText(value, "name")} 
-          placeholder='Username' 
-          iconName='user' 
+          onChangeText={(value) => handleChangeText(value, "email")} 
+          placeholder='Email' 
+          iconName='mail' 
         />
 			</View>
 			<View>

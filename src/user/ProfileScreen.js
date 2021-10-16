@@ -1,10 +1,10 @@
 import React from 'react'
 import { View, Text } from 'react-native'
+import { Button } from 'react-native-elements';
 import UserStyles from './../style/UserStyles'
 import NormalButton from './../components/NormalButton'
 import NormalInput from './../components/inputs/NormalInput'
 import EmailInput from './../components/inputs/EmailInput'
-import BirthdayInput from './../components/inputs/BirthdayInput'
 
 export default ProfileScreen = ({navigation, route}) => {
   const userInfo = route.params.userInfo;
@@ -14,6 +14,10 @@ export default ProfileScreen = ({navigation, route}) => {
     navigation.navigate('ModifyUserScreen', {
       userInfo
     })
+  }
+
+  const deleteUser = () => {
+    
   }
 
 	return (
@@ -37,19 +41,8 @@ export default ProfileScreen = ({navigation, route}) => {
           iconName='user' 
         />
 			</View>
-			<View>
-        <NormalInput 
-          disabled={true}
-          value={userInfo.username}
-          placeholder='Username' 
-          iconName='user' 
-        />
-			</View>
       <View>
 				<EmailInput disabled={true} value={userInfo.email} />
-			</View>
-      <View>
-				<BirthdayInput disabled={true} value={userInfo.birthday} />
 			</View>
 			<View>
         <NormalInput 
@@ -62,6 +55,11 @@ export default ProfileScreen = ({navigation, route}) => {
 			</View>
 			<View>
 				<NormalButton onPress={() => goToModifyUser()} title="Edit"/>
+			</View>
+      <View style={{paddingTop: 10}}>
+				<Button title="Delete" onPress={() => deleteUser()}buttonStyle={{
+          backgroundColor: "#a30000" 
+        }}/>
 			</View>
 		</View>
 	)

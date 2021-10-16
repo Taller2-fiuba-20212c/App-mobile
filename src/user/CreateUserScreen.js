@@ -1,29 +1,28 @@
 import React, { useState } from 'react'
-import { ScrollView, Text, View } from 'react-native'
+import { SafeAreaView, ScrollView, Text, View } from 'react-native'
 import NormalInput from './../components/inputs/NormalInput'
 import EmailInput from './../components/inputs/EmailInput'
-import BirthdayInput from './../components/inputs/BirthdayInput'
 import NormalButton from './../components/NormalButton'
 import UserStyles from '../style/UserStyles'
+import { register } from './../rest/UbademyAPI'
 
 export default CreateUserScreen = ({navigation}) => {
   const initialState = {
     name: '',
     lastname: '',
-    username: '',
     email: '',
-    birthday: '',
     password: '',
   }
   const [userInfo, setUserInfo] = useState(initialState);
 
-  const createNewUser = () => {
+  const createNewUser = async () => {
+    await register(userInfo.email, userInfo.password, userInfo.name, userInfo.lastname)
+    .then(response => console.log(response))
+    .catch(err => {})
     navigation.navigate('ProfileScreen', {
       userInfo: {
         name: "Alex",
         lastname: "Arbieto",
-        username: "alex1161",
-        birthday: "20-02-1999",
         email: "alexander@gmail.com",
         password: "123456"
       }
@@ -35,8 +34,8 @@ export default CreateUserScreen = ({navigation}) => {
   };
 
 	return (
+    <View style={UserStyles.container}>
     <ScrollView>
-		<View style={UserStyles.container}>
       <View>
 				<Text style={UserStyles.tittle}>Register</Text>
 			</View>
@@ -54,18 +53,8 @@ export default CreateUserScreen = ({navigation}) => {
           iconName='user' 
         />
 			</View>
-			<View>
-        <NormalInput 
-          onChangeText={(value) => handleChangeText(value, "username")} 
-          placeholder='Username' 
-          iconName='user' 
-        />
-			</View>
       <View>
 				<EmailInput onChangeText={(value) => handleChangeText(value, "email")} />
-			</View>
-      <View>
-				<BirthdayInput onChangeText={(value) => handleChangeText(value, "birthday")} />
 			</View>
 			<View>
         <NormalInput 
@@ -90,7 +79,8 @@ export default CreateUserScreen = ({navigation}) => {
 					> Sign in</Text>
 				</Text>
 			</View>
-		</View>
+		
     </ScrollView>
+    </View>
 	)
 }

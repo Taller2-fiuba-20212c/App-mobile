@@ -4,7 +4,6 @@ import UserStyles from './../style/UserStyles'
 import NormalButton from './../components/NormalButton'
 import NormalInput from './../components/inputs/NormalInput'
 import EmailInput from './../components/inputs/EmailInput'
-import BirthdayInput from './../components/inputs/BirthdayInput'
 
 export default ModifyUserScreen = ({navigation, route}) => {
   const userInfo = route.params.userInfo;
@@ -14,8 +13,6 @@ export default ModifyUserScreen = ({navigation, route}) => {
       userInfo: {
         name: "Alex",
         lastname: "Arbieto",
-        username: "alex1161",
-        birthday: "20-02-1999",
         email: "alexander@gmail.com",
         password: "123456"
       }
@@ -41,18 +38,8 @@ export default ModifyUserScreen = ({navigation, route}) => {
           iconName='user' 
         />
 			</View>
-			<View>
-        <NormalInput 
-          value={userInfo.username}
-          placeholder='Username' 
-          iconName='user' 
-        />
-			</View>
       <View>
 				<EmailInput value={userInfo.email} />
-			</View>
-      <View>
-				<BirthdayInput value={userInfo.birthday} />
 			</View>
 			<View>
         <NormalInput 
