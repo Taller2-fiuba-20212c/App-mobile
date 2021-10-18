@@ -5,6 +5,7 @@ import UserStyles from './../style/UserStyles'
 import NormalButton from './../components/NormalButton'
 import NormalInput from './../components/inputs/NormalInput'
 import EmailInput from './../components/inputs/EmailInput'
+import * as constants from  './../Constants'
 
 export default ProfileScreen = ({navigation, route}) => {
   const userInfo = route.params.userInfo;
@@ -58,7 +59,7 @@ export default ProfileScreen = ({navigation, route}) => {
 			</View>
       <View style={{paddingTop: 10}}>
 				<Button title="Delete" onPress={() => deleteUser()}buttonStyle={{
-          backgroundColor: "#a30000" 
+          backgroundColor: constants.DANGGER_COLOR
         }}/>
 			</View>
 		</View>
