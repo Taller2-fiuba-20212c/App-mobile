@@ -2,8 +2,11 @@ import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 import NormalButton from './../components/NormalButton'
 import NormalInput from './../components/inputs/NormalInput'
+import EmailInput from './../components/inputs/EmailInput'
 import UserStyles from './../style/UserStyles'
 import { login } from './../rest/UbademyAPI'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as constants from  './../Constants'
 
 export default LoginScreen = (props) => {
   const initialState = {
@@ -17,18 +20,27 @@ export default LoginScreen = (props) => {
     setUser({ ...user, [name]: value });
   };
 
-  const handleLogin = async () => {
-    await login(user.email, user.password)
-    .then(response => console.log(response))
+  const storeData = async (key_name, value) => {
+    try {
+      await AsyncStorage.setItem(key_name, value)
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
-    props.navigation.navigate('ProfileScreen', {
+  const handleLogin = async () => {
+    const {
+      accessToken, active, created_on, email, id, lastname, name, refreshToken, uid
+    } = await login(user.email, user.password)
+    storeData(constants.ACCESS_TOKEN, accessToken)
+    storeData(constants.REFRESH_TOKEN, refreshToken)
+
+    props.navigation.navigate('WelcomeScreen', {
       userInfo: {
-        name: "Alex",
-        lastname: "Arbieto",
-        username: "alex1161",
-        birthday: "20-02-1999",
-        email: "alexander@gmail.com",
-        password: "123456"
+        name: name,
+        lastname: lastname,
+        email: email,
+        password: constants.FAKE_PASSWORD,
       }
     })
   }
@@ -39,11 +51,7 @@ export default LoginScreen = (props) => {
 				<Text style={UserStyles.tittle}>Ubademy</Text>
 			</View>
 			<View>
-        <NormalInput 
-          onChangeText={(value) => handleChangeText(value, "email")} 
-          placeholder='Email' 
-          iconName='mail' 
-        />
+        <EmailInput onChangeText={(value) => handleChangeText(value, "email")} />
 			</View>
 			<View>
         <NormalInput 

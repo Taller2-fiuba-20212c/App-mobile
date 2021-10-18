@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { SafeAreaView, ScrollView, Text, View } from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
 import NormalInput from './../components/inputs/NormalInput'
 import EmailInput from './../components/inputs/EmailInput'
 import NormalButton from './../components/NormalButton'
@@ -19,14 +19,7 @@ export default CreateUserScreen = ({navigation}) => {
     await register(userInfo.email, userInfo.password, userInfo.name, userInfo.lastname)
     .then(response => console.log(response))
     .catch(err => {})
-    navigation.navigate('ProfileScreen', {
-      userInfo: {
-        name: "Alex",
-        lastname: "Arbieto",
-        email: "alexander@gmail.com",
-        password: "123456"
-      }
-    })
+    navigation.navigate('LoginScreen')
   }
 
   const handleChangeText = (value, name) => {
@@ -54,7 +47,7 @@ export default CreateUserScreen = ({navigation}) => {
         />
 			</View>
       <View>
-				<EmailInput onChangeText={(value) => handleChangeText(value, "email")} />
+				<EmailInput validate={true} onChangeText={(value) => handleChangeText(value, "email")} />
 			</View>
 			<View>
         <NormalInput 

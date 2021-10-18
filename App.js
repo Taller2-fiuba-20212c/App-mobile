@@ -7,6 +7,7 @@ import LoginScreen from './src/user/LoginScreen';
 import CreateUserScreen from './src/user/CreateUserScreen';
 import ModifyUserScreen from './src/user/ModifyUserScreen';
 import ProfileScreen from './src/user/ProfileScreen';
+import WelcomeScreen from './src/user/WelcomeScreen';
 
 const Stack = createNativeStackNavigator()
 
@@ -19,6 +20,7 @@ function MyStack() {
       <Stack.Screen name="CreateUserScreen" component={CreateUserScreen} />
       <Stack.Screen name="ModifyUserScreen" component={ModifyUserScreen} />
       <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+      <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
     </Stack.Navigator>
   )
 }

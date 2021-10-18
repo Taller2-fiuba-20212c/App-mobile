@@ -27,7 +27,7 @@ export default ProfileScreen = ({navigation, route}) => {
 			</View>
       <View>
         <NormalInput 
-          disabled={true}
+          disabled={disabledValue}
           value={userInfo.name}
           placeholder='Name' 
           iconName='user' 
@@ -35,20 +35,20 @@ export default ProfileScreen = ({navigation, route}) => {
 			</View>
       <View>
         <NormalInput 
-          disabled={true}
+          disabled={disabledValue}
           value={userInfo.lastname}
           placeholder='Last name' 
           iconName='user' 
         />
 			</View>
       <View>
-				<EmailInput disabled={true} value={userInfo.email} />
+				<EmailInput disabled={disabledValue} value={userInfo.email} />
 			</View>
 			<View>
         <NormalInput 
           value={userInfo.password}
           placeholder='Password' 
-          disabled={true}
+          disabled={disabledValue}
           secureTextEntry={true} 
           iconName='lock' 
         />

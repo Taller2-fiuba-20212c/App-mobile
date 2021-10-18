@@ -9,14 +9,7 @@ export default ModifyUserScreen = ({navigation, route}) => {
   const userInfo = route.params.userInfo;
 
   const handleSaveUser = () => {
-    navigation.navigate('ProfileScreen', {
-      userInfo: {
-        name: "Alex",
-        lastname: "Arbieto",
-        email: "alexander@gmail.com",
-        password: "123456"
-      }
-    })
+    navigation.navigate('WelcomeScreen')
   }
 
 	return (
@@ -39,7 +32,7 @@ export default ModifyUserScreen = ({navigation, route}) => {
         />
 			</View>
       <View>
-				<EmailInput value={userInfo.email} />
+				<EmailInput validate={true} value={userInfo.email} />
 			</View>
 			<View>
         <NormalInput 
