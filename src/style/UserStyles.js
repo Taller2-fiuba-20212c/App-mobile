@@ -1,5 +1,5 @@
 import {StyleSheet} from "react-native";
-import * as constants from  '../Constants'
+import { BASE_COLOR} from  '../consts'
 
 export default UserStyles = StyleSheet.create({
 	container: {
@@ -16,6 +16,6 @@ export default UserStyles = StyleSheet.create({
   
   signInUp: {
     fontWeight: 'bold', 
-    color: constants.BASE_COLOR,
+    color: BASE_COLOR,
   }
 })

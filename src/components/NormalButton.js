@@ -1,13 +1,13 @@
 import React from 'react'
 import { Button } from 'react-native-elements';
-import * as constants from  './../Constants'
+import { BASE_COLOR } from './../consts'
 
 export default NormalButton = (props) => {
   return (
     <Button 
       {...props}
       buttonStyle={{ 
-        backgroundColor: constants.BASE_COLOR 
+        backgroundColor: BASE_COLOR 
       }}
     />
   )

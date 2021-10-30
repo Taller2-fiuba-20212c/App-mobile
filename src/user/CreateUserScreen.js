@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
-import NormalInput from './../components/inputs/NormalInput'
-import EmailInput from './../components/inputs/EmailInput'
-import NormalButton from './../components/NormalButton'
+import { NormalButton, NormalInput, EmailInput } from './../components'
 import UserStyles from '../style/UserStyles'
 import { register } from './../rest/UbademyAPI'
 

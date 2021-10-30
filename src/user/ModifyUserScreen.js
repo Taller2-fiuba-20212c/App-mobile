@@ -1,9 +1,7 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 import UserStyles from './../style/UserStyles'
-import NormalButton from './../components/NormalButton'
-import NormalInput from './../components/inputs/NormalInput'
-import EmailInput from './../components/inputs/EmailInput'
+import { NormalButton, NormalInput, EmailInput } from './../components'
 
 export default ModifyUserScreen = ({navigation, route}) => {
   const userInfo = route.params.userInfo;
