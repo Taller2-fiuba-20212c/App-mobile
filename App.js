@@ -12,7 +12,7 @@ const Stack = createNativeStackNavigator()
 function MyStack() {
   return (
     <Stack.Navigator screenOptions={{
-      headerShown: false
+      headerShown: false,
     }}>
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="CreateUserScreen" component={CreateUserScreen} />
@@ -30,7 +30,11 @@ export default function App() {
         padding: StatusBar.currentHeight,
       }
     }>
-      <NavigationContainer>
+      <NavigationContainer theme={{
+        colors: {
+          background: '#ffffff',
+        }
+      }}>
         <MyStack />
       </NavigationContainer>
     </SafeAreaProvider>
