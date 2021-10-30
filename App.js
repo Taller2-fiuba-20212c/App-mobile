@@ -3,11 +3,9 @@ import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import LoginScreen from './src/user/LoginScreen';
-import CreateUserScreen from './src/user/CreateUserScreen';
-import ModifyUserScreen from './src/user/ModifyUserScreen';
-import ProfileScreen from './src/user/ProfileScreen';
-import WelcomeScreen from './src/user/WelcomeScreen';
+import { 
+  LoginScreen, CreateUserScreen, ModifyUserScreen, ProfileScreen, WelcomeScreen
+} from './src/scenes'
 
 const Stack = createNativeStackNavigator()
 
