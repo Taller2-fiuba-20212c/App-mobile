@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
-import { NormalButton, NormalInput, EmailInput } from '../components'
-// import NormalButton from './../components/NormalButton'
-// import NormalInput from './../components/inputs/NormalInput'
-// import EmailInput from './../components/inputs/EmailInput'
+import { NormalButton, NormalInput, EmailInput } from './../components'
 import UserStyles from './../style/UserStyles'
 import { login } from './../rest/UbademyAPI'
 import AsyncStorage from '@react-native-async-storage/async-storage';

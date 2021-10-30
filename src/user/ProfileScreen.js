@@ -2,9 +2,7 @@ import React from 'react'
 import { View, Text } from 'react-native'
 import { Button } from 'react-native-elements';
 import UserStyles from './../style/UserStyles'
-import NormalButton from './../components/NormalButton'
-import NormalInput from './../components/inputs/NormalInput'
-import EmailInput from './../components/inputs/EmailInput'
+import { NormalButton, NormalInput, EmailInput } from './../components'
 import { DANGGER_COLOR } from  './../consts'
 
 export default ProfileScreen = ({navigation, route}) => {
