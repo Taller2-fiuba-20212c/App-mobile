@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
-import NormalButton from './../components/NormalButton'
+import { NormalButton } from './../components'
 import UserStyles from './../style/UserStyles'
 
 export default LoginScreen = ({navigation, route}) => {

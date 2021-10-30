@@ -1,9 +1,9 @@
 import React from 'react'
 import { Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Entypo';
-import * as constants from  '../../Constants'
+import { BASE_COLOR } from  '../../consts'
 
-export default PasswordInput = (props) => {
+export default NormalInput = (props) => {
   return (
     <Input
       {...props}
@@ -11,7 +11,7 @@ export default PasswordInput = (props) => {
         <Icon
           name={props.iconName}
           size={24}
-          color={constants.BASE_COLOR}
+          color={BASE_COLOR}
         />
       }
     />
