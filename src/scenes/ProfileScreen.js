@@ -22,7 +22,7 @@ export default ProfileScreen = ({navigation, route}) => {
 	return (
 		<View style={UserStyles.container}>
       <View>
-				<Text style={UserStyles.tittle}>Profile</Text>
+				<Text style={UserStyles.title}>Profile</Text>
 			</View>
       <View>
         <NormalInput 

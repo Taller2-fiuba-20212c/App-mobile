@@ -7,7 +7,7 @@ export default UserStyles = StyleSheet.create({
 		flex: 1,
 	},
 
-  tittle: {
+  title: {
 		padding: 20,
 		fontWeight: 'bold',
 		fontSize: 40,

@@ -28,7 +28,7 @@ export default CreateUserScreen = ({navigation}) => {
     <View style={UserStyles.container}>
     <ScrollView>
       <View>
-				<Text style={UserStyles.tittle}>Register</Text>
+				<Text style={UserStyles.title}>Register</Text>
 			</View>
       <View>
         <NormalInput 

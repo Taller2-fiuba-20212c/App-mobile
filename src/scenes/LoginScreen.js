@@ -46,7 +46,7 @@ export default LoginScreen = (props) => {
 	return (
 		<View style={UserStyles.container}>
 			<View>
-				<Text style={UserStyles.tittle}>Ubademy</Text>
+				<Text style={UserStyles.title}>Login</Text>
 			</View>
 			<View>
         <EmailInput onChangeText={(value) => handleChangeText(value, "email")} />
@@ -68,11 +68,18 @@ export default LoginScreen = (props) => {
 			<View style={{padding: 20}}>
 				<Text style={{textAlign: 'center'}}>
 					Don't have an account?
-					<Text 
-						style={UserStyles.signInUp} 
-						onPress={() => props.navigation.navigate('CreateUserScreen')}
-					> Sign up</Text>
 				</Text>
+        <Text style={{textAlign: 'center'}}>
+          <Text 
+            style={UserStyles.signInUp} 
+            onPress={() => props.navigation.navigate('CreateUserScreen')}
+          >Sign up </Text>
+          |
+          <Text 
+            style={UserStyles.signInUp} 
+            onPress={() => props.navigation.navigate('PrincipalScreen')}
+          > Browse</Text>
+        </Text>
 			</View>
 		</View>
 	)

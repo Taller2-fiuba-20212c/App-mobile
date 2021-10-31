@@ -13,7 +13,7 @@ export default ModifyUserScreen = ({navigation, route}) => {
 	return (
 		<View style={UserStyles.container}>
       <View>
-				<Text style={UserStyles.tittle}>Modify user</Text>
+				<Text style={UserStyles.title}>Modify user</Text>
 			</View>
       <View>
         <NormalInput 
