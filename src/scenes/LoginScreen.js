@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
-import { NormalButton, NormalInput, EmailInput } from './../components'
+import { NormalButton, NormalInput, EmailInput,PasswordInput } from './../components'
 import UserStyles from './../style/UserStyles'
 import { login } from './../rest/UbademyAPI'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -33,7 +33,7 @@ export default LoginScreen = (props) => {
     storeData(ACCESS_TOKEN, accessToken)
     storeData(REFRESH_TOKEN, refreshToken)
 
-    props.navigation.navigate('WelcomeScreen', {
+    props.navigation.navigate('ProfileScreen', {
       userInfo: {
         name: name,
         lastname: lastname,
@@ -52,11 +52,8 @@ export default LoginScreen = (props) => {
         <EmailInput onChangeText={(value) => handleChangeText(value, "email")} />
 			</View>
 			<View>
-        <NormalInput 
+        <PasswordInput 
           onChangeText={(value) => handleChangeText(value, "password")} 
-          placeholder='Password' 
-          secureTextEntry={true} 
-          iconName='lock' 
         />
 			</View>
 			<View>

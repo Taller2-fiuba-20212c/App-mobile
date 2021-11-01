@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
-import { NormalButton, NormalInput, EmailInput } from './../components'
+import { NormalButton, NormalInput, EmailInput, PasswordInput } from './../components'
 import UserStyles from '../style/UserStyles'
 import { register } from './../rest/UbademyAPI'
 
@@ -48,15 +48,15 @@ export default CreateUserScreen = ({navigation}) => {
 				<EmailInput validate={true} onChangeText={(value) => handleChangeText(value, "email")} />
 			</View>
 			<View>
-        <NormalInput 
+        <PasswordInput 
           onChangeText={(value) => handleChangeText(value, "password")} 
-          placeholder='Password' 
-          secureTextEntry={true} 
-          iconName='lock' 
         />
 			</View>
       <View>
-        <NormalInput placeholder='Confirm password' secureTextEntry={true} iconName='lock' />
+      <PasswordInput 
+          onChangeText={(value) => handleChangeText(value, "password")} 
+          confirm={true}
+        />
 			</View>
 			<View>
 				<NormalButton title="Sign up" onPress={() => createNewUser()}/>

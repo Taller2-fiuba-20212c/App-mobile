@@ -44,12 +44,10 @@ export default ProfileScreen = ({navigation, route}) => {
 				<EmailInput disabled={disabledValue} value={userInfo.email} />
 			</View>
 			<View>
-        <NormalInput 
-          value={userInfo.password}
-          placeholder='Password' 
+        <PasswordInput 
+          value={userInfo.password} 
           disabled={disabledValue}
-          secureTextEntry={true} 
-          iconName='lock' 
+          hideVisibility={true}
         />
 			</View>
 			<View>

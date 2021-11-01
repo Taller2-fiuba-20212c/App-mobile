@@ -33,11 +33,8 @@ export default ModifyUserScreen = ({navigation, route}) => {
 				<EmailInput validate={true} value={userInfo.email} />
 			</View>
 			<View>
-        <NormalInput 
-          value={userInfo.password}
-          placeholder='Password' 
-          secureTextEntry={true} 
-          iconName='lock' 
+        <PasswordInput 
+          value={userInfo.password} 
         />
 			</View>
 			<View>
