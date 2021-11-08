@@ -1,10 +1,14 @@
 import { StyleSheet } from "react-native";
 
 export default WelcomeStyles = StyleSheet.create({
-  title: {
-		padding: 20,
+  container: {
+    flex: 1,
+  },
+  section: {
 		fontWeight: 'bold',
-		fontSize: 80,
-		textAlign: 'center',
+		fontSize: 40,
 	},
+  messageContainer: {
+    flexDirection: 'row-reverse'
+  }
 })

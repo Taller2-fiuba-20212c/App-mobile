@@ -15,12 +15,12 @@ function MyStack() {
     <Stack.Navigator screenOptions={{
       headerShown: false,
     }}>
+      <Stack.Screen name="PrincipalScreen" component={PrincipalScreen} />
       <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="CreateUserScreen" component={CreateUserScreen} />
       <Stack.Screen name="ModifyUserScreen" component={ModifyUserScreen} />
       <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-      <Stack.Screen name="PrincipalScreen" component={PrincipalScreen} />
     </Stack.Navigator>
   )
 }

@@ -1,4 +1,5 @@
 export { default as NormalButton } from './NormalButton'
+export { default as MessageButton } from './MessageButton'
 export { EmailInput } from './inputs'
 export { NormalInput } from './inputs'
 export { PasswordInput } from './inputs'
