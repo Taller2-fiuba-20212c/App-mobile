@@ -10,5 +10,8 @@ export default WelcomeStyles = StyleSheet.create({
 	},
   messageContainer: {
     flexDirection: 'row-reverse'
+  },
+  courses: {
+    
   }
 })
