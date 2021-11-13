@@ -5,6 +5,7 @@ export default WelcomeStyles = StyleSheet.create({
   principalContainer: {
     justifyContent:'center',
 		flex: 1,
+    paddingHorizontal: 20
 	},
   titleContainer: {
     justifyContent: 'center',
@@ -18,6 +19,7 @@ export default WelcomeStyles = StyleSheet.create({
 	},
   bottomContainer: {
     flex: 1,
-    paddingHorizontal:100
+    paddingHorizontal:100,
+    paddingVertical: 20
   }
 })

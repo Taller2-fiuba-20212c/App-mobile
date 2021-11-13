@@ -5,6 +5,7 @@ export default UserStyles = StyleSheet.create({
 	container: {
     justifyContent: 'center',
 		flex: 1,
+    paddingHorizontal: 20
 	},
 
   title: {
