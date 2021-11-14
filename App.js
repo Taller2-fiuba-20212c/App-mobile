@@ -3,6 +3,7 @@ import { StatusBar, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { MessageButton } from './src/components';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { 
@@ -31,6 +32,7 @@ const Tab = createBottomTabNavigator();
 function TabScreen() {
   return (
     <Tab.Navigator 
+      initialRouteName="Home"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -51,6 +53,10 @@ function TabScreen() {
         },
         headerShown: false,
         tabBarLabel:() => {return null},
+        tabBarStyle: {
+          backgroundColor: 'white',
+          borderTopWidth: 0
+        }
       })}>
       <Tab.Screen name="Home" component={PrincipalScreen} />
       <Tab.Screen name="Search" component={SearchScreen} />
@@ -63,9 +69,21 @@ const Stack = createNativeStackNavigator()
 
 function MyStack() {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{
+      headerShown: false,
+      headerStyle: {
+        backgroundColor: 'white',
+      },
+    }}>
       <Stack.Screen name="WelcomeScreen" component={WelcomeScreen}/>
-      <Stack.Screen name="PrincipalScreen" component={TabScreen} options={{headerShown: true}}/>
+      <Stack.Screen name="PrincipalScreen" 
+        component={TabScreen} 
+        options={{
+          headerShown: true,
+          title: 'Ubademy',
+          headerRight: () => (<MessageButton />),
+        }}
+      />
       <Stack.Screen name="LoginScreen" component={LoginScreen}/>
       <Stack.Screen name="CreateUserScreen" component={CreateUserScreen}/>
       <Stack.Screen name="ModifyUserScreen" component={ModifyUserScreen}/>
@@ -76,11 +94,7 @@ function MyStack() {
 
 export default function App() {
   return (
-    <SafeAreaProvider style={
-      {
-        // paddingTop: StatusBar.currentHeight,
-      }
-    }>
+    <SafeAreaProvider>
       <NavigationContainer theme={{
         colors: {
           background: '#ffffff',

@@ -25,9 +25,6 @@ export default PrincipalScreen = () => {
 	return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={PrincipalStyles.container}>
-        <View style={PrincipalStyles.messageContainer}>
-          <MessageButton />
-        </View>
         <Text style={PrincipalStyles.section}>Your courses</Text>
         <Carousel 
           data={courses} 
