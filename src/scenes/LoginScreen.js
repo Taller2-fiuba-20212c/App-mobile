@@ -74,7 +74,10 @@ export default LoginScreen = (props) => {
           |
           <Text 
             style={UserStyles.signInUp} 
-            onPress={() => props.navigation.navigate('PrincipalScreen')}
+            onPress={() => props.navigation.reset({
+              index: 0,
+              routes: [{ name: 'PrincipalScreen'}]
+            })}
           > Browse</Text>
         </Text>
 			</View>
