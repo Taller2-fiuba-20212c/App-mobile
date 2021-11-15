@@ -11,7 +11,7 @@ export default LongCardCourse = ({course}) => {
       height: '40%'
     }}
     >
-      <Card.Title>{course.title}</Card.Title>
+      <Card.Title>{course.name}</Card.Title>
       <Card.Divider/>
       {
         <View style={{ 

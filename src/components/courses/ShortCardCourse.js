@@ -14,7 +14,7 @@ export default ShortCardCourse = ({course}) => {
         marginTop: 10,
         marginBottom: 0
       }}>
-        {course.title}
+        {course.name}
       </Card.Title>
       <Text 
         style={{ flex: 1, padding: 10 }}
