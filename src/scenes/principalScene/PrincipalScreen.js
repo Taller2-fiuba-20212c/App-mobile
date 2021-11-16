@@ -7,7 +7,6 @@ import PrincipalStyles from './PrincipalStyles'
 
 const SLIDER_WIDTH = Dimensions.get('window').width;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
-const ITEM_HEIGHT = Math.round(ITEM_WIDTH * 3 / 4);
 
 const classMock = {
   video: 'video url',

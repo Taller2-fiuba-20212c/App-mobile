@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react'
 import { Text, View, ScrollView, Dimensions } from 'react-native'
 import { Image, PricingCard } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NormalButton, AccordionListItem } from './../../components'
 import { BASE_COLOR } from './../../consts'
 import CourseStyles from './CourseStyles'
@@ -57,7 +58,14 @@ export default CourseScreen = ({route, navigation}) => {
           color={BASE_COLOR}
           title={course.subType}
           price="$5"
-          button={{ title: 'GET STARTED', icon: 'flight-takeoff' }}
+          button={
+            <NormalButton 
+              title="GET STARTED" 
+              icon={
+                <Icon name="bookshelf" size={22} color="white"/>
+              }
+            />
+          }
         />
       </View>
     </ScrollView>
