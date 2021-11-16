@@ -6,11 +6,9 @@ import { BASE_COLOR } from './../../consts'
 import CourseStyles from './CourseStyles'
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const ITEM_WIDTH = Math.round(SCREEN_WIDTH * 0.7);
 
 export default CourseScreen = ({route, navigation}) => {
   const course = route.params.course;
-  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
@@ -19,7 +17,7 @@ export default CourseScreen = ({route, navigation}) => {
   });
 
 	return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView automaticallyAdjustContentInsets={false} style={{flex:1}} showsVerticalScrollIndicator={false}>
       <View style={CourseStyles.container}>
         <Image 
           style={{

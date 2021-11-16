@@ -4,6 +4,7 @@ import { ListItem } from 'react-native-elements';
 export default AccordionListItem = (props) => {
   const [expanded, setExpanded] = useState(false);
   const item = props.item;
+  
   return (
     <ListItem.Accordion
       {...props}
@@ -13,7 +14,7 @@ export default AccordionListItem = (props) => {
       content={
         <>
           <ListItem.Content>
-            <ListItem.Title>Unit {props.number+1} - {item.name}</ListItem.Title>
+            <ListItem.Title style={{fontSize: 16}}>Unit {props.number+1} - {item.name}</ListItem.Title>
           </ListItem.Content>
         </>
       }
@@ -22,21 +23,25 @@ export default AccordionListItem = (props) => {
         setExpanded(!expanded);
       }}
     >
-      {item.content.map((c, j) => (
-        <ListItem 
-          key={j} 
-          onPress={()=>console.log('log')} 
-          bottomDivider
-          containerStyle={{ 
-            paddingLeft: 40
-          }}
-        >
-          <ListItem.Content>
-            <ListItem.Title>Class {j+1} - {c.name}</ListItem.Title>
-          </ListItem.Content>
-          <ListItem.Chevron />
-        </ListItem>
-      ))}
+      {
+        expanded ? 
+        item.content.map((c, j) => (
+          <ListItem 
+            key={j} 
+            onPress={()=>console.log('log')} 
+            bottomDivider
+            containerStyle={{ 
+              paddingLeft: 40
+            }}
+          >
+            <ListItem.Content>
+              <ListItem.Title style={{fontSize: 16}}>Class {j+1} - {c.name}</ListItem.Title>
+            </ListItem.Content>
+            <ListItem.Chevron />
+          </ListItem>
+        )) :
+        null
+      }
     </ListItem.Accordion>
   )
 }
