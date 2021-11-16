@@ -4,4 +4,4 @@ export { default as ModifyUserScreen } from './ModifyUserScreen';
 export { default as ProfileScreen } from './ProfileScreen';
 export { WelcomeScreen } from './welcomeScene';
 export { PrincipalScreen } from './principalScene';
-export { CourseScreen } from './course';
+export { CourseScreen, ContentCourseScreen } from './course';

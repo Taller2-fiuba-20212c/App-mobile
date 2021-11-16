@@ -1,8 +1,8 @@
 import React from 'react'
 import { Text, View, ScrollView, Dimensions } from 'react-native'
-import { ListItem, Tab } from 'react-native-elements'
+import { ListItem } from 'react-native-elements'
 import Carousel from 'react-native-snap-carousel';
-import { NormalButton, ShortCardCourse, LongCardCourse } from './../../components'
+import { ShortCardCourse, LongCardCourse } from './../../components'
 import PrincipalStyles from './PrincipalStyles'
 
 const SLIDER_WIDTH = Dimensions.get('window').width;

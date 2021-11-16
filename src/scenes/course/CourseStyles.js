@@ -16,7 +16,7 @@ export default CourseStyles = StyleSheet.create({
     paddingTop: 10,
     paddingHorizontal: 20
   },
-  lessonsButton: {
+  contentCourseButton: {
     paddingHorizontal: 20
   }
 })

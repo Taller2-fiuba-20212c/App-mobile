@@ -29,7 +29,6 @@ export default AccordionListItem = (props) => {
           <ListItem 
             key={j} 
             onPress={()=>console.log('log')} 
-            bottomDivider
             containerStyle={{ 
               paddingLeft: 40
             }}
