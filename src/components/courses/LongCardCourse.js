@@ -1,9 +1,17 @@
 import React from 'react'
-import { Text, View, Pressable } from 'react-native'
+import { Text, View, TouchableNativeFeedback } from 'react-native'
 import { Card } from 'react-native-elements'
 
-export default LongCardCourse = ({course}) => {
+export default LongCardCourse = ({course, navigation}) => {
+
+  const watchCourse = () => {
+    navigation.navigate('CourseScreen', { 
+      course: course,
+    })
+  }
+
   return (
+    <TouchableNativeFeedback onPress={() => watchCourse()}>
     <Card 
     containerStyle={{ 
       flex:1, 
@@ -39,5 +47,6 @@ export default LongCardCourse = ({course}) => {
         </View>
       }
     </Card>
+    </TouchableNativeFeedback>
   )
 }

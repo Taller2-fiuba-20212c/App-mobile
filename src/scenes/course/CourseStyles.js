@@ -9,7 +9,8 @@ export default CourseStyles = StyleSheet.create({
 		fontSize: 28,
 	},
   description: {
-    paddingBottom:10
+    paddingBottom:10,
+    fontSize: 16,
   },
   text: {
     paddingTop: 10,

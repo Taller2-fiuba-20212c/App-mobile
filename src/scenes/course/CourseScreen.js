@@ -1,7 +1,7 @@
-import React, {useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Text, View, ScrollView, Dimensions } from 'react-native'
-import { Image, PricingCard, ListItem } from 'react-native-elements';
-import { NormalButton } from './../../components'
+import { Image, PricingCard } from 'react-native-elements';
+import { NormalButton, AccordionListItem } from './../../components'
 import { BASE_COLOR } from './../../consts'
 import CourseStyles from './CourseStyles'
 
@@ -10,6 +10,7 @@ const ITEM_WIDTH = Math.round(SCREEN_WIDTH * 0.7);
 
 export default CourseScreen = ({route, navigation}) => {
   const course = route.params.course;
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
@@ -35,13 +36,17 @@ export default CourseScreen = ({route, navigation}) => {
           <Text style={CourseStyles.description}>{course.description}</Text>
         </View>
         <View style={CourseStyles.text}>
-          <Text style={CourseStyles.section}>Teachers</Text>
+          <Text style={CourseStyles.section}>Lessons</Text>
         </View>
-        <View style={CourseStyles.text}>
-          <Text style={CourseStyles.description}>{course.description}</Text>
+        <View>
+          {
+            course.units.map((u, i) => (
+              <AccordionListItem item={u} key={i} number={i} />
+            ))
+          }
         </View>
         <View style={CourseStyles.lessonsButton}>
-          <NormalButton title='Lessons'/>
+          <NormalButton title='Show more'/>
         </View>
         <PricingCard
           color={BASE_COLOR}
