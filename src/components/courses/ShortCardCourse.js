@@ -1,20 +1,34 @@
 import React from 'react'
-import { Text } from 'react-native'
+import { Text, TouchableNativeFeedback } from 'react-native'
 import { Card } from 'react-native-elements'
 
-export default ShortCardCourse = ({course}) => {
+export default ShortCardCourse = ({course, navigation}) => {
+
+  const watchCourse = () => {
+    navigation.navigate('CourseScreen', { 
+      course: course,
+    })
+  }
+
   return (
-    <Card containerStyle={{padding:0}}>
+    <TouchableNativeFeedback onPress={() => watchCourse()}>
+    <Card 
+      containerStyle={{
+        padding:0, 
+        borderRadius: 20,
+        elevation: 5,
+      }}
+    >
       <Card.Image 
         source={course.imgsrc} 
-        style={{ paddingBottom: 20 }}
+        style={{ paddingBottom: 20, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
       >
       </Card.Image>
       <Card.Title style={{ 
         marginTop: 10,
         marginBottom: 0
       }}>
-        {course.title}
+        {course.name}
       </Card.Title>
       <Text 
         style={{ flex: 1, padding: 10 }}
@@ -24,5 +38,6 @@ export default ShortCardCourse = ({course}) => {
         {course.description}
       </Text>
     </Card>
+    </TouchableNativeFeedback>
   )
 }

@@ -1,28 +1,58 @@
 import React from 'react'
 import { Text, View, ScrollView, Dimensions } from 'react-native'
-import { ListItem, Tab } from 'react-native-elements'
+import { ListItem } from 'react-native-elements'
 import Carousel from 'react-native-snap-carousel';
-import { MessageButton, ShortCardCourse, LongCardCourse } from './../../components'
+import { ShortCardCourse, LongCardCourse } from './../../components'
 import PrincipalStyles from './PrincipalStyles'
 
 const SLIDER_WIDTH = Dimensions.get('window').width;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
-const ITEM_HEIGHT = Math.round(ITEM_WIDTH * 3 / 4);
 
-let courseMockup = {
-  title: 'COURSE TITLE',
-  imgsrc: require('../../../assets/python.jpg'),
-  description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+const classMock = {
+  video: 'video url',
+  name: 'class name'
 }
 
-let courses = [
-  courseMockup, courseMockup, courseMockup, courseMockup, courseMockup
+const unit = {
+  name: 'unit name',
+  // #PDFS, TEXT or VIDEO,
+  contentType: 'content type',
+  // #Video: {videoId: xxx},
+  // #Text: {text: xxx},
+  // #PDFs: {fileId: xxx},
+  content: [classMock, classMock, classMock, classMock],
+  creatorId: 'creatorId',
+  creationDate: 'ceationDate',
+  lastModificationDate: 'lastModificationDate'
+}
+
+const courseMock = {
+  imgsrc: require('../../../assets/python.jpg'),
+  name: 'COURSE NAME',
+  description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+  subType: 'subType',
+  tags: ['Tag1', 'Tag2', 'Tag3', 'Tag4'],
+  units: [unit, unit, unit, unit, unit, unit, unit, unit, unit, unit, unit, unit, unit],
+  exams: ['Exam1', 'Exam2', 'Exam3', 'Exam4'],
+  // consults: List[Consult] = [],
+  teachers: ['Teacher1', 'Teacher2', 'Teacher3'],
+  colaborators: ['Colaborator1', 'Colaborator2', 'Colaborator3'],
+  students: ['Student1', 'Student2', 'Student3'],
+  creatorId: 'CreatorID',
+  creationDate: 'ceationDate',
+  lastModificationDate: 'lastModificationDate'
+}
+
+const courses = [
+  courseMock, courseMock, courseMock, courseMock, courseMock
 ]
 
-export default PrincipalScreen = () => {
+export default PrincipalScreen = ({navigation}) => {
   const _renderItem = ({item, index}) => {
     return (
-      <ShortCardCourse course={item}/>
+      <View style={{paddingBottom: 5}}>
+        <ShortCardCourse navigation={navigation} course={item}/>
+      </View>
     );
   }
 
@@ -48,12 +78,11 @@ export default PrincipalScreen = () => {
                 key={i} 
                 containerStyle={{ 
                   padding: 0,
+                  paddingVertical: 5
                 }}
               >
-                <ListItem.Content style={{
-                  // backgroundColor:'red',
-                }}>
-                  <LongCardCourse course={l} />
+                <ListItem.Content>
+                  <LongCardCourse navigation={navigation} course={l} />
                 </ListItem.Content>
               </ListItem>
             ))
