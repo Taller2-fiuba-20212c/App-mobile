@@ -32,7 +32,7 @@ const courseMock = {
   description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
   subType: 'subType',
   tags: ['Tag1', 'Tag2', 'Tag3', 'Tag4'],
-  units: [unit, unit, unit, unit, unit, unit, unit, unit],
+  units: [unit, unit, unit, unit, unit, unit, unit, unit, unit, unit, unit, unit, unit],
   exams: ['Exam1', 'Exam2', 'Exam3', 'Exam4'],
   // consults: List[Consult] = [],
   teachers: ['Teacher1', 'Teacher2', 'Teacher3'],

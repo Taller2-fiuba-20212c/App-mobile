@@ -51,9 +51,14 @@ export default CourseScreen = ({route, navigation}) => {
             ))
           }
         </View>
-        <View style={CourseStyles.contentCourseButton}>
-          <NormalButton onPress={() => watchContentCourse()} title='Show all'/>
-        </View>
+        {
+          course.units.length > MAX_UNITS ? 
+          <View style={CourseStyles.contentCourseButton}>
+            <NormalButton onPress={() => watchContentCourse()} title='Show all'/>
+          </View>
+          : 
+          null
+        }
         <PricingCard
           color={BASE_COLOR}
           title={course.subType}
