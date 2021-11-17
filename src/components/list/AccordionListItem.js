@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { ListItem } from 'react-native-elements';
+import { ListItem, Icon } from 'react-native-elements';
 
 export default AccordionListItem = (props) => {
   const [expanded, setExpanded] = useState(false);
@@ -33,8 +33,10 @@ export default AccordionListItem = (props) => {
               paddingLeft: 40
             }}
           >
+            <Icon name='play' type='feather'/>
             <ListItem.Content>
               <ListItem.Title style={{fontSize: 16}}>Class {j+1} - {c.name}</ListItem.Title>
+              <ListItem.Subtitle style={{fontSize: 14}}>Video - 02:30 mins</ListItem.Subtitle>
             </ListItem.Content>
             <ListItem.Chevron />
           </ListItem>
