@@ -50,7 +50,9 @@ const courses = [
 export default PrincipalScreen = ({navigation}) => {
   const _renderItem = ({item, index}) => {
     return (
-      <ShortCardCourse navigation={navigation} course={item}/>
+      <View style={{paddingBottom: 5}}>
+        <ShortCardCourse navigation={navigation} course={item}/>
+      </View>
     );
   }
 
@@ -76,6 +78,7 @@ export default PrincipalScreen = ({navigation}) => {
                 key={i} 
                 containerStyle={{ 
                   padding: 0,
+                  paddingVertical: 5
                 }}
               >
                 <ListItem.Content>

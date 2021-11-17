@@ -16,7 +16,9 @@ export default LongCardCourse = ({course, navigation}) => {
     containerStyle={{ 
       flex:1, 
       width: '90%',
-      height: '40%'
+      height: '40%',
+      borderRadius: 20,
+      elevation: 5,
     }}
     >
       <Card.Title>{course.name}</Card.Title>

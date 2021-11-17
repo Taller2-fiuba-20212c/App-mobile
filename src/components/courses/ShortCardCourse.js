@@ -12,10 +12,16 @@ export default ShortCardCourse = ({course, navigation}) => {
 
   return (
     <TouchableNativeFeedback onPress={() => watchCourse()}>
-    <Card containerStyle={{padding:0}}>
+    <Card 
+      containerStyle={{
+        padding:0, 
+        borderRadius: 20,
+        elevation: 5,
+      }}
+    >
       <Card.Image 
         source={course.imgsrc} 
-        style={{ paddingBottom: 20 }}
+        style={{ paddingBottom: 20, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
       >
       </Card.Image>
       <Card.Title style={{ 
