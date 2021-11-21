@@ -3,21 +3,12 @@ import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MessageButton } from './src/components';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { 
   LoginScreen, CreateUserScreen, ModifyUserScreen, ProfileScreen, WelcomeScreen,
-  PrincipalScreen, CourseScreen, ContentCourseScreen
-} from './src/scenes'
-
-function SearchScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>  
-      <Text>Search screen</Text>
-    </View>
-  );
-}
+  PrincipalScreen, CourseScreen, ContentCourseScreen, SearchScreen
+} from './src/scenes';
 
 function UserScreen() {
   return (
@@ -53,6 +44,7 @@ function TabScreen() {
         },
         headerShown: false,
         tabBarLabel:() => {return null},
+        tabBarHideOnKeyboard: true,
         tabBarStyle: {
           backgroundColor: 'white',
           borderTopWidth: 0
@@ -76,14 +68,7 @@ function MyStack() {
       },
     }}>
       <Stack.Screen name="WelcomeScreen" component={WelcomeScreen}/>
-      <Stack.Screen name="PrincipalScreen" 
-        component={TabScreen} 
-        options={{
-          headerShown: true,
-          title: 'Ubademy',
-          headerRight: () => (<MessageButton />),
-        }}
-      />
+      <Stack.Screen name="PrincipalScreen" component={TabScreen} />
       <Stack.Screen name="LoginScreen" component={LoginScreen}/>
       <Stack.Screen name="CourseScreen" 
         component={CourseScreen}

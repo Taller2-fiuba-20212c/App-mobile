@@ -1,11 +1,12 @@
-import React from 'react'
-import { Text, View, ScrollView, Dimensions } from 'react-native'
-import { ListItem } from 'react-native-elements'
+import React, {useLayoutEffect} from 'react'
+import { Text, View, ScrollView } from 'react-native'
+import { ListItem, Icon } from 'react-native-elements'
 import Carousel from 'react-native-snap-carousel';
 import { ShortCardCourse, LongCardCourse } from './../../components'
+import { BASE_COLOR, WIDTH_SCREEN } from './../../consts';
 import PrincipalStyles from './PrincipalStyles'
 
-const SLIDER_WIDTH = Dimensions.get('window').width;
+const SLIDER_WIDTH = WIDTH_SCREEN;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
 
 const classMock = {
@@ -28,7 +29,7 @@ const unit = {
 
 const courseMock = {
   imgsrc: require('../../../assets/python.jpg'),
-  name: 'COURSE NAME',
+  name: 'Course name',
   description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
   subType: 'subType',
   tags: ['Tag1', 'Tag2', 'Tag3', 'Tag4'],
@@ -48,6 +49,25 @@ const courses = [
 ]
 
 export default PrincipalScreen = ({navigation}) => {
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: true,
+      title: 'Ubademy',
+      headerRight: () => (
+        <Icon 
+          name='chatbubble-ellipses'
+          size={24}
+          type='ionicon'
+          color={BASE_COLOR}
+          containerStyle={{
+            paddingRight: 20
+          }}
+        />
+      ),
+    });
+  });
+
   const _renderItem = ({item, index}) => {
     return (
       <View style={{paddingBottom: 5}}>
