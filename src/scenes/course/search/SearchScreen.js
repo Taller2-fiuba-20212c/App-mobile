@@ -1,8 +1,12 @@
 import React, {useLayoutEffect, useState} from 'react';
-import { View, Text, Pressable } from 'react-native'
-import { CheckBox, SearchBar, Icon, BottomSheet, Divider } from 'react-native-elements'
+import { View, Text, Pressable, ScrollView } from 'react-native'
+import { SearchBar, Icon, BottomSheet, Divider } from 'react-native-elements'
+import { CheckBoxList } from './../../../components'
 import { BASE_COLOR } from '../../../consts';
 import SearchStyles from './SearchStyles'
+
+const subType = ['Subs 1', 'Subs 2', 'Subs 3', 'Subs 4'];
+const catType = ['categorie 1', 'categorie 2', 'categorie 3', 'categorie 4', 'categorie 5'];
 
 export default SearchScreen = ({navigation}) => {
   const [searchText, setSearchText] = useState('');
@@ -49,20 +53,19 @@ export default SearchScreen = ({navigation}) => {
   return(
     <View>
       <BottomSheet 
-        isVisible={isVisible}
         onBackButtonPress={() => setIsVisible(false)}
         modalProps={{
+          visible: isVisible, 
           animationType: 'slide',
           statusBarTranslucent: true,
+          hardwareAccelerated: true,
           onRequestClose: () => {
             setIsVisible(false);
           },
         }}
       >
         <Pressable onPress={() => setIsVisible(false)}>
-          <View 
-            style={SearchStyles.transparentSpace}
-          >
+          <View style={SearchStyles.transparentSpace}>
         </View>
           </Pressable>
         <View style={SearchStyles.filterBackground}>
@@ -73,12 +76,12 @@ export default SearchScreen = ({navigation}) => {
               <Text style={SearchStyles.text}>Apply</Text>
             </View>
             <Divider orientation="horizontal"/>
-            <Text style={SearchStyles.subTitle}>Subcriptions</Text>
-            <CheckBox
-              title='Click Here'
-              checked={false}
-            />
-            <Text style={SearchStyles.subTitle}>Categories</Text>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <Text style={SearchStyles.subTitle}>Subcriptions</Text>
+              <CheckBoxList list={subType} />
+              <Text style={SearchStyles.subTitle}>Categories</Text>
+              <CheckBoxList list={catType} />
+            </ScrollView>
           </View>
         </View>
       </BottomSheet>

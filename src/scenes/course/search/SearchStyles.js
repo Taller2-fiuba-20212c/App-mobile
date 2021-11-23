@@ -9,7 +9,7 @@ export default SearchStyles = StyleSheet.create({
     paddingRight: 20
   },
   transparentSpace: {
-    height: HEIGHT_SCREEN*0.25,
+    height: HEIGHT_SCREEN*0.20,
     width: WIDTH_SCREEN
   },
   filterBackground: {
