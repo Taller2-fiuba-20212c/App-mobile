@@ -31,15 +31,12 @@ export default SearchScreen = ({navigation}) => {
     (newCheckedBoxes.subsTypes.length == 0 && newCheckedBoxes.catTypes.length == 0) 
       ? setApplyColor('gray') 
       : setApplyColor('black');
-
-    console.log(newCheckedBoxes)
   };
 
   const apply = () => { 
     setCheckedBoxes(initialCheckedBoxes)
     setFilters(checkedBoxes) 
     setIsVisible(false)
-    console.log(checkedBoxes)
   }
 
   const cancel = () => {

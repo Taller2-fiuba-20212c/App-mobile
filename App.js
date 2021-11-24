@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { 
   LoginScreen, CreateUserScreen, ModifyUserScreen, ProfileScreen, WelcomeScreen,
-  PrincipalScreen, CourseScreen, ContentCourseScreen, SearchScreen
+  PrincipalScreen, CourseScreen, ContentCourseScreen, SearchScreen, VideoClassScreen
 } from './src/scenes';
 
 function UserScreen() {
@@ -85,6 +85,7 @@ function MyStack() {
       />
       <Stack.Screen name="CreateUserScreen" component={CreateUserScreen}/>
       <Stack.Screen name="ModifyUserScreen" component={ModifyUserScreen}/>
+      <Stack.Screen name="VideoClassScreen" component={VideoClassScreen}/>
       <Stack.Screen name="ProfileScreen" component={ProfileScreen}/>
     </Stack.Navigator>
   )

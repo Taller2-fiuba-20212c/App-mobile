@@ -47,7 +47,7 @@ export default CourseScreen = ({route, navigation}) => {
         <View>
           {
             course.units.slice(0, MAX_UNITS).map((u, i) => (
-              <AccordionListItem item={u} key={i} number={i} />
+              <AccordionListItem navigation={navigation} item={u} key={i} number={i} />
             ))
           }
         </View>

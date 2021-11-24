@@ -10,7 +10,7 @@ const SLIDER_WIDTH = WIDTH_SCREEN;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
 
 const classMock = {
-  video: 'video url',
+  videoID: 'TFBfUorLbss',
   name: 'class name'
 }
 

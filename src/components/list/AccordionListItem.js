@@ -4,6 +4,7 @@ import { ListItem, Icon } from 'react-native-elements';
 export default AccordionListItem = (props) => {
   const [expanded, setExpanded] = useState(false);
   const item = props.item;
+  const navigation = props.navigation;
   
   return (
     <ListItem.Accordion
@@ -28,7 +29,9 @@ export default AccordionListItem = (props) => {
         item.content.map((c, j) => (
           <ListItem 
             key={j} 
-            onPress={()=>console.log('log')} 
+            onPress={() => navigation.navigate('VideoClassScreen', {
+              videoID: c.videoID
+            })} 
             containerStyle={{ 
               paddingLeft: 40
             }}
