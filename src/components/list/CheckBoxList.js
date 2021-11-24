@@ -11,6 +11,9 @@ export default CheckBoxList = (props) => {
     var newCheckedBoxes = checkedBoxes.slice()
     newCheckedBoxes[n] = !newCheckedBoxes[n]
     setCheckedBoxes(newCheckedBoxes);
+    props.onChangeChecks(
+      list.filter((u, i) => newCheckedBoxes[i])
+    )
   }
 
   return (

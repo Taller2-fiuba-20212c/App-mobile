@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { WIDTH_SCREEN, HEIGHT_SCREEN, BASE_COLOR } from '../../../consts';
+import { NAV_BAR_HEIGHT, WIDTH_SCREEN, HEIGHT_SCREEN, BASE_COLOR } from '../../../consts';
 
 export default SearchStyles = StyleSheet.create({
   header: {
@@ -16,7 +16,8 @@ export default SearchStyles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    height: HEIGHT_SCREEN*0.75
+    height: HEIGHT_SCREEN*0.70,
+    paddingBottom: NAV_BAR_HEIGHT
   },
   filter: {
     paddingHorizontal: 20
@@ -31,6 +32,10 @@ export default SearchStyles = StyleSheet.create({
     fontWeight: 'bold',
   },
   subTitle: {
+    fontSize: 16,
+    color: 'gray'
+  },
+  apply: {
     fontSize: 16,
     color: 'gray'
   },
