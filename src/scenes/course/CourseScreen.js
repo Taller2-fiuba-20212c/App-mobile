@@ -61,11 +61,11 @@ export default CourseScreen = ({route, navigation}) => {
         }
         <PricingCard
           color={BASE_COLOR}
-          title={course.subType}
+          title={'Sub type'}
           price="$5"
           button={
             <NormalButton 
-              title="GET STARTED" 
+              title="SUBSCRIBE" 
               icon={
                 <Icon name="bookshelf" size={22} color="white"/>
               }

@@ -1,4 +1,6 @@
 import React, {useState} from 'react'
+import { Text, View} from 'react-native'
+import YoutubePlayer from "react-native-youtube-iframe";
 import { ListItem, Icon } from 'react-native-elements';
 
 export default AccordionListItem = (props) => {
@@ -6,6 +8,33 @@ export default AccordionListItem = (props) => {
   const item = props.item;
   const navigation = props.navigation;
   
+  const renderUnit = (item) => {
+    if (item.contentType == 'video') {
+      return (
+        <View 
+          style={{ 
+            flex: 1, 
+            alignItems: 'center',
+            height: 200
+          }}
+        >
+          <YoutubePlayer 
+            height={300}
+            width={300}
+            videoId={item.content.videoId}
+            play={true}
+          />
+        </View> 
+      )
+    } else if (item.contentType == 'text') {
+      return (
+        <View style={{ flex: 1, paddingLeft: 40 }}>
+          <Text>{item.content.text}</Text>
+        </View>
+      )
+    }
+  }
+
   return (
     <ListItem.Accordion
       {...props}
@@ -26,24 +55,8 @@ export default AccordionListItem = (props) => {
     >
       {
         expanded ? 
-        item.content.map((c, j) => (
-          <ListItem 
-            key={j} 
-            onPress={() => navigation.navigate('VideoClassScreen', {
-              videoID: c.videoID
-            })} 
-            containerStyle={{ 
-              paddingLeft: 40
-            }}
-          >
-            <Icon name='play' type='feather'/>
-            <ListItem.Content>
-              <ListItem.Title style={{fontSize: 16}}>Class {j+1} - {c.name}</ListItem.Title>
-              <ListItem.Subtitle style={{fontSize: 14}}>Video - 02:30 mins</ListItem.Subtitle>
-            </ListItem.Content>
-            <ListItem.Chevron />
-          </ListItem>
-        )) :
+        renderUnit(item)        
+        :
         null
       }
     </ListItem.Accordion>

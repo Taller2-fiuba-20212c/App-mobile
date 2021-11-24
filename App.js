@@ -52,7 +52,7 @@ function TabScreen() {
       })}>
       <Tab.Screen name="Home" component={PrincipalScreen} />
       <Tab.Screen name="Search" component={SearchScreen} />
-      <Tab.Screen name="User" component={UserScreen} />
+      <Tab.Screen name="User" component={ProfileScreen} />
     </Tab.Navigator>
    );
 }

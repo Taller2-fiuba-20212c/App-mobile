@@ -4,7 +4,7 @@ import { NormalButton, NormalInput, EmailInput,PasswordInput } from './../compon
 import UserStyles from './../style/UserStyles'
 import { login } from './../rest/UbademyAPI'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ACCESS_TOKEN, REFRESH_TOKEN, FAKE_PASSWORD } from  './../consts'
+import { USER_INFO, FAKE_PASSWORD } from  './../consts'
 
 export default LoginScreen = (props) => {
   const initialState = {
@@ -27,19 +27,12 @@ export default LoginScreen = (props) => {
   }
 
   const handleLogin = async () => {
-    const {
-      accessToken, active, created_on, email, id, lastname, name, refreshToken, uid
-    } = await login(user.email, user.password)
-    storeData(ACCESS_TOKEN, accessToken)
-    storeData(REFRESH_TOKEN, refreshToken)
+    const userLoged = await login(user.email, user.password)
+    storeData(USER_INFO, JSON.stringify(userLoged))
 
-    props.navigation.navigate('ProfileScreen', {
-      userInfo: {
-        name: name,
-        lastname: lastname,
-        email: email,
-        password: FAKE_PASSWORD,
-      }
+    props.navigation.reset({
+      index: 0,
+      routes: [{ name: 'PrincipalScreen'}]
     })
   }
 

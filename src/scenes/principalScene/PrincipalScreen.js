@@ -1,9 +1,10 @@
-import React, {useLayoutEffect} from 'react'
+import React, {useLayoutEffect, useEffect, useState} from 'react'
 import { Text, View, ScrollView } from 'react-native'
 import { ListItem, Icon } from 'react-native-elements'
 import Carousel from 'react-native-snap-carousel';
 import { ShortCardCourse, LongCardCourse } from './../../components'
 import { BASE_COLOR, WIDTH_SCREEN } from './../../consts';
+import { getCourses } from './../../rest/UbademyAPI'
 import PrincipalStyles from './PrincipalStyles'
 
 const SLIDER_WIDTH = WIDTH_SCREEN;
@@ -44,11 +45,12 @@ const courseMock = {
   lastModificationDate: 'lastModificationDate'
 }
 
-const courses = [
-  courseMock, courseMock, courseMock, courseMock, courseMock
-]
+// const courses = [
+//   courseMock, courseMock, courseMock, courseMock, courseMock
+// ]
 
 export default PrincipalScreen = ({navigation}) => {
+  const [courses, setCourses] = useState([])
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -68,10 +70,14 @@ export default PrincipalScreen = ({navigation}) => {
     });
   });
 
+  useEffect(() => {
+    getCourses().then((r) => setCourses(r));
+  })
+
   const _renderItem = ({item, index}) => {
     return (
       <View style={{paddingBottom: 5}}>
-        <ShortCardCourse navigation={navigation} course={item}/>
+        <ShortCardCourse navigation={navigation} course={{...item, 'imgsrc': require('../../../assets/python.jpg')}}/>
       </View>
     );
   }
@@ -102,7 +108,7 @@ export default PrincipalScreen = ({navigation}) => {
                 }}
               >
                 <ListItem.Content>
-                  <LongCardCourse navigation={navigation} course={l} />
+                  <LongCardCourse navigation={navigation} course={{...l, 'imgsrc': require('../../../assets/python.jpg')}} />
                 </ListItem.Content>
               </ListItem>
             ))
