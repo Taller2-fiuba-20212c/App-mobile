@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { Text, View} from 'react-native'
-import YoutubePlayer from "react-native-youtube-iframe";
-import { ListItem, Icon } from 'react-native-elements';
+import { YoutubeVideo } from './../../components'
+import { ListItem } from 'react-native-elements';
 
 export default AccordionListItem = (props) => {
   const [expanded, setExpanded] = useState(false);
@@ -18,11 +18,10 @@ export default AccordionListItem = (props) => {
             height: 200
           }}
         >
-          <YoutubePlayer 
-            height={300}
+          <YoutubeVideo 
+            height={175}
             width={300}
             videoId={item.content.videoId}
-            play={true}
           />
         </View> 
       )
