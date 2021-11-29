@@ -47,7 +47,7 @@ export default CourseScreen = ({route, navigation}) => {
         <View>
           {
             course.units.slice(0, MAX_UNITS).map((u, i) => (
-              <AccordionListItem item={u} key={i} number={i} />
+              <AccordionListItem navigation={navigation} item={u} key={i} number={i} />
             ))
           }
         </View>
@@ -61,11 +61,11 @@ export default CourseScreen = ({route, navigation}) => {
         }
         <PricingCard
           color={BASE_COLOR}
-          title={course.subType}
+          title={'Sub type'}
           price="$5"
           button={
             <NormalButton 
-              title="GET STARTED" 
+              title="SUBSCRIBE" 
               icon={
                 <Icon name="bookshelf" size={22} color="white"/>
               }

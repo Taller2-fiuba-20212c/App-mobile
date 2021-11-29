@@ -1,15 +1,17 @@
-import React from 'react'
-import { Text, View, ScrollView, Dimensions } from 'react-native'
-import { ListItem } from 'react-native-elements'
+import React, {useLayoutEffect, useEffect, useState} from 'react'
+import { Text, View, ScrollView } from 'react-native'
+import { ListItem, Icon } from 'react-native-elements'
 import Carousel from 'react-native-snap-carousel';
 import { ShortCardCourse, LongCardCourse } from './../../components'
+import { BASE_COLOR, WIDTH_SCREEN } from './../../consts';
+import { getCourses } from './../../rest/UbademyAPI'
 import PrincipalStyles from './PrincipalStyles'
 
-const SLIDER_WIDTH = Dimensions.get('window').width;
+const SLIDER_WIDTH = WIDTH_SCREEN;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
 
 const classMock = {
-  video: 'video url',
+  videoID: 'TFBfUorLbss',
   name: 'class name'
 }
 
@@ -28,7 +30,7 @@ const unit = {
 
 const courseMock = {
   imgsrc: require('../../../assets/python.jpg'),
-  name: 'COURSE NAME',
+  name: 'Course name',
   description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
   subType: 'subType',
   tags: ['Tag1', 'Tag2', 'Tag3', 'Tag4'],
@@ -43,15 +45,39 @@ const courseMock = {
   lastModificationDate: 'lastModificationDate'
 }
 
-const courses = [
-  courseMock, courseMock, courseMock, courseMock, courseMock
-]
+// const courses = [
+//   courseMock, courseMock, courseMock, courseMock, courseMock
+// ]
 
 export default PrincipalScreen = ({navigation}) => {
+  const [courses, setCourses] = useState([])
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: true,
+      title: 'Ubademy',
+      headerRight: () => (
+        <Icon 
+          name='chatbubble-ellipses'
+          size={24}
+          type='ionicon'
+          color={BASE_COLOR}
+          containerStyle={{
+            paddingRight: 20
+          }}
+        />
+      ),
+    });
+  });
+
+  useEffect(() => {
+    getCourses().then((r) => setCourses(r));
+  })
+
   const _renderItem = ({item, index}) => {
     return (
       <View style={{paddingBottom: 5}}>
-        <ShortCardCourse navigation={navigation} course={item}/>
+        <ShortCardCourse navigation={navigation} course={{...item, 'imgsrc': require('../../../assets/python.jpg')}}/>
       </View>
     );
   }
@@ -82,7 +108,7 @@ export default PrincipalScreen = ({navigation}) => {
                 }}
               >
                 <ListItem.Content>
-                  <LongCardCourse navigation={navigation} course={l} />
+                  <LongCardCourse navigation={navigation} course={{...l, 'imgsrc': require('../../../assets/python.jpg')}} />
                 </ListItem.Content>
               </ListItem>
             ))
