@@ -4,7 +4,9 @@ import { CheckBox } from 'react-native-elements';
 
 export default CheckBoxList = (props) => {
   const list = props.list;
-  const initialCheckedBoxes = Array(list.length).fill(false);
+  const initialCheckedBoxes = props.checks ? 
+    list.map((u) => props.checks.includes(u)) :
+    Array(list.length).fill(false);
   const [checkedBoxes, setCheckedBoxes] = useState(initialCheckedBoxes);
 
   const updateCheckedBoxes = (n) => {

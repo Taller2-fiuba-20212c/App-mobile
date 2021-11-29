@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import { Text, View} from 'react-native'
-import { YoutubeVideo } from './../../components'
+import { YoutubeVideo } from './../video'
 import { ListItem } from 'react-native-elements';
 
 export default AccordionListItem = (props) => {

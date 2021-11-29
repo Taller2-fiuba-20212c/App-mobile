@@ -85,7 +85,7 @@ export default ProfileScreen = ({navigation, route}) => {
       </View>
       :
       <View>
-        <Text>Create acount</Text>
+        <Text>Sign Up</Text>
       </View>
     }
     </View>

@@ -1,53 +1,68 @@
-import React, {useLayoutEffect, useState} from 'react';
+import React, {useLayoutEffect, useState, useEffect} from 'react';
 import { View, Text, Pressable, ScrollView } from 'react-native'
-import { SearchBar, Icon, BottomSheet, Divider } from 'react-native-elements'
+import { SearchBar, Icon, BottomSheet, Divider, Slider } from 'react-native-elements'
 import { CheckBoxList } from './../../../components'
 import { BASE_COLOR } from '../../../consts';
 import SearchStyles from './SearchStyles'
 
-const subType = ['Subs 1', 'Subs 2', 'Subs 3', 'Subs 4'];
-const catType = ['categorie 1', 'categorie 2', 'categorie 3', 'categorie 4', 'categorie 5', 'categorie 6'];
+const subType = ['Bronze', 'Silver', 'Gold', 'Diamond'];
+const catType = ['Programming', 'Business', 'Design', 'Music', 'Photography & Video', 'Health & Fitness'];
 
 export default SearchScreen = ({navigation}) => {
   const [searchText, setSearchText] = useState('');
   const [isVisible, setIsVisible] = useState(false);
-  const [applyColor, setApplyColor] = useState('gray');
+  const [applyEnable, setApplyEnable] = useState(false);
 
   const initialFilters = {
-    subsTypes: [],
+    subType: subType[0],
     catTypes: [],
   }
   const [filters, setFilters] = useState(initialFilters);
 
-  const initialCheckedBoxes = {
-    subsTypes: [],
+  const initialValuesSelected = {
+    subType: subType[0],
     catTypes: [],
   }
-  const [checkedBoxes, setCheckedBoxes] = useState(initialCheckedBoxes);
+  const [valuesSelected, setValuesSelected] = useState(initialValuesSelected);
+
+  const compareArrays = (array1, array2) => {
+    const array2Sorted = array2.slice().sort();
+    return array1.length === array2.length && array1.slice().sort().every(function(value, index) {
+      return value === array2Sorted[index];
+    });
+  };
+
+  const updateApply = (state1, state2) => {
+    (state1.subType == state2.subType && compareArrays(state1.catTypes, state2.catTypes)) 
+    ? setApplyEnable(false) 
+    : setApplyEnable(true)
+  };
   
-  const handleChangeChecks = (checks, name) => {
-    const newCheckedBoxes = { ...checkedBoxes, [name]: checks};
-    setCheckedBoxes(newCheckedBoxes);
-    (newCheckedBoxes.subsTypes.length == 0 && newCheckedBoxes.catTypes.length == 0) 
-      ? setApplyColor('gray') 
-      : setApplyColor('black');
+  useEffect(() => {
+    updateApply(filters, valuesSelected);
+  }, [valuesSelected]);
+  
+  const handleChangeValue = (value, name) => {
+    setValuesSelected(s => ({ ...s, [name]: value}));
   };
 
   const apply = () => { 
-    setCheckedBoxes(initialCheckedBoxes)
-    setFilters(checkedBoxes) 
-    setIsVisible(false)
-  }
+    setFilters(valuesSelected);
+    setIsVisible(false);
+  };
 
   const cancel = () => {
-    setCheckedBoxes(initialCheckedBoxes)
-    setIsVisible(false)
-  }
+    setIsVisible(false);
+  };
 
   const open = () => {
-    setApplyColor('gray')
-    setIsVisible(true)
-  }
+    setIsVisible(true);
+  };
+
+  useEffect(() => {
+    setApplyEnable(false);
+    setValuesSelected(filters)
+  }, [isVisible]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -114,23 +129,31 @@ export default SearchScreen = ({navigation}) => {
               >Cancel</Text>
               <Text style={SearchStyles.filtersText}>Filters</Text>
               <Text 
-                disabled={applyColor == 'gray'}
+                disabled={!applyEnable}
                 onPress={() => apply()}
                 style={{
-                  ...SearchStyles.apply, 'color': applyColor
+                  ...SearchStyles.apply, 
+                  color: applyEnable ? 'black' : 'gray'
                 }}
               >Apply</Text>
             </View>
             <Divider orientation="horizontal"/>
             <ScrollView showsVerticalScrollIndicator={false}>
               <Text style={SearchStyles.subTitle}>Subcriptions</Text>
-              <CheckBoxList 
-                onChangeChecks={(checks) => handleChangeChecks(checks, 'subsTypes')}
-                list={subType} 
-              />
+              <View style={SearchStyles.SliderContainer}>
+                <Slider
+                  step={1}
+                  thumbStyle={{ height: 20, width: 20, backgroundColor: 'black' }}
+                  value={subType.indexOf(valuesSelected.subType)}
+                  maximumValue={subType.length - 1}
+                  onValueChange={(value) => handleChangeValue(subType[value], 'subType')}
+                />
+                <Text>Subcription level: {valuesSelected.subType}</Text>
+              </View>
               <Text style={SearchStyles.subTitle}>Categories</Text>
               <CheckBoxList 
-                onChangeChecks={(checks) => handleChangeChecks(checks, 'catTypes')}
+                checks={valuesSelected.catTypes}
+                onChangeChecks={(checks) => handleChangeValue(checks, 'catTypes')}
                 list={catType} 
               />
             </ScrollView>

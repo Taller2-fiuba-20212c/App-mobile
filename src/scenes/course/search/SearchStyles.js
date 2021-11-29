@@ -41,6 +41,9 @@ export default SearchStyles = StyleSheet.create({
   },
   text: {
     fontSize: 16
+  },
+  SliderContainer: {
+    padding: 20
   }
 
 })
