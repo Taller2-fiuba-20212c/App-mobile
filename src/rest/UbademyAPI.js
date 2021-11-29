@@ -26,3 +26,7 @@ export const getUserTrajectory = async (userId) => {
   return fetchFromURL(`/users/trajectory/${userId}`);
 }
 
+export const getCourses = async () => {
+  return fetchFromURL('/courses');
+}
+

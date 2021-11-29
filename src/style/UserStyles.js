@@ -1,13 +1,14 @@
-import {StyleSheet} from "react-native";
-import * as constants from  '../Constants'
+import { StyleSheet } from "react-native";
+import { BASE_COLOR } from  '../consts'
 
 export default UserStyles = StyleSheet.create({
 	container: {
     justifyContent: 'center',
 		flex: 1,
+    paddingHorizontal: 20
 	},
 
-  tittle: {
+  title: {
 		padding: 20,
 		fontWeight: 'bold',
 		fontSize: 40,
@@ -16,6 +17,6 @@ export default UserStyles = StyleSheet.create({
   
   signInUp: {
     fontWeight: 'bold', 
-    color: constants.BASE_COLOR,
+    color: BASE_COLOR,
   }
 })

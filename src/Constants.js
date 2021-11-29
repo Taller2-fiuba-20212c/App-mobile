@@ -1,5 +1,0 @@
-export const BASE_COLOR = "#145A32"
-export const DANGGER_COLOR = "#a30000"
-export const ACCESS_TOKEN = "accessToken"
-export const REFRESH_TOKEN = "refreshToken"
-export const FAKE_PASSWORD = "password1234"

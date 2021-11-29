@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
-import NormalButton from './../components/NormalButton'
-import NormalInput from './../components/inputs/NormalInput'
-import EmailInput from './../components/inputs/EmailInput'
+import { NormalButton, NormalInput, EmailInput,PasswordInput } from './../components'
 import UserStyles from './../style/UserStyles'
 import { login } from './../rest/UbademyAPI'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as constants from  './../Constants'
+import { USER_INFO, FAKE_PASSWORD } from  './../consts'
 
 export default LoginScreen = (props) => {
   const initialState = {
@@ -29,36 +27,26 @@ export default LoginScreen = (props) => {
   }
 
   const handleLogin = async () => {
-    const {
-      accessToken, active, created_on, email, id, lastname, name, refreshToken, uid
-    } = await login(user.email, user.password)
-    storeData(constants.ACCESS_TOKEN, accessToken)
-    storeData(constants.REFRESH_TOKEN, refreshToken)
+    const userLoged = await login(user.email, user.password)
+    storeData(USER_INFO, JSON.stringify(userLoged))
 
-    props.navigation.navigate('WelcomeScreen', {
-      userInfo: {
-        name: name,
-        lastname: lastname,
-        email: email,
-        password: constants.FAKE_PASSWORD,
-      }
+    props.navigation.reset({
+      index: 0,
+      routes: [{ name: 'PrincipalScreen'}]
     })
   }
 
 	return (
 		<View style={UserStyles.container}>
 			<View>
-				<Text style={UserStyles.tittle}>Ubademy</Text>
+				<Text style={UserStyles.title}>Login</Text>
 			</View>
 			<View>
         <EmailInput onChangeText={(value) => handleChangeText(value, "email")} />
 			</View>
 			<View>
-        <NormalInput 
+        <PasswordInput 
           onChangeText={(value) => handleChangeText(value, "password")} 
-          placeholder='Password' 
-          secureTextEntry={true} 
-          iconName='lock' 
         />
 			</View>
 			<View>
@@ -70,11 +58,21 @@ export default LoginScreen = (props) => {
 			<View style={{padding: 20}}>
 				<Text style={{textAlign: 'center'}}>
 					Don't have an account?
-					<Text 
-						style={UserStyles.signInUp} 
-						onPress={() => props.navigation.navigate('CreateUserScreen')}
-					> Sign up</Text>
 				</Text>
+        <Text style={{textAlign: 'center'}}>
+          <Text 
+            style={UserStyles.signInUp} 
+            onPress={() => props.navigation.navigate('CreateUserScreen')}
+          >Sign up </Text>
+          |
+          <Text 
+            style={UserStyles.signInUp} 
+            onPress={() => props.navigation.reset({
+              index: 0,
+              routes: [{ name: 'PrincipalScreen'}]
+            })}
+          > Browse</Text>
+        </Text>
 			</View>
 		</View>
 	)
