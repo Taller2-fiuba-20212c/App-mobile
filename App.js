@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { 
-  LoginScreen, CreateUserScreen, ModifyUserScreen, ProfileScreen, WelcomeScreen,
+  LoginScreen, RegisterScreen, ModifyUserScreen, ProfileScreen, WelcomeScreen,
   PrincipalScreen, CourseScreen, ContentCourseScreen, SearchScreen, VideoClassScreen
 } from './src/scenes';
 
@@ -83,7 +83,7 @@ function MyStack() {
           title: 'Content'
         }}
       />
-      <Stack.Screen name="CreateUserScreen" component={CreateUserScreen}/>
+      <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
       <Stack.Screen name="ModifyUserScreen" component={ModifyUserScreen}/>
       <Stack.Screen name="VideoClassScreen" component={VideoClassScreen}/>
       <Stack.Screen name="ProfileScreen" component={ProfileScreen}/>

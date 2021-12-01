@@ -4,11 +4,12 @@ export const login = async (email, password) => {
   return postDataToURL(`/auth/login`, {}, { email: email, password: password });
 }
 
-export const register = async (email, password, name, lastname) => {
+export const register = async (email, password, role, name, lastname) => {
   return postDataToURL(`/users/create`, {}, { 
     email: email, 
     password: password,
     name: name, 
+    role: role,
     lastname: lastname,
   });
 }

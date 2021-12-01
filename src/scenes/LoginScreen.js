@@ -62,7 +62,7 @@ export default LoginScreen = (props) => {
         <Text style={{textAlign: 'center'}}>
           <Text 
             style={UserStyles.signInUp} 
-            onPress={() => props.navigation.navigate('CreateUserScreen')}
+            onPress={() => props.navigation.navigate('RegisterScreen')}
           >Sign up </Text>
           |
           <Text 

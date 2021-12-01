@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Entypo';
-import { BASE_COLOR } from  './../../consts'
+import { BASE_COLOR, ERROR_COLOR } from  './../../consts'
 
 export default EmailInput = (props) => {
   const [email, setEmail] = useState(props.value)
@@ -18,6 +18,10 @@ export default EmailInput = (props) => {
     if (props.onChangeText) {
       props.onChangeText(newEmail)
     }
+
+    if (props.error) {
+      props.error(!validate(newEmail))
+    }
   }
 
   const validate = (email) => {
@@ -31,7 +35,7 @@ export default EmailInput = (props) => {
       disabled={props.disabled}
       placeholder='Email'
       onChangeText={newEmail => handleChangeText(newEmail)}
-      errorStyle={{ color:'red' }}
+      errorStyle={{ color: ERROR_COLOR }}
       errorMessage={error}
       leftIcon={
         <Icon
