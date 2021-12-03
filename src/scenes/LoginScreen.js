@@ -1,18 +1,19 @@
 import React, { useState } from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, Alert, ActivityIndicator } from 'react-native'
 import { NormalButton, NormalInput, EmailInput,PasswordInput } from './../components'
 import UserStyles from './../style/UserStyles'
 import { login } from './../rest/UbademyAPI'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { USER_INFO, FAKE_PASSWORD } from  './../consts'
+import { USER_INFO, BASE_COLOR } from  './../consts'
 
-export default LoginScreen = (props) => {
+export default LoginScreen = ({navigation}) => {
   const initialState = {
     email: '',
     password: '',
   }
 
   const [user, setUser] = useState(initialState);
+  const [loading, setLoading] = useState(false);
 
   const handleChangeText = (value, name) => {
     setUser({ ...user, [name]: value });
@@ -26,14 +27,37 @@ export default LoginScreen = (props) => {
     }
   }
 
-  const handleLogin = async () => {
-    const userLoged = await login(user.email, user.password)
-    storeData(USER_INFO, JSON.stringify(userLoged))
+  const handleError = (e) => {
+    switch (e.response.status){
+      case 400: {
+        Alert.alert('Bad request', e.response.data.errors[0].param + ': ' + e.response.data.errors[0].msg);
+        break;
+      }
+      case 403: {
+        Alert.alert('Bad request', e.response.data.errors[0].param + ': ' + e.response.data.errors[0].msg);
+        break;
+      }
+      default: {
+        Alert.alert('Something went wrong');
+        break;
+      }
+    }
+  }
 
-    props.navigation.reset({
-      index: 0,
-      routes: [{ name: 'PrincipalScreen'}]
+  const handleLogin = async () => {
+    setLoading(true);
+    await login(user.email, user.password)
+    .then(r => {
+      setLoading(false);
+      storeData(USER_INFO, JSON.stringify(userLoged));
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'PrincipalScreen'}]
+      })
     })
+    .catch(e => handleError(e))
+    
+    setLoading(false);
   }
 
 	return (
@@ -49,12 +73,17 @@ export default LoginScreen = (props) => {
           onChangeText={(value) => handleChangeText(value, "password")} 
         />
 			</View>
-			<View>
-				<NormalButton 
-          onPress={() => handleLogin()}
-          title="Sign in"
-        />
-			</View>
+      {
+        loading ? 
+        <ActivityIndicator size="large" color={BASE_COLOR} />
+        :
+        <View>
+          <NormalButton 
+            onPress={() => handleLogin()}
+            title="Sign in"
+          />
+        </View>
+      }
 			<View style={{padding: 20}}>
 				<Text style={{textAlign: 'center'}}>
 					Don't have an account?
