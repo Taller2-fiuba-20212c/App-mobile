@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { ScrollView, Text, View, Alert } from 'react-native'
+import { ScrollView, Text, View, Alert, ActivityIndicator } from 'react-native'
 import { NormalButton, NormalInput, EmailInput, PasswordInput } from './../../components'
 import { CheckBox, Icon } from 'react-native-elements'
 import RegisterStyles from './RegisterStyles'
@@ -17,13 +17,14 @@ export default RegisterScreen = ({navigation}) => {
     password: '',
   }
   const [userInfo, setUserInfo] = useState(initialState);
-  const [missingFields, setMissingFields] = useState(true);
+  const [disableButton, setDisableButton] = useState(true);
   const [error, setError] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const handleError = (err) => {
     switch (err.response.status){
       case 400: {
-        Alert.alert('Bad request', err.response.data.errors[0].msg + ': ' + err.response.data.errors[0].param);
+        Alert.alert('Bad request', err.response.data.errors[0].param + ': ' + err.response.data.errors[0].msg);
         break;
       }
       default: {
@@ -34,16 +35,21 @@ export default RegisterScreen = ({navigation}) => {
   }
 
   const createNewUser = async () => {
+    setLoading(true);
     await register(
       userInfo.email, userInfo.password, userInfo.role, 
       userInfo.name, userInfo.lastname
     )
-    .then(r => navigation.navigate('LoginScreen'))
+    .then(r => {
+      setLoading(false);
+      navigation.navigate('LoginScreen')
+    })
     .catch(err => handleError(err))
+    setLoading(false);
   } 
 
   useEffect(() => {
-    setMissingFields(
+    setDisableButton(
       Object.values(userInfo).some(x => x == null || x == '') || error
     );
   }, [userInfo, error]);
@@ -112,13 +118,18 @@ export default RegisterScreen = ({navigation}) => {
           confirm={true}
         /> */}
 			</View>
-			<View>
-				<NormalButton 
-          disabled={missingFields} 
-          title="Sign up" 
-          onPress={() => createNewUser()}
-        />
-			</View>
+      {
+        loading ? 
+        <ActivityIndicator size="large" color={BASE_COLOR} />
+        :
+        <View>
+          <NormalButton 
+            disabled={disableButton} 
+            title="Sign up" 
+            onPress={() => createNewUser()}
+          />
+			  </View>
+      }
       <View style={{padding: 20}}>
 				<Text style={{textAlign: 'center'}}>
 					Have an account?
@@ -147,10 +158,15 @@ const HorizontalBoxes = ({onChange}) => {
   }
 
   return (
-    <>
+    <View style={{ flexDirection: 'row' }}>
     <CheckBox
       title={capitalize(ROLES_REGISTER[0])}
-      containerStyle ={{backgroundColor: 'transparent', borderWidth: 0}}
+      containerStyle ={{
+        backgroundColor: 'transparent', 
+        borderWidth: 0,
+        flex: 1,
+        paddingHorizontal: 0
+      }}
       checkedIcon={
         <Icon
           name="radio-button-checked"
@@ -171,7 +187,12 @@ const HorizontalBoxes = ({onChange}) => {
       onPress={() => handlePress(ROLES_REGISTER[0])}
     />
     <CheckBox
-      containerStyle ={{backgroundColor: 'transparent', borderWidth: 0}}
+      containerStyle ={{
+        backgroundColor: 'transparent', 
+        borderWidth: 0,
+        flex: 1,
+        paddingHorizontal: 0
+      }}
       title={capitalize(ROLES_REGISTER[1])}
       checkedIcon={
         <Icon
@@ -193,7 +214,12 @@ const HorizontalBoxes = ({onChange}) => {
       onPress={() => handlePress(ROLES_REGISTER[1])}
     />
     <CheckBox
-      containerStyle ={{backgroundColor: 'transparent', borderWidth: 0}}
+      containerStyle ={{
+        backgroundColor: 'transparent', 
+        borderWidth: 0,
+        flex: 1,
+        paddingHorizontal: 0
+      }}
       title={capitalize(ROLES_REGISTER[2])}
       checkedIcon={
         <Icon
@@ -214,6 +240,6 @@ const HorizontalBoxes = ({onChange}) => {
       checked={selected == ROLES_REGISTER[2]}
       onPress={() => handlePress(ROLES_REGISTER[2])}
     />
-    </>
+    </View>
   )
 }
