@@ -16,3 +16,12 @@ export const storeData = async (key_name, value) => {
     console.error(e)
   }
 }
+
+export const capitalize = (string) => {
+  const s = string.toLowerCase();
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+export const getAvatarTitle = (name, lastname) => {
+  return name[0].toUpperCase() + lastname[0].toUpperCase()
+}

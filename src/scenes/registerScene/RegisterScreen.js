@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { ScrollView, Text, View, Alert, ActivityIndicator } from 'react-native'
-import { NormalButton, NormalInput, EmailInput, PasswordInput } from './../../components'
-import { CheckBox, Icon } from 'react-native-elements'
+import { 
+  NormalButton, NormalInput, EmailInput, PasswordInput, HorizontalBoxes 
+} from './../../components'
 import RegisterStyles from './RegisterStyles'
-import { BASE_COLOR } from './../../consts'
-import { register } from './../../model'
-
-const ROLES_REGISTER = ['STUDENT', 'COLABORATOR', 'PROFESSOR']
+import { BASE_COLOR, USER_INFO } from './../../consts'
+import { register, storeData } from './../../model'
 
 export default RegisterScreen = ({navigation}) => {
   const initialState = {
@@ -42,7 +41,8 @@ export default RegisterScreen = ({navigation}) => {
     )
     .then(r => {
       setLoading(false);
-      navigation.navigate('LoginScreen')
+      storeData(USER_INFO, JSON.stringify(r));
+      navigation.navigate('PrincipalScreen');
     })
     .catch(err => handleError(err))
     setLoading(false);
@@ -142,104 +142,4 @@ export default RegisterScreen = ({navigation}) => {
     </ScrollView>
     </View>
 	)
-}
-
-const HorizontalBoxes = ({onChange}) => {
-  const [selected, setSelected] = useState(null);
-
-  const handlePress = (newSelected) => {
-    setSelected(newSelected);
-    onChange(newSelected);
-  }
-
-  function capitalize(string) {
-    const s = string.toLowerCase();
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  }
-
-  return (
-    <View style={{ flexDirection: 'row' }}>
-    <CheckBox
-      title={capitalize(ROLES_REGISTER[0])}
-      containerStyle ={{
-        backgroundColor: 'transparent', 
-        borderWidth: 0,
-        flex: 1,
-        paddingHorizontal: 0
-      }}
-      checkedIcon={
-        <Icon
-          name="radio-button-checked"
-          type="material"
-          color={BASE_COLOR}
-          size={25}
-        />
-      }
-      uncheckedIcon={
-        <Icon
-          name="radio-button-unchecked"
-          type="material"
-          color="grey"
-          size={25}
-        />
-      }
-      checked={selected == ROLES_REGISTER[0]}
-      onPress={() => handlePress(ROLES_REGISTER[0])}
-    />
-    <CheckBox
-      containerStyle ={{
-        backgroundColor: 'transparent', 
-        borderWidth: 0,
-        flex: 1,
-        paddingHorizontal: 0
-      }}
-      title={capitalize(ROLES_REGISTER[1])}
-      checkedIcon={
-        <Icon
-          name="radio-button-checked"
-          type="material"
-          color={BASE_COLOR}
-          size={25}
-        />
-      }
-      uncheckedIcon={
-        <Icon
-          name="radio-button-unchecked"
-          type="material"
-          color="grey"
-          size={25}
-        />
-      }
-      checked={selected == ROLES_REGISTER[1]}
-      onPress={() => handlePress(ROLES_REGISTER[1])}
-    />
-    <CheckBox
-      containerStyle ={{
-        backgroundColor: 'transparent', 
-        borderWidth: 0,
-        flex: 1,
-        paddingHorizontal: 0
-      }}
-      title={capitalize(ROLES_REGISTER[2])}
-      checkedIcon={
-        <Icon
-          name="radio-button-checked"
-          type="material"
-          color={BASE_COLOR}
-          size={25}
-        />
-      }
-      uncheckedIcon={
-        <Icon
-          name="radio-button-unchecked"
-          type="material"
-          color="grey"
-          size={25}
-        />
-      }
-      checked={selected == ROLES_REGISTER[2]}
-      onPress={() => handlePress(ROLES_REGISTER[2])}
-    />
-    </View>
-  )
 }

@@ -40,7 +40,7 @@ export default LoginScreen = ({navigation}) => {
     await login(user.email, user.password)
     .then(r => {
       setLoading(false);
-      storeData(USER_INFO, JSON.stringify(userLoged));
+      storeData(USER_INFO, JSON.stringify(r));
       navigation.reset({
         index: 0,
         routes: [{ name: 'PrincipalScreen'}]

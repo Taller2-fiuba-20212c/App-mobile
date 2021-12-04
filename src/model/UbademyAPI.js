@@ -14,6 +14,20 @@ export const register = async (email, password, role, name, lastname) => {
   });
 }
 
+export const modifyUser = async (uid, email, password, role, name, lastname) => {
+  return putDataToURL(`/edit/:${uid}`, 
+  {
+    uid: uid,
+  }, 
+  { 
+    email: email, 
+    password: password,
+    name: name, 
+    role: role,
+    lastname: lastname,
+  });
+}
+
 export const deleteUser = async (email, password, name, lastname) => {
   return deleteDataFromURL(`/users/create`, {}, { 
     email: email, 

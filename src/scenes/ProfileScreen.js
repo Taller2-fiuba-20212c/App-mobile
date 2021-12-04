@@ -2,16 +2,9 @@ import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { View, Text } from 'react-native'
 import { Avatar } from 'react-native-elements'
 import UserStyles from './../style/UserStyles'
-import { getData } from './../model'
+import { getData, capitalize, getAvatarTitle } from './../model'
 import { NormalButton, NormalInput, EmailInput } from './../components'
 import { BASE_COLOR, USER_INFO } from  './../consts'
-
-const USER = {
-  name: 'Alexander',
-  lastname: 'Arbieto',
-  email: 'alexander@gmail.com',
-  role: 'Student',
-}
 
 export default ProfileScreen = ({navigation, route}) => {
   const [userInfo, setUserInfo] = useState(null);
@@ -20,24 +13,21 @@ export default ProfileScreen = ({navigation, route}) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: true,
-      title: 'Profile',
+      title: userInfo ? 
+        userInfo.name + ' ' + userInfo.lastname
+        : 
+        'Profile',
     });
   });
 
   const goToModifyUser = () => {
-    // navigation.navigate('ModifyUserScreen', {
-    //   userInfo
-    // })
+    navigation.navigate('ModifyUserScreen')
   }
 
   useEffect(() => {
     getData(USER_INFO)
     .then(r => setUserInfo(r))
   }, [])
-
-  const getTitle = () => {
-    return userInfo.name[0].toUpperCase() + userInfo.lastname[0].toUpperCase()
-  }
 
 	return (
     <View style={{flex: 1}}>
@@ -50,13 +40,11 @@ export default ProfileScreen = ({navigation, route}) => {
           <Avatar
             rounded
             size='xlarge'
-            title={getTitle()}
+            title={getAvatarTitle(userInfo.name, userInfo.lastname)}
             containerStyle={{ 
               backgroundColor: BASE_COLOR 
             }}
-          >
-            {/* <Avatar.Accessory size={45} /> */}
-          </Avatar>
+          />
         </View>
         <View>
           <NormalInput 
@@ -77,7 +65,7 @@ export default ProfileScreen = ({navigation, route}) => {
         <View>
           <NormalInput 
             disabled={disabledValue}
-            value={userInfo.role}
+            value={capitalize(userInfo.role)}
             placeholder='Role' 
             iconName='graduation-cap' 
           />
@@ -89,7 +77,7 @@ export default ProfileScreen = ({navigation, route}) => {
           />
         </View>
         <View>
-          <NormalButton onPress={() => goToModifyUser()} title="Edit"/>
+          <NormalButton onPress={() => goToModifyUser()} title="Edit Profile"/>
         </View>
       </View>
       :

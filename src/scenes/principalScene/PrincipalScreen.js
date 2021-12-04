@@ -73,7 +73,7 @@ export default PrincipalScreen = ({navigation}) => {
   useEffect(() => {
     getCourses().then((r) => setCourses(r));
     return () => {
-      setCourses([]); // This worked for me
+      setCourses([]);
     };
   }, [])
 

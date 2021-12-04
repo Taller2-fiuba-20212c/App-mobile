@@ -1,2 +1,4 @@
-export { login, register, deleteUser, getUserTrajectory, getCourses } from './UbademyAPI'
-export { getData, storeData } from './Utils'
+export { 
+  login, register, deleteUser, getUserTrajectory, getCourses, modifyUser 
+} from './UbademyAPI'
+export { getData, storeData, capitalize, getAvatarTitle } from './Utils'
