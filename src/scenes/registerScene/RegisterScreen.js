@@ -4,7 +4,7 @@ import { NormalButton, NormalInput, EmailInput, PasswordInput } from './../../co
 import { CheckBox, Icon } from 'react-native-elements'
 import RegisterStyles from './RegisterStyles'
 import { BASE_COLOR } from './../../consts'
-import { register } from './../../rest/UbademyAPI'
+import { register } from './../../model'
 
 const ROLES_REGISTER = ['STUDENT', 'COLABORATOR', 'PROFESSOR']
 

@@ -4,7 +4,7 @@ import { ListItem, Icon } from 'react-native-elements'
 import Carousel from 'react-native-snap-carousel';
 import { ShortCardCourse, LongCardCourse } from './../../components'
 import { BASE_COLOR, WIDTH_SCREEN } from './../../consts';
-import { getCourses } from './../../rest/UbademyAPI'
+import { getCourses } from './../../model'
 import PrincipalStyles from './PrincipalStyles'
 
 const SLIDER_WIDTH = WIDTH_SCREEN;
@@ -72,7 +72,10 @@ export default PrincipalScreen = ({navigation}) => {
 
   useEffect(() => {
     getCourses().then((r) => setCourses(r));
-  })
+    return () => {
+      setCourses([]); // This worked for me
+    };
+  }, [])
 
   const _renderItem = ({item, index}) => {
     return (

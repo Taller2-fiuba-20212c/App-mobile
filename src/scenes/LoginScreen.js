@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import { Text, View, Alert, ActivityIndicator } from 'react-native'
 import { NormalButton, NormalInput, EmailInput,PasswordInput } from './../components'
 import UserStyles from './../style/UserStyles'
-import { login } from './../rest/UbademyAPI'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { login, storeData } from './../model'
 import { USER_INFO, BASE_COLOR } from  './../consts'
 
 export default LoginScreen = ({navigation}) => {
@@ -18,14 +17,6 @@ export default LoginScreen = ({navigation}) => {
   const handleChangeText = (value, name) => {
     setUser({ ...user, [name]: value });
   };
-
-  const storeData = async (key_name, value) => {
-    try {
-      await AsyncStorage.setItem(key_name, value)
-    } catch (e) {
-      console.error(e)
-    }
-  }
 
   const handleError = (e) => {
     switch (e.response.status){
@@ -55,8 +46,7 @@ export default LoginScreen = ({navigation}) => {
         routes: [{ name: 'PrincipalScreen'}]
       })
     })
-    .catch(e => handleError(e))
-    
+    .catch(e => handleError(e));
     setLoading(false);
   }
 
@@ -91,12 +81,12 @@ export default LoginScreen = ({navigation}) => {
         <Text style={{textAlign: 'center'}}>
           <Text 
             style={UserStyles.signInUp} 
-            onPress={() => props.navigation.navigate('RegisterScreen')}
+            onPress={() => navigation.navigate('RegisterScreen')}
           >Sign up </Text>
           |
           <Text 
             style={UserStyles.signInUp} 
-            onPress={() => props.navigation.reset({
+            onPress={() => navigation.reset({
               index: 0,
               routes: [{ name: 'PrincipalScreen'}]
             })}

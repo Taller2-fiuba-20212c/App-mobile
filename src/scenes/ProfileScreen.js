@@ -2,10 +2,16 @@ import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { View, Text } from 'react-native'
 import { Avatar } from 'react-native-elements'
 import UserStyles from './../style/UserStyles'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getData } from './../model'
 import { NormalButton, NormalInput, EmailInput } from './../components'
-import { DANGGER_COLOR, USER_INFO, FAKE_PASSWORD } from  './../consts'
+import { BASE_COLOR, USER_INFO } from  './../consts'
 
+const USER = {
+  name: 'Alexander',
+  lastname: 'Arbieto',
+  email: 'alexander@gmail.com',
+  role: 'Student',
+}
 
 export default ProfileScreen = ({navigation, route}) => {
   const [userInfo, setUserInfo] = useState(null);
@@ -24,34 +30,33 @@ export default ProfileScreen = ({navigation, route}) => {
     // })
   }
 
-  const getData = async (key_name) => {
-    try {
-      const data = await AsyncStorage.getItem(key_name)
-      const dataObject = data != null ? JSON.parse(data) : null;
-      setUserInfo(dataObject)
-    } catch(e) {
-      // error reading value
-      console.error(e);
-    }
-  }
-
   useEffect(() => {
     getData(USER_INFO)
+    .then(r => setUserInfo(r))
   }, [])
+
+  const getTitle = () => {
+    return userInfo.name[0].toUpperCase() + userInfo.lastname[0].toUpperCase()
+  }
 
 	return (
     <View style={{flex: 1}}>
     {
-      userInfo !== null ?
+      userInfo != null ?
       <View style={UserStyles.container}>
-        <View style={{  }}>
+        <View style={{ 
+          alignItems: 'center'
+        }}>
           <Avatar
             rounded
-            source={{
-              uri:
-                'https://uifaces.co/our-content/donated/6MWH9Xi_.jpg',
+            size='xlarge'
+            title={getTitle()}
+            containerStyle={{ 
+              backgroundColor: BASE_COLOR 
             }}
-          />
+          >
+            {/* <Avatar.Accessory size={45} /> */}
+          </Avatar>
         </View>
         <View>
           <NormalInput 
@@ -70,13 +75,17 @@ export default ProfileScreen = ({navigation, route}) => {
           />
         </View>
         <View>
-          <EmailInput disabled={disabledValue} value={userInfo.email} />
+          <NormalInput 
+            disabled={disabledValue}
+            value={userInfo.role}
+            placeholder='Role' 
+            iconName='graduation-cap' 
+          />
         </View>
         <View>
-          <PasswordInput 
-            value={userInfo.password} 
-            disabled={disabledValue}
-            hideVisibility={true}
+          <EmailInput 
+            disabled={disabledValue} 
+            value={userInfo.email} 
           />
         </View>
         <View>
@@ -84,8 +93,16 @@ export default ProfileScreen = ({navigation, route}) => {
         </View>
       </View>
       :
-      <View>
-        <Text>Sign Up</Text>
+      <View style={ UserStyles.container }>
+        <Text style={{ fontSize: 20, textAlign: 'center'}}>Have not logged in yet?</Text>
+        <NormalButton 
+          title='Sing in' onPress={() => {
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'LoginScreen'}]
+            })
+          }}
+        />
       </View>
     }
     </View>
