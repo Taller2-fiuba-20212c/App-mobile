@@ -1,22 +1,26 @@
-import React, {useEffect} from 'react'
-import { Text, View, ScrollView, Dimensions } from 'react-native'
-import { Image, PricingCard } from 'react-native-elements';
+import React, {useEffect, useState} from 'react'
+import { Text, View, ScrollView, ActivityIndicator } from 'react-native'
+import { Image, PricingCard, ListItem, Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NormalButton, AccordionListItem } from './../../components'
-import { BASE_COLOR } from './../../consts'
+import { BASE_COLOR, WIDTH_SCREEN, MAX_UNITS } from './../../consts'
+import { getAvatarTitle, capitalize } from './../../model'
+import { getUser } from './../../model'
 import CourseStyles from './CourseStyles'
-
-const SCREEN_WIDTH = Dimensions.get('window').width;
-const MAX_UNITS = 6;
 
 export default CourseScreen = ({route, navigation}) => {
   const course = route.params.course;
+  const [creator, setCreator] = useState(null);
 
   useEffect(() => {
     navigation.setOptions({
       title: course.name,
     });
-  });
+    getUser(course.creatorId).then((r) => {
+      console.log(r);
+      setCreator(r);
+    });
+  }, []);
 
   const watchContentCourse = () => {
     navigation.navigate('ContentCourseScreen', {
@@ -30,8 +34,8 @@ export default CourseScreen = ({route, navigation}) => {
         <Image 
           style={{
             resizeMode: 'stretch',
-            width: SCREEN_WIDTH,
-            height: Math.round(SCREEN_WIDTH * 0.5),
+            width: WIDTH_SCREEN,
+            height: Math.round(WIDTH_SCREEN * 0.5),
           }} 
           source={course.imgsrc}
         />
@@ -59,6 +63,33 @@ export default CourseScreen = ({route, navigation}) => {
           : 
           null
         }
+        <View style={CourseStyles.text}>
+          <Text style={CourseStyles.section}>Creator</Text>
+        </View>
+        {
+          creator == null ?
+          <View>
+            <ActivityIndicator size="large" color={BASE_COLOR} />
+          </View> 
+          :
+          <ListItem 
+            containerStyle={{paddingHorizontal: 20}}
+            onPress={() => navigation.navigate('UserScreen', {userInfo: creator})}
+          >
+            <Avatar
+              rounded
+              title={getAvatarTitle(creator.name, creator.lastname)}
+              containerStyle={{ 
+                backgroundColor: BASE_COLOR 
+              }}
+            />
+            <ListItem.Content>
+              <ListItem.Title>{creator.name + ' ' +creator.lastname}</ListItem.Title>
+              <ListItem.Subtitle>{capitalize(creator.role)}</ListItem.Subtitle>
+            </ListItem.Content>
+            <ListItem.Chevron/>
+          </ListItem>
+        }
         <PricingCard
           color={BASE_COLOR}
           title={'Sub type'}
@@ -66,8 +97,13 @@ export default CourseScreen = ({route, navigation}) => {
           button={
             <NormalButton 
               title="SUBSCRIBE" 
+              onPress={() => console.log(course)}
               icon={
-                <Icon name="bookshelf" size={22} color="white"/>
+                <Icon 
+                  name="bookshelf" 
+                  size={22} 
+                  color="white"
+                />
               }
             />
           }

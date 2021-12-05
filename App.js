@@ -7,16 +7,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { 
   LoginScreen, RegisterScreen, ModifyUserScreen, ProfileScreen, WelcomeScreen,
-  PrincipalScreen, CourseScreen, ContentCourseScreen, SearchScreen, VideoClassScreen
+  PrincipalScreen, CourseScreen, ContentCourseScreen, SearchScreen, VideoClassScreen, 
+  UserScreen
 } from './src/scenes';
-
-function UserScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>  
-      <Text>User screen</Text>
-    </View>
-  );
-}
 
 const Tab = createBottomTabNavigator();
 
@@ -70,6 +63,7 @@ function MyStack() {
       <Stack.Screen name="WelcomeScreen" component={WelcomeScreen}/>
       <Stack.Screen name="PrincipalScreen" component={TabScreen} />
       <Stack.Screen name="LoginScreen" component={LoginScreen}/>
+      <Stack.Screen name="UserScreen" component={UserScreen}/>
       <Stack.Screen name="CourseScreen" 
         component={CourseScreen}
         options={{

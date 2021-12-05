@@ -1,5 +1,5 @@
 import React, {useLayoutEffect, useEffect, useState} from 'react'
-import { Text, View, ScrollView } from 'react-native'
+import { Text, View, ScrollView, ActivityIndicator } from 'react-native'
 import { ListItem, Icon } from 'react-native-elements'
 import Carousel from 'react-native-snap-carousel';
 import { ShortCardCourse, LongCardCourse } from './../../components'
@@ -50,7 +50,7 @@ const courseMock = {
 // ]
 
 export default PrincipalScreen = ({navigation}) => {
-  const [courses, setCourses] = useState([])
+  const [courses, setCourses] = useState(null)
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -91,17 +91,25 @@ export default PrincipalScreen = ({navigation}) => {
         <View style={PrincipalStyles.text}>
           <Text style={PrincipalStyles.section}>Your courses</Text>
         </View>
-        <Carousel 
-          data={courses} 
-          renderItem={_renderItem}
-          sliderWidth={SLIDER_WIDTH}
-          itemWidth={ITEM_WIDTH}
-        />
+        {
+          courses == null ? 
+          <ActivityIndicator size="large" color={BASE_COLOR} />
+          :
+          <Carousel 
+            data={courses} 
+            renderItem={_renderItem}
+            sliderWidth={SLIDER_WIDTH}
+            itemWidth={ITEM_WIDTH}
+          />
+        }
         <View style={PrincipalStyles.text}>
           <Text style={PrincipalStyles.section}>Top courses</Text>
         </View>
         <View style={PrincipalStyles.topCourses}>
           {
+            courses == null ? 
+            <ActivityIndicator size="large" color={BASE_COLOR} />
+            :
             courses.map((l, i) => (
               <ListItem 
                 key={i} 

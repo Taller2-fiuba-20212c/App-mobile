@@ -7,6 +7,7 @@ import { BASE_COLOR, USER_INFO } from  './../../consts'
 import ModifyUserStyles from './ModifyUserStyles'
 
 export default ModifyUserScreen = ({navigation}) => {
+  const [userInfoSaved, setUserInfoSaved] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [loadingScreen, setLoadingScreen] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -29,25 +30,33 @@ export default ModifyUserScreen = ({navigation}) => {
     }
   }
 
+  const modifyDataSaved = (r) => {
+    const aux = Object.assign({}, userInfoSaved);
+    const newUserInfo = Object.assign(aux, r);
+    storeData(USER_INFO, JSON.stringify(newUserInfo));
+  }
+
   const saveChange = async () => {
     setLoading(true);
     await modifyUser(
-      userInfo.uid, userInfo.email, userInfo.password, 
-      userInfo.role, userInfo.name, userInfo.lastname
+      userInfo.uid, userInfo.email, userInfo.role, 
+      userInfo.name, userInfo.lastname, userInfo.active
     )
     .then(r => {
       setLoading(false);
-      storeData(USER_INFO, JSON.stringify(r));
+      modifyDataSaved(r);
       navigation.navigate('ProfileScreen')
     })
     .catch(err => handleError(err))
     setLoading(false);
+    console.log(userInfo);
   }
 
   useEffect(() => {
     getData(USER_INFO)
     .then(r => {
       setUserInfo(r);
+      setUserInfoSaved(r);
       setLoadingScreen(false);
     })
   }, []);

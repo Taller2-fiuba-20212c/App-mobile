@@ -14,17 +14,14 @@ export const register = async (email, password, role, name, lastname) => {
   });
 }
 
-export const modifyUser = async (uid, email, password, role, name, lastname) => {
-  return putDataToURL(`/edit/:${uid}`, 
-  {
-    uid: uid,
-  }, 
+export const modifyUser = async (uid, email, role, name, lastname, active) => {
+  return putDataToURL(`/edit/:${uid}`, {}, 
   { 
     email: email, 
-    password: password,
     name: name, 
     role: role,
     lastname: lastname,
+    active: active
   });
 }
 
@@ -37,8 +34,8 @@ export const deleteUser = async (email, password, name, lastname) => {
   });
 }
 
-export const getUserTrajectory = async (userId) => {
-  return fetchFromURL(`/users/trajectory/${userId}`);
+export const getUser = async (userId) => {
+  return fetchFromURL(`/users/get/${userId}`);
 }
 
 export const getCourses = async () => {
