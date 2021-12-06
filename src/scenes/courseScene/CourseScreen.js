@@ -2,10 +2,10 @@ import React, {useEffect, useState} from 'react'
 import { Text, View, ScrollView, ActivityIndicator } from 'react-native'
 import { Image, PricingCard, ListItem, Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { NormalButton, AccordionListItem } from './../../components'
-import { BASE_COLOR, WIDTH_SCREEN, MAX_UNITS } from './../../consts'
-import { getAvatarTitle, capitalize } from './../../model'
-import { getUser } from './../../model'
+import { NormalButton, AccordionListItem } from '../../components'
+import { BASE_COLOR, WIDTH_SCREEN, MAX_UNITS } from '../../consts'
+import { getAvatarTitle, capitalize } from '../../model'
+import { getUser } from '../../model'
 import CourseStyles from './CourseStyles'
 
 export default CourseScreen = ({route, navigation}) => {

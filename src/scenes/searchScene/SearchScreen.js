@@ -1,8 +1,8 @@
 import React, {useLayoutEffect, useState, useEffect} from 'react';
 import { View, Text, Pressable, ScrollView } from 'react-native'
 import { SearchBar, Icon, BottomSheet, Divider, Slider } from 'react-native-elements'
-import { CheckBoxList } from './../../../components'
-import { BASE_COLOR } from '../../../consts';
+import { CheckBoxList } from '../../components'
+import { BASE_COLOR } from '../../consts';
 import SearchStyles from './SearchStyles'
 
 const subType = ['Bronze', 'Silver', 'Gold', 'Diamond'];

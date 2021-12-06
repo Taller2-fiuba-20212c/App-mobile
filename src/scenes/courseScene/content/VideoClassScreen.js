@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native'
 import YoutubePlayer from "react-native-youtube-iframe";
-import { WIDTH_SCREEN, WINDOW_HEIGHT } from './../../../consts'
+import { WIDTH_SCREEN, WINDOW_HEIGHT } from '../../../consts'
 
 export default VideoClassScreen = ({route}) => {
   const videoID = route.params.videoID;

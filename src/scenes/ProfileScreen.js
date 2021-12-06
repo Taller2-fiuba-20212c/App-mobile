@@ -24,6 +24,10 @@ export default ProfileScreen = ({navigation, route}) => {
     navigation.navigate('ModifyUserScreen')
   }
 
+  const goToCreateCourse = () => {
+    navigation.navigate('CreateCourseScreen')
+  }
+
   useEffect(() => {
     getData(USER_INFO)
     .then(r => setUserInfo(r))
@@ -79,6 +83,14 @@ export default ProfileScreen = ({navigation, route}) => {
         <View>
           <NormalButton onPress={() => goToModifyUser()} title="Edit Profile"/>
         </View>
+        {
+          userInfo.role == 'PROFESSOR' ? 
+          <View style={{ paddingVertical: 10 }}>
+            <NormalButton onPress={() => goToCreateCourse()} title="Create new course"/>
+          </View>
+          :
+          null
+        }
       </View>
       :
       <View style={ UserStyles.container }>
