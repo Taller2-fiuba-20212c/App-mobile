@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { ScrollView, Text, View, Alert, ActivityIndicator } from 'react-native'
+import { ScrollView, Text, View, ActivityIndicator } from 'react-native'
 import { 
-  NormalButton, NormalInput, EmailInput, PasswordInput, HorizontalBoxes 
+  NormalButton, NormalInput, EmailInput, PasswordInput, HorizontalBoxes, Alert 
 } from './../../components'
 import RegisterStyles from './RegisterStyles'
 import { BASE_COLOR, USER_INFO } from './../../consts'
@@ -20,17 +20,31 @@ export default RegisterScreen = ({navigation}) => {
   const [error, setError] = useState(true);
   const [loading, setLoading] = useState(false);
 
+  const [visible, setVisible] = useState(false);
+  const [alertInfo, setAlertInfo] = useState({
+    title: '',
+    msg: ''
+  });
+
   const handleError = (err) => {
     switch (err.response.status){
       case 400: {
-        Alert.alert('Bad request', err.response.data.errors[0].param + ': ' + err.response.data.errors[0].msg);
+        setAlertInfo({
+          title: err.response.data.errors[0].param, 
+          msg: err.response.data.errors[0].msg
+        });
         break;
       }
       default: {
-        Alert.alert('Something went wrong');
+        setAlertInfo({
+          title: 'Something went wrong',
+          msg: ''
+        });
         break;
       }
     }
+
+    setVisible(true)
   }
 
   const createNewUser = async () => {
@@ -140,6 +154,12 @@ export default RegisterScreen = ({navigation}) => {
 				</Text>
 			</View>
     </ScrollView>
+    <Alert 
+      isVisible={visible}
+      alertInfo={alertInfo}
+      onBackdropPress={() => setVisible(false)}
+      onButtonPress={() => setVisible(false)}
+    />
     </View>
 	)
 }

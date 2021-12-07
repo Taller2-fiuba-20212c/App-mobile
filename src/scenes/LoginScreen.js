@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Text, View, Alert, ActivityIndicator } from 'react-native'
-import { NormalButton, NormalInput, EmailInput,PasswordInput } from './../components'
+import { Text, View, ActivityIndicator } from 'react-native'
+import { NormalButton, Alert, EmailInput,PasswordInput } from './../components'
 import UserStyles from './../style/UserStyles'
 import { login, storeData } from './../model'
 import { USER_INFO, BASE_COLOR } from  './../consts'
@@ -14,25 +14,42 @@ export default LoginScreen = ({navigation}) => {
   const [user, setUser] = useState(initialState);
   const [loading, setLoading] = useState(false);
 
+  const [visible, setVisible] = useState(false);
+  const [alertInfo, setAlertInfo] = useState({
+    title: '',
+    msg: ''
+  });
+
   const handleChangeText = (value, name) => {
     setUser({ ...user, [name]: value });
   };
 
-  const handleError = (e) => {
-    switch (e.response.status){
+  const handleError = (err) => {
+    switch (err.response.status){
       case 400: {
-        Alert.alert('Bad request', e.response.data.errors[0].param + ': ' + e.response.data.errors[0].msg);
+        setAlertInfo({
+          title: err.response.data.errors[0].param, 
+          msg: err.response.data.errors[0].msg
+        });
         break;
       }
       case 403: {
-        Alert.alert('Bad request', e.response.data.errors[0].param + ': ' + e.response.data.errors[0].msg);
+        setAlertInfo({
+          title: err.response.data.errors[0].param, 
+          msg: err.response.data.errors[0].msg
+        });
         break;
       }
       default: {
-        Alert.alert('Something went wrong');
+        setAlertInfo({
+          title: 'Something went wrong',
+          msg: ''
+        });
         break;
       }
     }
+
+    setVisible(true)
   }
 
   const handleLogin = async () => {
@@ -93,6 +110,13 @@ export default LoginScreen = ({navigation}) => {
           > Browse</Text>
         </Text>
 			</View>
+      <Alert 
+        isVisible={visible}
+        alertInfo={alertInfo}
+        onBackdropPress={() => setVisible(false)}
+        onButtonPress={() => setVisible(false)}
+      />
 		</View>
+    
 	)
 }

@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
-import { View, Text, ActivityIndicator, Alert, ScrollView } from 'react-native'
+import { View, Text, ActivityIndicator, ScrollView } from 'react-native'
 import { getData, storeData, modifyUser, getAvatarTitle } from './../../model'
 import { Avatar } from 'react-native-elements'
-import { NormalButton, NormalInput, EmailInput, HorizontalBoxes } from './../../components'
+import { 
+  NormalButton, NormalInput, EmailInput, HorizontalBoxes, Alert 
+} from './../../components'
 import { BASE_COLOR, USER_INFO } from  './../../consts'
 import ModifyUserStyles from './ModifyUserStyles'
 
@@ -12,22 +14,31 @@ export default ModifyUserScreen = ({navigation}) => {
   const [loadingScreen, setLoadingScreen] = useState(true);
   const [loading, setLoading] = useState(false);
   const [disableButton, setDisableButton] = useState(false)
+  const [visible, setVisible] = useState(false);
+  const [alertInfo, setAlertInfo] = useState({
+    title: '',
+    msg: ''
+  });
 
   const handleError = (err) => {
     switch (err.response.status){
       case 400: {
-        Alert.alert('Bad request', err.response.data.errors[0].param + ': ' + err.response.data.errors[0].msg);
-        break;
-      }
-      case 404: {
-        console.log(err.response);
+        setAlertInfo({
+          title: err.response.data.errors[0].param, 
+          msg: err.response.data.errors[0].msg
+        });
         break;
       }
       default: {
-        Alert.alert('Something went wrong');
+        setAlertInfo({
+          title: 'Something went wrong',
+          msg: ''
+        });
         break;
       }
     }
+
+    setVisible(true)
   }
 
   const modifyDataSaved = (r) => {
@@ -156,6 +167,12 @@ export default ModifyUserScreen = ({navigation}) => {
                 </View>
               }
             </View>
+            <Alert 
+              isVisible={visible}
+              alertInfo={alertInfo}
+              onBackdropPress={() => setVisible(false)}
+              onButtonPress={() => setVisible(false)}
+            />
           </ScrollView>
         </View>
       }
