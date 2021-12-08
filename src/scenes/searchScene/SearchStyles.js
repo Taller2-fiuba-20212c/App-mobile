@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { NAV_BAR_HEIGHT, WIDTH_SCREEN, HEIGHT_SCREEN, BASE_COLOR } from '../../../consts';
+import { NAV_BAR_HEIGHT, WIDTH_SCREEN, HEIGHT_SCREEN } from '../../consts';
 
 export default SearchStyles = StyleSheet.create({
   header: {

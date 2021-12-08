@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
-import { BASE_COLOR } from  '../consts'
+import { BASE_COLOR } from  './../../consts'
 
-export default UserStyles = StyleSheet.create({
+export default CrearCourseStyles = StyleSheet.create({
 	container: {
     justifyContent: 'center',
 		flex: 1,

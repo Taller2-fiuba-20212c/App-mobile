@@ -6,17 +6,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { 
-  LoginScreen, CreateUserScreen, ModifyUserScreen, ProfileScreen, WelcomeScreen,
-  PrincipalScreen, CourseScreen, ContentCourseScreen, SearchScreen, VideoClassScreen
+  LoginScreen, RegisterScreen, ModifyUserScreen, ProfileScreen, WelcomeScreen,
+  PrincipalScreen, CourseScreen, ContentCourseScreen, SearchScreen, VideoClassScreen, 
+  UserScreen, CreateCourseScreen, ExtraInfoScreen
 } from './src/scenes';
-
-function UserScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>  
-      <Text>User screen</Text>
-    </View>
-  );
-}
 
 const Tab = createBottomTabNavigator();
 
@@ -68,8 +61,10 @@ function MyStack() {
       },
     }}>
       <Stack.Screen name="WelcomeScreen" component={WelcomeScreen}/>
+      <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
       <Stack.Screen name="PrincipalScreen" component={TabScreen} />
       <Stack.Screen name="LoginScreen" component={LoginScreen}/>
+      <Stack.Screen name="UserScreen" component={UserScreen}/>
       <Stack.Screen name="CourseScreen" 
         component={CourseScreen}
         options={{
@@ -83,9 +78,10 @@ function MyStack() {
           title: 'Content'
         }}
       />
-      <Stack.Screen name="CreateUserScreen" component={CreateUserScreen}/>
+      <Stack.Screen name="ExtraInfoScreen" component={ExtraInfoScreen}/>
       <Stack.Screen name="ModifyUserScreen" component={ModifyUserScreen}/>
       <Stack.Screen name="VideoClassScreen" component={VideoClassScreen}/>
+      <Stack.Screen name="CreateCourseScreen" component={CreateCourseScreen}/>
       <Stack.Screen name="ProfileScreen" component={ProfileScreen}/>
     </Stack.Navigator>
   )

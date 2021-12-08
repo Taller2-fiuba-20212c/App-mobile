@@ -2,10 +2,9 @@ import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { View, Text } from 'react-native'
 import { Avatar } from 'react-native-elements'
 import UserStyles from './../style/UserStyles'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getData, capitalize, getAvatarTitle } from './../model'
 import { NormalButton, NormalInput, EmailInput } from './../components'
-import { DANGGER_COLOR, USER_INFO, FAKE_PASSWORD } from  './../consts'
-
+import { BASE_COLOR, USER_INFO } from  './../consts'
 
 export default ProfileScreen = ({navigation, route}) => {
   const [userInfo, setUserInfo] = useState(null);
@@ -14,42 +13,40 @@ export default ProfileScreen = ({navigation, route}) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: true,
-      title: 'Profile',
+      title: userInfo ? 
+        userInfo.name + ' ' + userInfo.lastname
+        : 
+        'Profile',
     });
   });
 
   const goToModifyUser = () => {
-    // navigation.navigate('ModifyUserScreen', {
-    //   userInfo
-    // })
+    navigation.navigate('ModifyUserScreen')
   }
 
-  const getData = async (key_name) => {
-    try {
-      const data = await AsyncStorage.getItem(key_name)
-      const dataObject = data != null ? JSON.parse(data) : null;
-      setUserInfo(dataObject)
-    } catch(e) {
-      // error reading value
-      console.error(e);
-    }
+  const goToCreateCourse = () => {
+    navigation.navigate('CreateCourseScreen')
   }
 
   useEffect(() => {
     getData(USER_INFO)
+    .then(r => setUserInfo(r))
   }, [])
 
 	return (
     <View style={{flex: 1}}>
     {
-      userInfo !== null ?
+      userInfo != null ?
       <View style={UserStyles.container}>
-        <View style={{  }}>
+        <View style={{ 
+          alignItems: 'center'
+        }}>
           <Avatar
             rounded
-            source={{
-              uri:
-                'https://uifaces.co/our-content/donated/6MWH9Xi_.jpg',
+            size='xlarge'
+            title={getAvatarTitle(userInfo.name, userInfo.lastname)}
+            containerStyle={{ 
+              backgroundColor: BASE_COLOR 
             }}
           />
         </View>
@@ -70,22 +67,42 @@ export default ProfileScreen = ({navigation, route}) => {
           />
         </View>
         <View>
-          <EmailInput disabled={disabledValue} value={userInfo.email} />
-        </View>
-        <View>
-          <PasswordInput 
-            value={userInfo.password} 
+          <NormalInput 
             disabled={disabledValue}
-            hideVisibility={true}
+            value={capitalize(userInfo.role)}
+            placeholder='Role' 
+            iconName='graduation-cap' 
           />
         </View>
         <View>
-          <NormalButton onPress={() => goToModifyUser()} title="Edit"/>
+          <EmailInput 
+            disabled={disabledValue} 
+            value={userInfo.email} 
+          />
         </View>
+        <View>
+          <NormalButton onPress={() => goToModifyUser()} title="Edit Profile"/>
+        </View>
+        {
+          userInfo.role == 'PROFESSOR' ? 
+          <View style={{ paddingVertical: 10 }}>
+            <NormalButton onPress={() => goToCreateCourse()} title="Create new course"/>
+          </View>
+          :
+          null
+        }
       </View>
       :
-      <View>
-        <Text>Sign Up</Text>
+      <View style={ UserStyles.container }>
+        <Text style={{ fontSize: 20, textAlign: 'center'}}>Have not logged in yet?</Text>
+        <NormalButton 
+          title='Sing in' onPress={() => {
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'LoginScreen'}]
+            })
+          }}
+        />
       </View>
     }
     </View>
