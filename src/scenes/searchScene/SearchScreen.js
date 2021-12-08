@@ -2,11 +2,8 @@ import React, {useLayoutEffect, useState, useEffect} from 'react';
 import { View, Text, Pressable, ScrollView } from 'react-native'
 import { SearchBar, Icon, BottomSheet, Divider, Slider } from 'react-native-elements'
 import { CheckBoxList } from '../../components'
-import { BASE_COLOR } from '../../consts';
+import { BASE_COLOR, SUBCRIPTIONS_TYPES, CATEGORIES_TYPES } from '../../consts';
 import SearchStyles from './SearchStyles'
-
-const subType = ['Bronze', 'Silver', 'Gold', 'Diamond'];
-const catType = ['Programming', 'Business', 'Design', 'Music', 'Photography & Video', 'Health & Fitness'];
 
 export default SearchScreen = ({navigation}) => {
   const [searchText, setSearchText] = useState('');
@@ -14,13 +11,13 @@ export default SearchScreen = ({navigation}) => {
   const [applyEnable, setApplyEnable] = useState(false);
 
   const initialFilters = {
-    subType: subType[0],
+    subType: SUBCRIPTIONS_TYPES[0],
     catTypes: [],
   }
   const [filters, setFilters] = useState(initialFilters);
 
   const initialValuesSelected = {
-    subType: subType[0],
+    subType: SUBCRIPTIONS_TYPES[0],
     catTypes: [],
   }
   const [valuesSelected, setValuesSelected] = useState(initialValuesSelected);
@@ -144,9 +141,9 @@ export default SearchScreen = ({navigation}) => {
                 <Slider
                   step={1}
                   thumbStyle={{ height: 20, width: 20, backgroundColor: 'black' }}
-                  value={subType.indexOf(valuesSelected.subType)}
-                  maximumValue={subType.length - 1}
-                  onValueChange={(value) => handleChangeValue(subType[value], 'subType')}
+                  value={SUBCRIPTIONS_TYPES.indexOf(valuesSelected.subType)}
+                  maximumValue={SUBCRIPTIONS_TYPES.length - 1}
+                  onValueChange={(value) => handleChangeValue(CATEGORIES_TYPES[value], 'subType')}
                 />
                 <Text>Subcription level: {valuesSelected.subType}</Text>
               </View>
@@ -154,7 +151,7 @@ export default SearchScreen = ({navigation}) => {
               <CheckBoxList 
                 checks={valuesSelected.catTypes}
                 onChangeChecks={(checks) => handleChangeValue(checks, 'catTypes')}
-                list={catType} 
+                list={CATEGORIES_TYPES} 
               />
             </ScrollView>
           </View>

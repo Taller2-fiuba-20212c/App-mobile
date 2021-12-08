@@ -8,7 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { 
   LoginScreen, RegisterScreen, ModifyUserScreen, ProfileScreen, WelcomeScreen,
   PrincipalScreen, CourseScreen, ContentCourseScreen, SearchScreen, VideoClassScreen, 
-  UserScreen, CreateCourseScreen
+  UserScreen, CreateCourseScreen, ExtraInfoScreen
 } from './src/scenes';
 
 const Tab = createBottomTabNavigator();
@@ -60,6 +60,7 @@ function MyStack() {
         backgroundColor: 'white',
       },
     }}>
+      <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
       <Stack.Screen name="WelcomeScreen" component={WelcomeScreen}/>
       <Stack.Screen name="PrincipalScreen" component={TabScreen} />
       <Stack.Screen name="LoginScreen" component={LoginScreen}/>
@@ -77,7 +78,7 @@ function MyStack() {
           title: 'Content'
         }}
       />
-      <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
+      <Stack.Screen name="ExtraInfoScreen" component={ExtraInfoScreen}/>
       <Stack.Screen name="ModifyUserScreen" component={ModifyUserScreen}/>
       <Stack.Screen name="VideoClassScreen" component={VideoClassScreen}/>
       <Stack.Screen name="CreateCourseScreen" component={CreateCourseScreen}/>

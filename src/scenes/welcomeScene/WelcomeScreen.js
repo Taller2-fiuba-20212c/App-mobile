@@ -11,7 +11,7 @@ export default WelcomeScreen = ({navigation}) => {
   const handleStart = () => {
     navigation.reset({
       index: 0,
-      routes: [{ name: nextHop}]
+      routes: [{ name: nextHop }]
     })
   }
 
