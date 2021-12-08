@@ -16,11 +16,8 @@ export default SearchScreen = ({navigation}) => {
   }
   const [filters, setFilters] = useState(initialFilters);
 
-  const initialValuesSelected = {
-    subType: SUBCRIPTIONS_TYPES[0],
-    catTypes: [],
-  }
-  const [valuesSelected, setValuesSelected] = useState(initialValuesSelected);
+  const [subTypeSelected, setSubTypeSelected] = useState(SUBCRIPTIONS_TYPES[0]);
+  const [categoriesSelected, setCategoriesSelected] = useState([]);
 
   const compareArrays = (array1, array2) => {
     const array2Sorted = array2.slice().sort();
@@ -29,37 +26,34 @@ export default SearchScreen = ({navigation}) => {
     });
   };
 
-  const updateApply = (state1, state2) => {
-    (state1.subType == state2.subType && compareArrays(state1.catTypes, state2.catTypes)) 
+  const updateApply = (filters, subType, catTypes) => {
+    (filters.subType == subType && compareArrays(filters.catTypes, catTypes)) 
     ? setApplyEnable(false) 
     : setApplyEnable(true)
   };
   
   useEffect(() => {
-    updateApply(filters, valuesSelected);
-  }, [valuesSelected]);
-  
-  const handleChangeValue = (value, name) => {
-    setValuesSelected(s => ({ ...s, [name]: value}));
-  };
+    updateApply(filters, subTypeSelected, categoriesSelected);
+  }, [subTypeSelected, categoriesSelected]);
 
   const apply = () => { 
-    setFilters(valuesSelected);
+    setFilters({
+      subType: subTypeSelected,
+      catTypes: categoriesSelected
+    });
+    setApplyEnable(false);
     setIsVisible(false);
   };
 
   const cancel = () => {
+    setSubTypeSelected(filters.subType);
+    setCategoriesSelected(filters.catTypes);
     setIsVisible(false);
   };
 
   const open = () => {
     setIsVisible(true);
   };
-
-  useEffect(() => {
-    setApplyEnable(false);
-    setValuesSelected(filters)
-  }, [isVisible]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -139,18 +133,19 @@ export default SearchScreen = ({navigation}) => {
               <Text style={SearchStyles.subTitle}>Subcriptions</Text>
               <View style={SearchStyles.SliderContainer}>
                 <Slider
+                  allowTouchTrack={true}
                   step={1}
                   thumbStyle={{ height: 20, width: 20, backgroundColor: 'black' }}
-                  value={SUBCRIPTIONS_TYPES.indexOf(valuesSelected.subType)}
+                  value={SUBCRIPTIONS_TYPES.indexOf(filters.subType)}
                   maximumValue={SUBCRIPTIONS_TYPES.length - 1}
-                  onValueChange={(value) => handleChangeValue(CATEGORIES_TYPES[value], 'subType')}
+                  onValueChange={(value) => setSubTypeSelected(SUBCRIPTIONS_TYPES[value])}
                 />
-                <Text>Subcription level: {valuesSelected.subType}</Text>
+                <Text>Subcription level: {subTypeSelected}</Text>
               </View>
               <Text style={SearchStyles.subTitle}>Categories</Text>
               <CheckBoxList 
-                checks={valuesSelected.catTypes}
-                onChangeChecks={(checks) => handleChangeValue(checks, 'catTypes')}
+                checks={categoriesSelected}
+                onChangeChecks={(checks) => setCategoriesSelected(checks)}
                 list={CATEGORIES_TYPES} 
               />
             </ScrollView>

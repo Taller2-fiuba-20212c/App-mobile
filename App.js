@@ -60,8 +60,8 @@ function MyStack() {
         backgroundColor: 'white',
       },
     }}>
-      <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
       <Stack.Screen name="WelcomeScreen" component={WelcomeScreen}/>
+      <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
       <Stack.Screen name="PrincipalScreen" component={TabScreen} />
       <Stack.Screen name="LoginScreen" component={LoginScreen}/>
       <Stack.Screen name="UserScreen" component={UserScreen}/>

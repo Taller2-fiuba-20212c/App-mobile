@@ -49,18 +49,17 @@ export default RegisterScreen = ({navigation}) => {
 
   const createNewUser = async () => {
     setLoading(true);
-    // await register(
-    //   userInfo.email, userInfo.password, userInfo.role, 
-    //   userInfo.name, userInfo.lastname
-    // )
-    // .then(r => {
-    //   setLoading(false);
-    //   storeData(USER_INFO, JSON.stringify(r));
-    //   navigation.navigate('ExtraInfoScreen');
-    // })
-    // .catch(err => handleError(err))
+    await register(
+      userInfo.email, userInfo.password, userInfo.role, 
+      userInfo.name, userInfo.lastname
+    )
+    .then(r => {
+      setLoading(false);
+      storeData(USER_INFO, JSON.stringify(r));
+      navigation.navigate('ExtraInfoScreen');
+    })
+    .catch(err => handleError(err))
     setLoading(false);
-    navigation.navigate('ExtraInfoScreen');
   } 
 
   useEffect(() => {
@@ -127,19 +126,13 @@ export default RegisterScreen = ({navigation}) => {
           onChangeText={(value) => handleChange(value, "password")} 
         />
 			</View>
-      <View>
-        {/* <PasswordInput 
-          onChangeText={(value) => handleChange(value, "password")} 
-          confirm={true}
-        /> */}
-			</View>
       {
         loading ? 
         <ActivityIndicator size="large" color={BASE_COLOR} />
         :
         <View>
           <NormalButton 
-            disabled={false} 
+            disabled={disableButton} 
             title="Sign up" 
             onPress={() => createNewUser()}
           />
