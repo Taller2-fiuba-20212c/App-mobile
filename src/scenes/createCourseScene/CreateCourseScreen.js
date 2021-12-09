@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { ScrollView, View, ActivityIndicator, LogBox } from 'react-native'
+import { ScrollView, View, ActivityIndicator } from 'react-native'
 import { NormalInput, Dropdown } from './../../components'
 import { BASE_COLOR } from '../../consts'
 import { getPlace } from './../../model'
@@ -8,61 +8,61 @@ import TagInput from 'react-native-tags-input';
 import CreateCourseStyles from './CreateCourseStyles'
 
 export default CreateCourseScreen = ({navigation}) => {
-  const [selectedTeams, setSelectedTeams] = useState([])
-  const [place, setPlace] = useState(null);
+  // const [selectedTeam, setSelectedTeam] = useState({})
+  // const [place, setPlace] = useState(null);
   const [disableButton, setDisableButton] = useState(true);
   const [basicInfo, setBasicInfo] = useState({
     name: '',
     description: '',
   });
-  const [tags, setTags] = useState({
-    tag: '',
-    tagsArray: []
-  })
+  // const [tags, setTags] = useState({
+  //   tag: '',
+  //   tagsArray: []
+  // })
 
   const handleChange = (value, name) => {
     setBasicInfo({ ...basicInfo, [name]: value });
   }
 
   useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     navigation.setOptions({
       headerShown: true,
       title: 'Create Course',
     });
   
-    getPlace().then((p) => {
-      setPlace(p)
-    });
+    // getPlace().then((p) => {
+    //   setPlace(p)
+    // });
   }, [])
 
   useEffect(() => {
     setDisableButton(
       Object.values(basicInfo).some(x => x == null || x == '') 
-      || 
-      selectedTeams.length == 0 
-      || 
-      place == null
+      // Object.values(selectedTeam).length == 0
     );
-  }, [place, selectedTeams, basicInfo]);
+  }, [basicInfo]);
 
-  const createCourse = () => {
+  const goNext = () => {
     // post courses
     const courseInfo = {
-      country: place.country,
-      hashtags: selectedTeams.map((i) => {
-        return i.item
-      }),
       name: basicInfo.name,
       description: basicInfo.description
     }
     console.log(courseInfo);
+
+    navigation.navigate('CreateCourseSecondScreen', params={
+      courseInfo: courseInfo
+    })
   }
+
+  // function onChange() {
+  //   return (val) => setSelectedTeam(val)
+  // }
 
   return (
     <View style={CreateCourseStyles.container}>
       {
-        place ?
+        true ?
         <ScrollView 
           keyboardShouldPersistTaps='always' 
           showsVerticalScrollIndicator={false}
@@ -73,7 +73,7 @@ export default CreateCourseScreen = ({navigation}) => {
           justifyContent: 'space-between'
         }}>
           <View>
-            <View >
+            {/* <View >
               <NormalInput 
                 containerStyle={{paddingTop: 20, height: 110}}
                 label={'Country'}
@@ -82,10 +82,13 @@ export default CreateCourseScreen = ({navigation}) => {
                 placeholder='Country'
                 iconName='location-pin'
               />
-            </View>
+            </View> */}
             <View>
               <NormalInput 
-                containerStyle={{height: 90}}
+                containerStyle={{
+                  paddingTop: 20,
+                  height: 110
+                }}
                 onChangeText={(value) => handleChange(value, "name")} 
                 label="Name"
                 placeholder='Name' 
@@ -103,7 +106,7 @@ export default CreateCourseScreen = ({navigation}) => {
               />
             </View>
             <View>
-              <TagInput
+              {/* <TagInput
                 updateState={setTags}
                 placeholder="Tags..." 
                 tags={tags}
@@ -148,20 +151,22 @@ export default CreateCourseScreen = ({navigation}) => {
                   />
                 }
                 leftElementContainerStyle={{marginLeft: 0}}
-              />
+              /> */}
             </View>
             <View style={{ paddingHorizontal: 10 }}>
-              <Dropdown 
-                label='Associated hashtags' 
-                onChange={(newSelected) => setSelectedTeams(newSelected)} 
-              />
+              {/* <Dropdown 
+                label='Category' 
+                value={selectedTeam}
+                onChange={onChange()} 
+                isMulti={false}
+              /> */}
             </View>
           </View>
           <View style={{ paddingBottom: 10 }}>
             <NormalButton 
               disabled={disableButton}
-              title='Create course' 
-              onPress={() => createCourse()}
+              title='Next' 
+              onPress={() => goNext()}
             />
           </View>
         </View>

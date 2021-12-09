@@ -5,6 +5,6 @@ export { WelcomeScreen } from './welcomeScene';
 export { PrincipalScreen } from './principalScene';
 export { RegisterScreen, ExtraInfoScreen } from './registerScene';
 export { ModifyUserScreen } from './modifyUserScene';
-export { CreateCourseScreen } from './createCourseScene'
+export { CreateCourseScreen, CreateCourseSecondScreen } from './createCourseScene'
 export { SearchScreen } from './searchScene'
 export { CourseScreen, ContentCourseScreen, VideoClassScreen } from './courseScene';

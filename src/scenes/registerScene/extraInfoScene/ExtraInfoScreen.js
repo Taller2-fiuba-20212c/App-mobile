@@ -1,13 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, ActivityIndicator } from 'react-native';
 import ExtraInfoStyles from './ExtraInfoStyles'
-import { BASE_COLOR } from './../../../consts'
+import { BASE_COLOR, CATEGORIES_TYPES } from './../../../consts'
 import { getPlace } from './../../../model'
 import { NormalButton, Dropdown } from './../../../components'
+
+const categories = CATEGORIES_TYPES.map((c) => {
+  return {
+    item: c,
+    id: c.toUpperCase()
+  }
+})
 
 export default ExtraInfoScreen = ({ navigation }) => {
   const [place, setPlace] = useState(null);
   const [selectedTeams, setSelectedTeams] = useState([])
+
+  const xorBy = (l1, l2) => {
+    return l1.filter(x => !l2.includes(x)).concat(l2.filter(x => !l1.includes(x)));
+  }
+
+  function onMultiChange() {
+    return (item) => setSelectedTeams(xorBy(selectedTeams, [item]))
+  }
 
   useEffect(() => {
     getPlace().then((p) => setPlace(p));
@@ -50,7 +65,11 @@ export default ExtraInfoScreen = ({ navigation }) => {
           <View style={ ExtraInfoStyles.dropdown }>
             <Dropdown 
               label="Preferred categories" 
-              onChange={(value) => setSelectedTeams(value)} 
+              selectedValues={selectedTeams}
+              options={categories}
+              onMultiSelect={onMultiChange()}
+              onTapClose={onMultiChange()}
+              isMulti={true}
             />
           </View>
         </View>
