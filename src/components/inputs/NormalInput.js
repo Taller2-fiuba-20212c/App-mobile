@@ -14,6 +14,9 @@ export default NormalInput = (props) => {
           color={BASE_COLOR}
         />
       }
+      labelStyle={{
+        color: 'gray'
+      }}
     />
   )
 }

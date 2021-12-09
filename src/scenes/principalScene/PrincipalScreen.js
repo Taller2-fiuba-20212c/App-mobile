@@ -3,8 +3,8 @@ import { Text, View, ScrollView, ActivityIndicator } from 'react-native'
 import { ListItem, Icon } from 'react-native-elements'
 import Carousel from 'react-native-snap-carousel';
 import { ShortCardCourse, LongCardCourse } from './../../components'
-import { BASE_COLOR, WIDTH_SCREEN } from './../../consts';
-import { getCourses } from './../../model'
+import { BASE_COLOR, WIDTH_SCREEN, USER_INFO } from './../../consts';
+import { getCourses, getData } from './../../model'
 import PrincipalStyles from './PrincipalStyles'
 
 const SLIDER_WIDTH = WIDTH_SCREEN;
@@ -51,6 +51,8 @@ const courseMock = {
 
 export default PrincipalScreen = ({navigation}) => {
   const [courses, setCourses] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [isProf, setIsProf] = useState(false)
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -72,6 +74,15 @@ export default PrincipalScreen = ({navigation}) => {
 
   useEffect(() => {
     getCourses().then((r) => setCourses(r));
+    getData(USER_INFO).then((user) => {
+      if (user) {
+        if (user.role == 'PROFESSOR') {
+          setIsProf(true);
+        }
+      }
+
+      setLoading(false);
+    })
     return () => {
       setCourses([]);
     };
@@ -85,47 +96,71 @@ export default PrincipalScreen = ({navigation}) => {
     );
   }
 
+  const goToCreateCourse = () => {
+    navigation.navigate('CreateCourseScreen')
+  }
+
 	return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={PrincipalStyles.container}>
-        <View style={PrincipalStyles.text}>
-          <Text style={PrincipalStyles.section}>Your courses</Text>
-        </View>
-        {
-          courses == null ? 
+    <View 
+      style={{ flex: 1 }}
+    >
+      {
+        loading ? 
+        <View style={PrincipalStyles.loadingContainer}>
           <ActivityIndicator size="large" color={BASE_COLOR} />
-          :
-          <Carousel 
-            data={courses} 
-            renderItem={_renderItem}
-            sliderWidth={SLIDER_WIDTH}
-            itemWidth={ITEM_WIDTH}
-          />
-        }
-        <View style={PrincipalStyles.text}>
-          <Text style={PrincipalStyles.section}>Top courses</Text>
         </View>
-        <View style={PrincipalStyles.topCourses}>
+        :
+        <ScrollView showsVerticalScrollIndicator={false} >
+        <View style={PrincipalStyles.container}>
+          <View style={PrincipalStyles.YourCoursesContainer}>
+            <Text style={PrincipalStyles.section}>Your courses</Text>
+            {
+              isProf ? 
+              <NormalButton 
+                title="Add course"
+                onPress={() => goToCreateCourse()}
+              />
+              :
+              null
+            }
+          </View>
           {
             courses == null ? 
             <ActivityIndicator size="large" color={BASE_COLOR} />
             :
-            courses.map((l, i) => (
-              <ListItem 
-                key={i} 
-                containerStyle={{ 
-                  padding: 0,
-                  paddingVertical: 5
-                }}
-              >
-                <ListItem.Content>
-                  <LongCardCourse navigation={navigation} course={{...l, 'imgsrc': require('../../../assets/python.jpg')}} />
-                </ListItem.Content>
-              </ListItem>
-            ))
+            <Carousel 
+              data={courses} 
+              renderItem={_renderItem}
+              sliderWidth={SLIDER_WIDTH}
+              itemWidth={ITEM_WIDTH}
+            />
           }
+          <View style={PrincipalStyles.text}>
+            <Text style={PrincipalStyles.section}>Top courses</Text>
+          </View>
+          <View style={PrincipalStyles.topCourses}>
+            {
+              courses == null ? 
+              <ActivityIndicator size="large" color={BASE_COLOR} />
+              :
+              courses.map((l, i) => (
+                <ListItem 
+                  key={i} 
+                  containerStyle={{ 
+                    padding: 0,
+                    paddingVertical: 5
+                  }}
+                >
+                  <ListItem.Content>
+                    <LongCardCourse navigation={navigation} course={{...l, 'imgsrc': require('../../../assets/python.jpg')}} />
+                  </ListItem.Content>
+                </ListItem>
+              ))
+            }
+          </View>
         </View>
-      </View>
-    </ScrollView>
+        </ScrollView>
+      }
+    </View>
 	)
 }

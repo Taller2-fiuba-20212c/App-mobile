@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Location from 'expo-location';
 
 export const getData = async (key_name) => {
   try {
@@ -24,4 +25,20 @@ export const capitalize = (string) => {
 
 export const getAvatarTitle = (name, lastname) => {
   return name[0].toUpperCase() + lastname[0].toUpperCase()
+}
+
+export const getPlace = async () => {
+  let { status } = await Location.requestForegroundPermissionsAsync();
+  if (status !== 'granted') {
+    throw new Error(status)
+  }
+
+  let location = await Location.getCurrentPositionAsync({});
+
+  const place = await Location.reverseGeocodeAsync({
+    latitude : location.coords.latitude,
+    longitude : location.coords.longitude
+  });
+
+  return place;
 }
