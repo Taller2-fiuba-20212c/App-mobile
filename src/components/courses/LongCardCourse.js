@@ -1,6 +1,7 @@
 import React from 'react'
 import { Text, View, TouchableNativeFeedback } from 'react-native'
 import { Card } from 'react-native-elements'
+import { DEFAULT_IMG } from './../../consts'
 
 export default LongCardCourse = ({course, navigation}) => {
 
@@ -28,7 +29,7 @@ export default LongCardCourse = ({course, navigation}) => {
           flexDirection: 'row',
         }}>
           <Card.Image 
-            source={course.imgsrc} 
+            source={course.imgsrc ? course.imgsrc : DEFAULT_IMG} 
             style={{ width: 100, height: 50 }}
             containerStyle={{ paddingRight: 10 }}
           />

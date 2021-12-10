@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { ScrollView, View, ActivityIndicator } from 'react-native'
-import { NormalInput, Dropdown } from './../../components'
+import { View, ActivityIndicator } from 'react-native'
+import { Dropdown } from './../../components'
 import { BASE_COLOR, CATEGORIES_TYPES, SUBCRIPTIONS_TYPES } from '../../consts'
-import { getPlace } from './../../model'
-import { Icon } from 'react-native-elements'
-import TagInput from 'react-native-tags-input';
 import CreateCourseStyles from './CreateCourseStyles'
 
 const categories = CATEGORIES_TYPES.map((c) => {
@@ -41,17 +38,16 @@ export default CreateCourseSecondScreen = ({navigation, route}) => {
   }, [category, subLevel]);
 
   const createCourse = () => {
-    // post courses
     const courseInfo = {
       ...route.params.courseInfo,
       category: category.item,
-      subLevel: subLevel.item,
+      suscriptionIncluded: subLevel.item,
     }
     console.log(courseInfo);
 
-    // navigation.navigate('CreateCourseSecondScreen', params={
-    //   courseInfo: courseInfo
-    // })
+    navigation.navigate('CreateCourseThirdScreen', params={
+      courseInfo: courseInfo
+    })
   }
 
   function onChangeCategory() {
@@ -99,7 +95,7 @@ export default CreateCourseSecondScreen = ({navigation, route}) => {
           <View style={{ paddingBottom: 10 }}>
             <NormalButton 
               disabled={disableButton}
-              title='Next' 
+              title='Almost done!' 
               onPress={() => createCourse()}
             />
           </View>

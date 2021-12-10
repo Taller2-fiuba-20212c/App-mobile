@@ -1,6 +1,7 @@
 import React from 'react'
 import { Text, TouchableNativeFeedback } from 'react-native'
 import { Card } from 'react-native-elements'
+import { DEFAULT_IMG } from './../../consts'
 
 export default ShortCardCourse = ({course, navigation}) => {
 
@@ -20,7 +21,7 @@ export default ShortCardCourse = ({course, navigation}) => {
       }}
     >
       <Card.Image 
-        source={course.imgsrc} 
+        source={course.imgsrc ? course.imgsrc : DEFAULT_IMG } 
         style={{ paddingBottom: 20, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
       >
       </Card.Image>

@@ -91,7 +91,7 @@ export default PrincipalScreen = ({navigation}) => {
   const _renderItem = ({item, index}) => {
     return (
       <View style={{paddingBottom: 5}}>
-        <ShortCardCourse navigation={navigation} course={{...item, 'imgsrc': require('../../../assets/python.jpg')}}/>
+        <ShortCardCourse navigation={navigation} course={item}/>
       </View>
     );
   }
@@ -152,7 +152,7 @@ export default PrincipalScreen = ({navigation}) => {
                   }}
                 >
                   <ListItem.Content>
-                    <LongCardCourse navigation={navigation} course={{...l, 'imgsrc': require('../../../assets/python.jpg')}} />
+                    <LongCardCourse navigation={navigation} course={l} />
                   </ListItem.Content>
                 </ListItem>
               ))
