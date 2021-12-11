@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react'
 import { Text, View, ScrollView, ActivityIndicator } from 'react-native'
 import { Image, FAB, Icon } from 'react-native-elements';
-import IconB from 'react-native-vector-icons/MaterialCommunityIcons';
-import { NormalButton, AccordionListItem } from '../../components'
-import { BASE_COLOR, DEFAULT_IMG, WIDTH_SCREEN, MAX_UNITS, USER_INFO } from '../../consts'
-import { getAvatarTitle, capitalize } from '../../model'
+import * as ImagePicker from 'expo-image-picker';
+import { NormalButton, AccordionListItem, Alert } from '../../components'
+import { BASE_COLOR, NORMAL_ERROR_TITLE, DEFAULT_IMG, WIDTH_SCREEN, MAX_UNITS, USER_INFO } from '../../consts'
+import { getErrorPermissionMsg } from '../../model'
 import { getUser, getData } from '../../model'
 import EditCourseStyles from './EditCourseStyles'
 
@@ -12,6 +12,10 @@ export default EditCourseScreen = ({route, navigation}) => {
   const course = route.params.course;
   const [creator, setCreator] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
+  const [image, setImage] = useState(
+    course.imgsrc ? course.imgsrc : DEFAULT_IMG
+  );
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
@@ -19,7 +23,6 @@ export default EditCourseScreen = ({route, navigation}) => {
       title: 'Edit course'
     });
     getUser(course.creatorId).then((r) => {
-      console.log(r);
       setCreator(r);
     });
     getData(USER_INFO).then((user) => {
@@ -35,6 +38,28 @@ export default EditCourseScreen = ({route, navigation}) => {
     })
   }
 
+  const changeImg = async () => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          setVisible(true)
+          return
+        }
+      }
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+  
+      if (!result.cancelled) {
+        setImage({...image, uri: result.uri});
+      }
+    })();
+  }
+
 	return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={EditCourseStyles.container}>
@@ -45,12 +70,7 @@ export default EditCourseScreen = ({route, navigation}) => {
             width: WIDTH_SCREEN,
             height: Math.round(WIDTH_SCREEN * 0.5),
           }} 
-          source={
-            course.imgsrc ? 
-            course.imgsrc
-            : 
-            DEFAULT_IMG
-          }
+          source={image}
         />
         <View style={{
             position: 'absolute',
@@ -58,6 +78,7 @@ export default EditCourseScreen = ({route, navigation}) => {
             left: WIDTH_SCREEN - 56,
           }}>
             <FAB 
+              onPress={() => changeImg()}
               icon={
                 <Icon 
                   name='edit'
@@ -100,6 +121,12 @@ export default EditCourseScreen = ({route, navigation}) => {
           </View>
         }
       </View>
+      <Alert 
+        isVisible={visible}
+        alertInfo={{ title: NORMAL_ERROR_TITLE, msg: getErrorPermissionMsg('camera roll', 'change this image')}}
+        onBackdropPress={() => setVisible(false)}
+        onButtonPress={() => setVisible(false)}
+      />
     </ScrollView>
 	)
 }

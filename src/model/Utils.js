@@ -29,9 +29,6 @@ export const getAvatarTitle = (name, lastname) => {
 
 export const getPlace = async () => {
   let { status } = await Location.requestForegroundPermissionsAsync();
-  if (status !== 'granted') {
-    throw new Error(status)
-  }
 
   let location = await Location.getCurrentPositionAsync({});
 
@@ -40,5 +37,9 @@ export const getPlace = async () => {
     longitude : location.coords.longitude
   });
 
-  return place;
+  return place
+}
+
+export const getErrorPermissionMsg = (requirement, action) => {
+  return 'We need ' + requirement + ' permissions to ' + action
 }

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { ScrollView, View, ActivityIndicator } from 'react-native'
-import { NormalInput } from './../../components'
-import { BASE_COLOR, USER_INFO } from '../../consts'
-import { getPlace, getData } from './../../model'
+import { NormalInput, Alert } from './../../components'
+import { BASE_COLOR, USER_INFO, NORMAL_ERROR_TITLE } from '../../consts'
+import { getPlace, getData, getErrorPermissionMsg } from './../../model'
 import { Icon } from 'react-native-elements'
 import TagInput from 'react-native-tags-input';
 import CreateCourseStyles from './CreateCourseStyles'
@@ -16,15 +16,25 @@ export default CreateCourseScreen = ({navigation, route}) => {
   })
   const [creating, setCreating] = useState(false);
   const [creatorId, setCreatorId] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
       headerShown: true,
       title: 'Almost ready!',
     });
-  
-    getPlace().then((p) => {
-      setPlace(p)
+
+    getPlace()
+    .then((p) => {
+      setPlace(p);
+      setLoading(false)
+    })
+    .catch((err) => {
+      console.log(err);
+      setVisible(true)
+      setLoading(false)
     });
 
     getData(USER_INFO).then(user => {
@@ -64,7 +74,7 @@ export default CreateCourseScreen = ({navigation, route}) => {
         contentContainerStyle={{ flexGrow: 1 }}
       >
       {
-        place ?
+        !loading ?
         <View style={{ 
           flex: 1,
           justifyContent: 'space-between'
@@ -74,7 +84,7 @@ export default CreateCourseScreen = ({navigation, route}) => {
               <NormalInput 
                 containerStyle={{paddingTop: 20, height: 100}}
                 label={'Country'}
-                value={place[0].country}
+                value={place ? place[0].country : place}
                 disabled={true}
                 placeholder='Country'
                 iconName='location-pin'
@@ -148,6 +158,12 @@ export default CreateCourseScreen = ({navigation, route}) => {
         </View>
       }
       </ScrollView>
+      <Alert 
+        isVisible={visible}
+        alertInfo={{ title: NORMAL_ERROR_TITLE, msg: getErrorPermissionMsg('location', 'create a course')}}
+        onBackdropPress={() => setVisible(false)}
+        onButtonPress={() => setVisible(false)}
+      />
     </View>
   )
 }

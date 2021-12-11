@@ -6,6 +6,7 @@ export const FAKE_PASSWORD = "password1234"
 export const USER_INFO = "userLoged"
 export const WIDTH_SCREEN = Dimensions.get('window').width
 export const MAX_UNITS = 6
+export const NORMAL_ERROR_TITLE = 'Sorry!'
 
 export const DEFAULT_IMG = require('../../assets/python.jpg')
 

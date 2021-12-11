@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
-import { Text, View } from 'react-native'
-import { Overlay, Icon, Button } from 'react-native-elements'
+import React from 'react'
+import { Text } from 'react-native'
+import { Overlay, Button } from 'react-native-elements'
 import AlertStyles from './AlertStyles'
 import { capitalize } from './../../model'
 
 export default Alert = (props) => {
   return (
     <Overlay 
+      animationType='fade'
+      statusBarTranslucent={true}
       isVisible={props.isVisible} 
       onBackdropPress={() => props.onBackdropPress()}
       overlayStyle={AlertStyles.container}
