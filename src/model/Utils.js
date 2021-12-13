@@ -41,5 +41,5 @@ export const getPlace = async () => {
 }
 
 export const getErrorPermissionMsg = (requirement, action) => {
-  return 'We need ' + requirement + ' permissions to ' + action
+  return 'We need ' + requirement + ' to ' + action
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -8,7 +7,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { 
   LoginScreen, RegisterScreen, ModifyUserScreen, ProfileScreen, WelcomeScreen,
   PrincipalScreen, CourseScreen, ContentCourseScreen, SearchScreen, VideoClassScreen, 
-  UserScreen, EditCourseScreen, CreateCourseScreen, CreateCourseSecondScreen, CreateCourseThirdScreen, ExtraInfoScreen
+  UserScreen, EditCourseScreen, CreateCourseScreen, CreateCourseSecondScreen, 
+  CreateCourseThirdScreen, ExtraInfoScreen, CreateUnitScreen
 } from './src/scenes';
 
 const Tab = createBottomTabNavigator();
@@ -61,8 +61,10 @@ function MyStack() {
       },
     }}>
       <Stack.Screen name="WelcomeScreen" component={WelcomeScreen}/>
+      <Stack.Screen name="VideoClassScreen" component={VideoClassScreen}/>
       <Stack.Screen name="ExtraInfoScreen" component={ExtraInfoScreen}/>
       <Stack.Screen name="CreateCourseSecondScreen" component={CreateCourseSecondScreen}/>
+      <Stack.Screen name="CreateUnitScreen" component={CreateUnitScreen}/>
       <Stack.Screen name="CreateCourseThirdScreen" component={CreateCourseThirdScreen}/>
       <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
       <Stack.Screen name="PrincipalScreen" component={TabScreen} />
@@ -82,7 +84,6 @@ function MyStack() {
         }}
       />
       <Stack.Screen name="ModifyUserScreen" component={ModifyUserScreen}/>
-      <Stack.Screen name="VideoClassScreen" component={VideoClassScreen}/>
       <Stack.Screen name="CreateCourseScreen" component={CreateCourseScreen}/>
       <Stack.Screen name="EditCourseScreen" component={EditCourseScreen}/>
       <Stack.Screen name="ProfileScreen" component={ProfileScreen}/>

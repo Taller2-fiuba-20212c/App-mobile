@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react'
 import { Text, View, ScrollView, ActivityIndicator } from 'react-native'
-import { Image, PricingCard, ListItem, Avatar, Icon } from 'react-native-elements';
+import { Image, PricingCard, ListItem, Avatar, Icon, Switch } from 'react-native-elements';
 import IconB from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NormalButton, AccordionListItem } from '../../components'
 import { BASE_COLOR, WIDTH_SCREEN, MAX_UNITS, USER_INFO, DEFAULT_IMG } from '../../consts'
 import { getAvatarTitle, capitalize } from '../../model'
-import { getUser, getData } from '../../model'
+import { getUser } from '../../model'
 import CourseStyles from './CourseStyles'
 
 export default CourseScreen = ({route, navigation}) => {
@@ -15,7 +15,7 @@ export default CourseScreen = ({route, navigation}) => {
   useEffect(() => {
     navigation.setOptions({
       headerShown: true,
-      title: course.name,
+      title: {...course}.name,
       headerRight: () => (
         route.params.isOwner &&
         <Icon 
@@ -24,15 +24,14 @@ export default CourseScreen = ({route, navigation}) => {
           type='font-awesome'
           color={BASE_COLOR}
           onPress={() => {
-            navigation.navigate('EditCourseScreen', params={
-              course: course
+            navigation.navigate('EditCourseScreen', {
+              course: {...course}
             })
           }}
         />
       ),
     });
     getUser(course.creatorId).then((r) => {
-      console.log(r);
       setCreator(r);
     });
   }, []);
@@ -54,7 +53,7 @@ export default CourseScreen = ({route, navigation}) => {
           }} 
           source={
             course.imgsrc ? 
-            course.imgsrc
+            { uri: course.imgsrc }
             : 
             DEFAULT_IMG
           }
@@ -66,7 +65,7 @@ export default CourseScreen = ({route, navigation}) => {
           <Text style={CourseStyles.description}>{course.description}</Text>
         </View>
         {
-          course.units && 
+          course.units.length > 0 && 
           <View>
             <View style={CourseStyles.text}>
               <Text style={CourseStyles.section}>Content</Text>
@@ -99,7 +98,12 @@ export default CourseScreen = ({route, navigation}) => {
           :
           <ListItem 
             containerStyle={{paddingHorizontal: 20}}
-            onPress={() => navigation.navigate('UserScreen', {userInfo: creator})}
+            onPress={() => {
+              route.params.isOwner ?
+              navigation.navigate('ProfileScreen')
+              :
+              navigation.navigate('UserScreen', {userInfo: creator})
+            }}
           >
             <Avatar
               rounded
@@ -115,11 +119,65 @@ export default CourseScreen = ({route, navigation}) => {
             <ListItem.Chevron/>
           </ListItem>
         }
+        <View style={CourseStyles.text}>
+          <Text style={CourseStyles.section}>Category</Text>
+        </View>
+        <View style={CourseStyles.text}>
+          <Text style={CourseStyles.description}>{course.category}</Text>
+        </View>
+        { 
+          route.params.isOwner &&
+          <View>
+            <View style={CourseStyles.text}>
+              <Text style={CourseStyles.section}>Subscription included</Text>
+            </View>
+            <View style={CourseStyles.text}>
+              <Text style={CourseStyles.description}>{course.subscriptionIncluded}</Text>
+            </View>
+          </View>
+        }
+        <View style={CourseStyles.text}>
+          <Text style={CourseStyles.section}>Tags</Text>
+        </View>
+        <View style={CourseStyles.text}>
+          <View style={{
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+          }}>
+            {
+              course.tags.slice().map((tag, i) => (
+                <View key={i} style={{
+                  backgroundColor: BASE_COLOR,
+                  borderRadius: 20,
+                  marginHorizontal: 5
+                }}>
+                  <Text style={{color: 'white', margin: 10}}>{tag}</Text>
+                </View>
+              ))
+            }
+          </View>
+        </View>
+        {
+          route.params.isOwner && 
+          <View style={{ 
+            paddingHorizontal: 20, 
+            flexDirection: 'row', 
+            alignItems: 'baseline', 
+            justifyContent: 'space-between',
+            paddingBottom: 20
+          }}>
+            <View>
+              <Text style={CourseStyles.section}>Publish</Text>
+            </View>
+            <Switch value={course.published} color={BASE_COLOR} disabled={true}/>
+          </View>
+        }
         {
           !route.params.isOwner &&
           <PricingCard
             color={BASE_COLOR}
-            title={'Sub type'}
+            title={course.subscriptionIncluded}
             price="$5"
             button={
               <NormalButton 

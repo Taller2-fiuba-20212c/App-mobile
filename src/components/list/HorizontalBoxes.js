@@ -2,9 +2,9 @@ import React, {useState} from 'react'
 import { View } from 'react-native'
 import { CheckBox, Icon } from 'react-native-elements'
 import { capitalize } from './../../model'
-import { BASE_COLOR, ROLES_REGISTER } from './../../consts'
+import { BASE_COLOR } from './../../consts'
 
-export default HorizontalBoxes = ({onChange, value}) => {
+export default HorizontalBoxes = ({onChange, value, options}) => {
   const [selected, setSelected] = useState(value);
 
   const handlePress = (newSelected) => {
@@ -15,7 +15,7 @@ export default HorizontalBoxes = ({onChange, value}) => {
   return (
     <View style={{ flexDirection: 'row' }}>
     <CheckBox
-      title={capitalize(ROLES_REGISTER[0])}
+      title={capitalize(options[0])}
       containerStyle ={{
         backgroundColor: 'transparent', 
         borderWidth: 0,
@@ -38,8 +38,8 @@ export default HorizontalBoxes = ({onChange, value}) => {
           size={25}
         />
       }
-      checked={selected == ROLES_REGISTER[0]}
-      onPress={() => handlePress(ROLES_REGISTER[0])}
+      checked={selected == options[0]}
+      onPress={() => handlePress(options[0])}
     />
     <CheckBox
       containerStyle ={{
@@ -48,7 +48,7 @@ export default HorizontalBoxes = ({onChange, value}) => {
         flex: 1,
         paddingHorizontal: 0
       }}
-      title={capitalize(ROLES_REGISTER[1])}
+      title={capitalize(options[1])}
       checkedIcon={
         <Icon
           name="radio-button-checked"
@@ -65,8 +65,8 @@ export default HorizontalBoxes = ({onChange, value}) => {
           size={25}
         />
       }
-      checked={selected == ROLES_REGISTER[1]}
-      onPress={() => handlePress(ROLES_REGISTER[1])}
+      checked={selected == options[1]}
+      onPress={() => handlePress(options[1])}
     />
     <CheckBox
       containerStyle ={{
@@ -75,7 +75,7 @@ export default HorizontalBoxes = ({onChange, value}) => {
         flex: 1,
         paddingHorizontal: 0
       }}
-      title={capitalize(ROLES_REGISTER[2])}
+      title={capitalize(options[2])}
       checkedIcon={
         <Icon
           name="radio-button-checked"
@@ -92,8 +92,8 @@ export default HorizontalBoxes = ({onChange, value}) => {
           size={25}
         />
       }
-      checked={selected == ROLES_REGISTER[2]}
-      onPress={() => handlePress(ROLES_REGISTER[2])}
+      checked={selected == options[2]}
+      onPress={() => handlePress(options[2])}
     />
     </View>
   )

@@ -14,7 +14,10 @@ export default Alert = (props) => {
       overlayStyle={AlertStyles.container}
     >
       <Text style={AlertStyles.textPrimary}>{capitalize(props.alertInfo.title)}</Text>
-      { props.alertInfo.msg == '' ? null :
+      { 
+        props.alertInfo.msg == '' ? 
+        null 
+        :
         <Text style={AlertStyles.textSecondary}>{capitalize(props.alertInfo.msg)}</Text>
       }
       <Button

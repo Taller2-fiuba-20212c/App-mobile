@@ -36,9 +36,8 @@ export default CreateCourseScreen = ({navigation}) => {
       name: basicInfo.name,
       description: basicInfo.description
     }
-    console.log(courseInfo);
 
-    navigation.navigate('CreateCourseSecondScreen', params={
+    navigation.navigate('CreateCourseSecondScreen', {
       courseInfo: courseInfo
     })
   }
@@ -64,7 +63,6 @@ export default CreateCourseScreen = ({navigation}) => {
               onChangeText={(value) => handleChange(value, "name")} 
               label="Name"
               placeholder='Name' 
-              iconName='user' 
             />
           </View>
           <View>
@@ -73,7 +71,6 @@ export default CreateCourseScreen = ({navigation}) => {
               containerStyle={{ height: 80 }}
               label='Description'
               placeholder='Description' 
-              iconName='user' 
               maxLength={300}
             />
           </View>

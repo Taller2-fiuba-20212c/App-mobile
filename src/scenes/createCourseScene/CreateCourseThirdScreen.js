@@ -55,12 +55,13 @@ export default CreateCourseScreen = ({navigation, route}) => {
       ...route.params.courseInfo,
       country: place[0].country,
       tags: tags.tagsArray,
-      creatorId: creatorId
+      creatorId: creatorId,
+      units: []
     }
     console.log(courseInfo);
 
     setCreating(false);
-    navigation.navigate('CourseScreen', params={
+    navigation.navigate('CourseScreen', {
       course: courseInfo,
       isOwner: true
     })
@@ -160,7 +161,7 @@ export default CreateCourseScreen = ({navigation, route}) => {
       </ScrollView>
       <Alert 
         isVisible={visible}
-        alertInfo={{ title: NORMAL_ERROR_TITLE, msg: getErrorPermissionMsg('location', 'create a course')}}
+        alertInfo={{ title: NORMAL_ERROR_TITLE, msg: getErrorPermissionMsg('location permissions', 'create a course')}}
         onBackdropPress={() => setVisible(false)}
         onButtonPress={() => setVisible(false)}
       />

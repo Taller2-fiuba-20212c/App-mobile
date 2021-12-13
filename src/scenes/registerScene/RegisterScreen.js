@@ -4,7 +4,7 @@ import {
   NormalButton, NormalInput, EmailInput, PasswordInput, HorizontalBoxes, Alert 
 } from './../../components'
 import RegisterStyles from './RegisterStyles'
-import { BASE_COLOR, USER_INFO } from './../../consts'
+import { BASE_COLOR, USER_INFO, ROLES_REGISTER } from './../../consts'
 import { register, storeData } from './../../model'
 
 export default RegisterScreen = ({navigation}) => {
@@ -119,7 +119,7 @@ export default RegisterScreen = ({navigation}) => {
             fontSize: 16
           }}
         >Role</Text>
-        <HorizontalBoxes onChange={(value) => handleChange(value, 'role')}/>
+        <HorizontalBoxes options={ROLES_REGISTER} onChange={(value) => handleChange(value, 'role')}/>
       </View>
 			<View>
         <PasswordInput 

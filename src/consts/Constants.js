@@ -8,7 +8,7 @@ export const WIDTH_SCREEN = Dimensions.get('window').width
 export const MAX_UNITS = 6
 export const NORMAL_ERROR_TITLE = 'Sorry!'
 
-export const DEFAULT_IMG = require('../../assets/python.jpg')
+export const DEFAULT_IMG = require('../../assets/no-image.png')
 
 export const HEIGHT_SCREEN = Dimensions.get('screen').height; // device height
 export const STATUS_BAR_HEIGHT = StatusBar.currentHeight || 24; 

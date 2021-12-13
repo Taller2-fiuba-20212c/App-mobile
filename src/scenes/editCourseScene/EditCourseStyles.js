@@ -7,16 +7,5 @@ export default CourseStyles = StyleSheet.create({
   section: {
 		fontWeight: 'bold',
 		fontSize: 28,
-	},
-  description: {
-    paddingBottom:10,
-    fontSize: 16,
-  },
-  text: {
-    paddingTop: 10,
-    paddingHorizontal: 20
-  },
-  contentCourseButton: {
-    paddingHorizontal: 20
-  }
+	}
 })

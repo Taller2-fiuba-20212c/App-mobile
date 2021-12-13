@@ -5,7 +5,7 @@ import { Avatar } from 'react-native-elements'
 import { 
   NormalButton, NormalInput, EmailInput, HorizontalBoxes, Alert 
 } from './../../components'
-import { BASE_COLOR, USER_INFO } from  './../../consts'
+import { BASE_COLOR, USER_INFO, ROLES_REGISTER } from  './../../consts'
 import ModifyUserStyles from './ModifyUserStyles'
 
 export default ModifyUserScreen = ({navigation}) => {
@@ -150,6 +150,7 @@ export default ModifyUserScreen = ({navigation}) => {
                   }}
                 >Role</Text>
                 <HorizontalBoxes 
+                  options={ROLES_REGISTER}
                   value={userInfo.role} 
                   onChange={(value) => handleChange(value, 'role')}
                 />

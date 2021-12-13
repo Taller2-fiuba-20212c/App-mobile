@@ -6,7 +6,7 @@ import { getData, capitalize, getAvatarTitle } from './../model'
 import { NormalButton, NormalInput, EmailInput } from './../components'
 import { BASE_COLOR, USER_INFO } from  './../consts'
 
-export default ProfileScreen = ({navigation, route}) => {
+export default ProfileScreen = ({navigation}) => {
   const [userInfo, setUserInfo] = useState(null);
   const disabledValue = true;
 
