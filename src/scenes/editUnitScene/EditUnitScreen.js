@@ -1,13 +1,20 @@
 import React, {useEffect, useState} from 'react'
-import { View, ScrollView } from 'react-native'
+import { Text, View, ScrollView } from 'react-native'
 import { NormalButton, NormalInput, Alert } from '../../components'
-import CreateUnitStyles from './CreateUnitStyles'
 
-export default CreateUnitScreen = ({route, navigation}) => {
-  const course = route.params.course;
+export default EditUnitScreen = ({route, navigation}) => {
+  const oldUnit = route.params.unit;
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerShown: true,
+      title: 'Create unit'
+    });
+  }, []);
+
   const [disableButton, setDisableButton] = useState(true);
   const [unit, setUnit] = useState({
-    name: '',
+    name: oldUnit.name,
     videoId: ''
   });
   const [visible, setVisible] = useState(false);
@@ -22,35 +29,25 @@ export default CreateUnitScreen = ({route, navigation}) => {
   }
 
   useEffect(() => {
-    navigation.setOptions({
-      headerShown: true,
-      title: 'Create unit'
-    });
-  }, []);
-
-  useEffect(() => {
     setDisableButton(
       Object.values(unit).some(x => x == null || x == '')
     );
   }, [unit]);
 
-  const createUnit = () => {
+  const save = () => {
     if (error) {
       setVisible(true);
       return
     }
-    const courseInfo = {
-      ...course,
-      units: course.units.concat([unit]),
-    }
 
     navigation.navigate('EditCourseScreen', {
-      course: courseInfo
+      newUnit: courseInfo,
+      newUnitNumber: props.number
     })
   }
 
   return (
-    <View style={CreateUnitStyles.container}>
+    <View style={{ flex:1 ,paddingHorizontal: 20}}>
       <ScrollView 
         keyboardShouldPersistTaps='always' 
         showsVerticalScrollIndicator={false}
@@ -67,6 +64,7 @@ export default CreateUnitScreen = ({route, navigation}) => {
                 paddingTop: 20,
                 height: 110
               }}
+              value={unit.name}
               onChangeText={(value) => handleChange(value, "name")} 
               label="Name"
               placeholder='Name' 
@@ -97,18 +95,12 @@ export default CreateUnitScreen = ({route, navigation}) => {
               placeholder='Video' 
             />
           </View>
-          <NormalButton 
-            title='Add exam' 
-            onPress={() => navigation.navigate('CreateExamScreen', {
-              unit: unit,
-            })}
-          />
         </View>
         <View style={{ paddingBottom: 10 }}>
           <NormalButton 
             disabled={disableButton}
-            title='Create unit' 
-            onPress={() => createUnit()}
+            title='Save' 
+            onPress={() => save()}
           />
         </View>
       </View>

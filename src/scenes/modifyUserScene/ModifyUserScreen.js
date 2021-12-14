@@ -60,7 +60,6 @@ export default ModifyUserScreen = ({navigation}) => {
     })
     .catch(err => handleError(err))
     setLoading(false);
-    console.log(userInfo);
   }
 
   useEffect(() => {

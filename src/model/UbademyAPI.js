@@ -42,3 +42,15 @@ export const getCourses = async () => {
   return fetchFromURL('/courses');
 }
 
+export const createCourse = async (course) => {
+  return postDataToURL('/courses', {}, { 
+    name: course.name, 
+    description: course.description,
+    country: course.country,
+    category: course.category,
+    suscriptionIncluded: course.subscriptionIncluded,
+    creatorId: course.creatorId,
+    tags: course.tags
+  });
+}
+

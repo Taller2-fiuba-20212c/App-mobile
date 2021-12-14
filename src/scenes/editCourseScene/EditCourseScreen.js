@@ -11,8 +11,8 @@ import { getErrorPermissionMsg } from '../../model'
 import EditCourseStyles from './EditCourseStyles'
 import TagInput from 'react-native-tags-input';
 
-export default EditCourseScreen = ({route, navigation}) => {
-  const course = route.params.course;
+export default EditCourseScreen = ({route, navigation, newUnit, number}) => {
+  const course = route.params.course; //Fetch course data
   const [image, setImage] = useState(
     course.imgsrc ? {uri: course.imgsrc} : DEFAULT_IMG
   );
@@ -25,12 +25,7 @@ export default EditCourseScreen = ({route, navigation}) => {
     msg: ''
   })
 
-  const [newCourse, setNewCourse] = useState({
-    name: course.name,
-    description: course.description,
-    subscriptionIncluded: course.subscriptionIncluded,
-    category: course.category
-  });
+  const [newCourse, setNewCourse] = useState(course);
   const [tags, setTags] = useState({
     tag: '',
     tagsArray: course.tags
@@ -42,6 +37,13 @@ export default EditCourseScreen = ({route, navigation}) => {
       headerShown: true,
       title: 'Edit course'
     });
+
+    if (newUnit) {
+      setNewCourse({
+        ...newCourse, 
+        units: newCourse.units.slice[number]
+      })
+    }
   }, []);
 
   useEffect(() => {
@@ -65,18 +67,14 @@ export default EditCourseScreen = ({route, navigation}) => {
     const c = {
       ...course,
       imgsrc: image.uri,
-      description: newCourse.description,
-      name: newCourse.name,
       tags: tags.tagsArray,
-      subscriptionIncluded: newCourse.subscriptionIncluded,
-      category: newCourse.category,
       published: isPublish
     }
 
     console.log(c)
 
     navigation.navigate('CourseScreen', {
-      course: {...c},
+      course: c,
       isOwner: true
     })
   }
@@ -117,29 +115,14 @@ export default EditCourseScreen = ({route, navigation}) => {
       course: {
         ...course,
         imgsrc: image.uri,
-        name: newCourse.name,
-        description: newCourse.description,
         tags: tags.tagsArray,
-        subscriptionIncluded: newCourse.subscriptionIncluded,
-        category: newCourse.category,
         published: isPublish
       }
     })
   }
 
   const createExam = () => {
-    navigation.navigate('CreateExamScreen', {
-      course: {
-        ...course,
-        imgsrc: image.uri,
-        description: newCourse.description,
-        tags: tags.tagsArray,
-        name: newCourse.name,
-        subscriptionIncluded: newCourse.subscriptionIncluded,
-        category: newCourse.category,
-        published: isPublish
-      }
-    })
+    navigation.navigate('CreateExamScreen')
   }
 
   const handlePublish = () => {
@@ -199,6 +182,8 @@ export default EditCourseScreen = ({route, navigation}) => {
           </View>
           <NormalInput 
             placeholder='Description' 
+            multiline={true}
+            numberOfLines={3}
             value={newCourse.description} 
             onChangeText={(value) => handleChange(value, "description")} 
           />
@@ -216,7 +201,13 @@ export default EditCourseScreen = ({route, navigation}) => {
               <View>
                 {
                   course.units.slice(0, MAX_UNITS).map((u, i) => (
-                    <AccordionListItem item={u} key={i} number={i} />
+                    <AccordionListItem 
+                      navigation={navigation} 
+                      item={u} 
+                      key={i} 
+                      number={i} 
+                      edit={true}
+                    />
                   ))
                 }
               </View>

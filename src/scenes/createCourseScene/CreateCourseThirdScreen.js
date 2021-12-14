@@ -58,8 +58,8 @@ export default CreateCourseScreen = ({navigation, route}) => {
       creatorId: creatorId,
       units: []
     }
-    console.log(courseInfo);
-
+    
+    console.log(courseInfo)
     setCreating(false);
     navigation.navigate('CourseScreen', {
       course: courseInfo,
