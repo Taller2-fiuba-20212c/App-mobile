@@ -69,6 +69,8 @@ export default CreateCourseScreen = ({navigation}) => {
             <NormalInput 
               onChangeText={(value) => handleChange(value, "description")} 
               containerStyle={{ height: 80 }}
+              multiline={true}
+              numberOfLines={3}
               label='Description'
               placeholder='Description' 
               maxLength={300}

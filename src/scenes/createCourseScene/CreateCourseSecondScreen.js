@@ -41,7 +41,7 @@ export default CreateCourseSecondScreen = ({navigation, route}) => {
     const courseInfo = {
       ...route.params.courseInfo,
       category: category.item,
-      subscriptionIncluded: subLevel.item,
+      suscriptionIncluded: subLevel.item,
     }
 
     navigation.navigate('CreateCourseThirdScreen', {

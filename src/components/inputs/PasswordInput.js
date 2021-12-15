@@ -40,6 +40,7 @@ export default PasswordInput = (props) => {
       }
       secureTextEntry={visibility} 
       iconName='lock' 
+      keyboardType='visible-password'
       rightIcon={props.hideVisibility ? null : eyeIcon}
     />
   )

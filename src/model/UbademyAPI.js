@@ -15,7 +15,10 @@ export const register = async (email, password, role, name, lastname) => {
 }
 
 export const modifyUser = async (uid, email, role, name, lastname, active) => {
-  return putDataToURL(`/edit/:${uid}`, {}, 
+  return putDataToURL(`/edit`, 
+  {
+    uid: uid
+  }, 
   { 
     email: email, 
     name: name, 
@@ -44,13 +47,17 @@ export const getCourses = async () => {
 
 export const createCourse = async (course) => {
   return postDataToURL('/courses', {}, { 
-    name: course.name, 
-    description: course.description,
-    country: course.country,
-    category: course.category,
-    suscriptionIncluded: course.subscriptionIncluded,
-    creatorId: course.creatorId,
-    tags: course.tags
+    ...course,
+    creationDate: "2021-12-13T16:10:58.169Z",
+    lastModificationDate: "2021-12-13T16:10:58.169Z",
+    // name: course.name, 
+    // description: course.description,
+    // country: course.country,
+    // category: course.category,
+    // suscriptionIncluded: course.subscriptionIncluded,
+    // creatorId: course.creatorId,
+    // tags: course.tags,
+    // units: course.units
   });
 }
 

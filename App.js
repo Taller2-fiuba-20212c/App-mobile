@@ -66,12 +66,12 @@ function MyStack() {
       <Stack.Screen name="VideoClassScreen" component={VideoClassScreen}/>
       <Stack.Screen name="ExtraInfoScreen" component={ExtraInfoScreen}/>
       <Stack.Screen name="CreateCourseSecondScreen" component={CreateCourseSecondScreen}/>
+      <Stack.Screen name="LoginScreen" component={LoginScreen}/>
       <Stack.Screen name="CreateUnitScreen" component={CreateUnitScreen}/>
       <Stack.Screen name="EditUnitScreen" component={EditUnitScreen}/>
       <Stack.Screen name="CreateCourseThirdScreen" component={CreateCourseThirdScreen}/>
       <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
       <Stack.Screen name="PrincipalScreen" component={TabScreen} />
-      <Stack.Screen name="LoginScreen" component={LoginScreen}/>
       <Stack.Screen name="UserScreen" component={UserScreen}/>
       <Stack.Screen name="CourseScreen" 
         component={CourseScreen}

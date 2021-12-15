@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { ScrollView, View, ActivityIndicator } from 'react-native'
 import { NormalInput, Alert } from './../../components'
 import { BASE_COLOR, USER_INFO, NORMAL_ERROR_TITLE } from '../../consts'
-import { getPlace, getData, getErrorPermissionMsg } from './../../model'
+import { getPlace, getData, getErrorPermissionMsg, createCourse } from './../../model'
 import { Icon } from 'react-native-elements'
 import TagInput from 'react-native-tags-input';
 import CreateCourseStyles from './CreateCourseStyles'
@@ -48,7 +48,7 @@ export default CreateCourseScreen = ({navigation, route}) => {
     );
   }, [place, tags]);
 
-  const createCourse = () => {
+  const handleCreateCourse = () => {
     setCreating(true);
     // post courses
     const courseInfo = {
@@ -60,11 +60,16 @@ export default CreateCourseScreen = ({navigation, route}) => {
     }
     
     console.log(courseInfo)
-    setCreating(false);
-    navigation.navigate('CourseScreen', {
-      course: courseInfo,
-      isOwner: true
+    createCourse(courseInfo)
+    .then(r => console.log(r))
+    .catch(e => {
+      console.error(e.response)
     })
+    setCreating(false);
+    // navigation.navigate('CourseScreen', {
+    //   course: courseInfo,
+    //   isOwner: true
+    // })
   }
 
   return (
@@ -148,7 +153,7 @@ export default CreateCourseScreen = ({navigation, route}) => {
             <NormalButton 
               disabled={disableButton}
               title='Create course' 
-              onPress={() => createCourse()}
+              onPress={() => handleCreateCourse()}
             />
           }
           </View>
