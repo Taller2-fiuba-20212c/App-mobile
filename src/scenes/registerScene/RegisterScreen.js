@@ -36,9 +36,18 @@ export default RegisterScreen = ({navigation}) => {
         break;
       }
       default: {
+        let msg;
+        let title;
+        if (err.response.data.errors[0].param == 'email') {
+          title = 'Sorry'
+          msg = err.response.data.errors[0].msg;
+        } else {
+          title = 'Something went wrong';
+          msg = '';
+        }
         setAlertInfo({
-          title: 'Something went wrong',
-          msg: ''
+          title: title,
+          msg: msg
         });
         break;
       }

@@ -110,7 +110,7 @@ export default ModifyUserScreen = ({navigation}) => {
               <Avatar
                 rounded
                 size='xlarge'
-                title={getAvatarTitle(userInfo.name, userInfo.lastname)}
+                title={getAvatarTitle(userInfoSaved.name, userInfoSaved.lastname)}
                 containerStyle={{ 
                   backgroundColor: BASE_COLOR 
                 }}

@@ -56,14 +56,12 @@ export default LoginScreen = ({navigation}) => {
     setLoading(true);
     await login(user.email, user.password)
     .then(r => {
-      console.log(r)
-      storeData(USER_INFO, JSON.stringify(r)).then(() => {
-        setLoading(false);
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'PrincipalScreen'}]
-        })
-      });
+      setLoading(false);
+      storeData(USER_INFO, JSON.stringify(r))
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'PrincipalScreen'}]
+      })
     })
     .catch(e => handleError(e));
     setLoading(false);
