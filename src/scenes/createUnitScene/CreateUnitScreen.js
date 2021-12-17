@@ -4,7 +4,6 @@ import { NormalButton, NormalInput, Alert } from '../../components'
 import CreateUnitStyles from './CreateUnitStyles'
 
 export default CreateUnitScreen = ({route, navigation}) => {
-  const course = route.params.course;
   const [disableButton, setDisableButton] = useState(true);
   const [unit, setUnit] = useState({
     name: '',
@@ -39,13 +38,9 @@ export default CreateUnitScreen = ({route, navigation}) => {
       setVisible(true);
       return
     }
-    const courseInfo = {
-      ...course,
-      units: course.units.concat([unit]),
-    }
 
     navigation.navigate('EditCourseScreen', {
-      course: courseInfo
+      courseId: route.params.courseId,
     })
   }
 

@@ -11,4 +11,5 @@ export { EditCourseScreen } from './editCourseScene'
 export { CreateUnitScreen } from './createUnitScene'
 export { EditUnitScreen } from './editUnitScene'
 export { CreateExamScreen } from './exam'
+export { ChatScreen } from './chat'
 export { CourseScreen, ContentCourseScreen, VideoClassScreen } from './courseScene';

@@ -1,9 +1,10 @@
 import React, {useLayoutEffect, useState, useEffect} from 'react';
-import { View, Text, Pressable, ScrollView } from 'react-native'
-import { SearchBar, Icon, BottomSheet, Divider, Slider } from 'react-native-elements'
-import { CheckBoxList } from '../../components'
+import { View, Text, Pressable, ScrollView, ActivityIndicator } from 'react-native'
+import { SearchBar, Icon, BottomSheet, Divider, Slider, ListItem } from 'react-native-elements'
+import { CheckBoxList, LongCardCourse } from '../../components'
 import { BASE_COLOR, SUBCRIPTIONS_TYPES, CATEGORIES_TYPES } from '../../consts';
 import SearchStyles from './SearchStyles'
+import { searchCourses } from './../../model'
 
 export default SearchScreen = ({navigation}) => {
   const [searchText, setSearchText] = useState('');
@@ -43,6 +44,9 @@ export default SearchScreen = ({navigation}) => {
     });
     setApplyEnable(false);
     setIsVisible(false);
+    if (searchText) {
+      handleSearchCourses()
+    }
   };
 
   const cancel = () => {
@@ -55,11 +59,20 @@ export default SearchScreen = ({navigation}) => {
     setIsVisible(true);
   };
 
-  const searchCourses = () => {
-    console.log({
+  const [result, setResult] = useState(null);
+  const [searching, setSearching] = useState(false);
+
+  const handleSearchCourses = () => {
+    setSearching(true);
+    searchCourses({
       ...filters,
       text: searchText,
     })
+    .then(r => {
+      setResult(r);
+      setSearching(false);
+    })
+    .catch(err => console.log(err.response));
   }
 
   useLayoutEffect(() => {
@@ -82,7 +95,7 @@ export default SearchScreen = ({navigation}) => {
               color: 'black'
             }}
             returnKeyType='search'
-            onSubmitEditing={searchCourses}
+            onSubmitEditing={handleSearchCourses}
             showLoading={true}
             round={true}
             lightTheme={true}
@@ -106,13 +119,38 @@ export default SearchScreen = ({navigation}) => {
   });
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => setSearchText(''));
+    const unsubscribe = navigation.addListener('focus', () => {
+      setSearchText('')
+      setResult(null)
+    });
 
     return unsubscribe;
   }, [navigation]);
 
   return(
     <View>
+      {
+        searching ? 
+        <ActivityIndicator size="large" color={BASE_COLOR} />
+        : 
+        <ScrollView>
+          {
+            result && result.map((l, i) => (
+              <ListItem 
+                key={i} 
+                containerStyle={{ 
+                  padding: 0,
+                  paddingVertical: 5
+                }}
+              >
+                <ListItem.Content>
+                  <LongCardCourse navigation={navigation} course={l} />
+                </ListItem.Content>
+              </ListItem>
+            ))
+          }
+        </ScrollView>
+      }
       <BottomSheet 
         onBackButtonPress={() => cancel()}
         modalProps={{

@@ -21,6 +21,7 @@ export default ModifyUserScreen = ({navigation}) => {
   });
 
   const handleError = (err) => {
+    console.log(err.response)
     switch (err.response.status){
       case 400: {
         setAlertInfo({

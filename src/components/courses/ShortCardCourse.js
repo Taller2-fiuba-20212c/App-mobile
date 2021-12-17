@@ -7,7 +7,7 @@ export default ShortCardCourse = ({course, navigation}) => {
 
   const watchCourse = () => {
     navigation.navigate('CourseScreen', { 
-      course: course,
+      course: course
     })
   }
 
@@ -21,7 +21,7 @@ export default ShortCardCourse = ({course, navigation}) => {
       }}
     >
       <Card.Image 
-        source={ course.imgsrc ? {uri: course.imgsrc} : DEFAULT_IMG } 
+        source={ course.image ? {uri: course.image} : DEFAULT_IMG } 
         style={{ paddingBottom: 20, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
       >
       </Card.Image>

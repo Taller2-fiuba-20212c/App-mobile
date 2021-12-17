@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { ScrollView, View, ActivityIndicator } from 'react-native'
-import { NormalInput, Dropdown } from './../../components'
-import { BASE_COLOR } from '../../consts'
-import { getPlace } from './../../model'
-import { Icon } from 'react-native-elements'
-import TagInput from 'react-native-tags-input';
+import { ScrollView, View } from 'react-native'
+import { NormalInput } from './../../components'
 import CreateCourseStyles from './CreateCourseStyles'
 
 export default CreateCourseScreen = ({navigation}) => {

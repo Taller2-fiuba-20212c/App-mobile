@@ -50,26 +50,33 @@ export default CreateCourseScreen = ({navigation, route}) => {
 
   const handleCreateCourse = () => {
     setCreating(true);
-    // post courses
     const courseInfo = {
       ...route.params.courseInfo,
       country: place[0].country,
       tags: tags.tagsArray,
       creatorId: creatorId,
-      units: []
     }
-    
-    console.log(courseInfo)
+
     createCourse(courseInfo)
-    .then(r => console.log(r))
+    .then(r => {
+      setCreating(false);
+      navigation.reset({
+        index: 1,
+        routes: [
+          {name: 'PrincipalScreen'},
+          {name: 'CourseScreen',
+          params: {
+            courseId: r.id,
+            isOwner: true
+          }
+          }
+        ],
+      })
+    })
     .catch(e => {
       console.error(e.response)
+      setCreating(false);
     })
-    setCreating(false);
-    // navigation.navigate('CourseScreen', {
-    //   course: courseInfo,
-    //   isOwner: true
-    // })
   }
 
   return (
