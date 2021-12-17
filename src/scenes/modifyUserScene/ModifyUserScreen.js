@@ -7,8 +7,11 @@ import {
 } from './../../components'
 import { BASE_COLOR, USER_INFO } from  './../../consts'
 import ModifyUserStyles from './ModifyUserStyles'
+import { useGlobalAuthActionsContext } from '../../model/ContextFactory'
 
 export default ModifyUserScreen = ({navigation}) => {
+  const setAppAuthContext = useGlobalAuthActionsContext();
+
   const [userInfoSaved, setUserInfoSaved] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [loadingScreen, setLoadingScreen] = useState(true);
@@ -54,6 +57,7 @@ export default ModifyUserScreen = ({navigation}) => {
       userInfo.name, userInfo.lastname, userInfo.active
     )
     .then(r => {
+      setAppAuthContext(prevState => ({ ...prevState, user: { ...r, accessToken: prevState.user.accessToken, refreshToken: prevState.user.refreshToken }}));
       setLoading(false);
       modifyDataSaved(r);
       navigation.navigate('ProfileScreen')
