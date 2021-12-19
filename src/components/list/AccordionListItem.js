@@ -22,14 +22,17 @@ export default AccordionListItem = (props) => {
           <YoutubeVideo 
             height={175}
             width={300}
-            videoId={item.videoId}
+            videoId={item.content.videoId}
           />
         </View>
-        <ListItem>
-          <ListItem.Content>
-            <ListItem.Title>Exam</ListItem.Title>
-          </ListItem.Content>
-        </ListItem>
+        {
+          item.exam &&
+          <ListItem>
+            <ListItem.Content>
+              <ListItem.Title>Exam</ListItem.Title>
+            </ListItem.Content>
+          </ListItem>
+        }
       </View> 
     )
   }

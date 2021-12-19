@@ -36,26 +36,29 @@ export default PrincipalScreen = ({navigation}) => {
   });
 
   useEffect(() => {
-    getTop5()
-    .then((r) => {
-      setTop5(r)
-    })
-    .catch((e) => console.log(e.response))
-
-    getCourses().then((r) => setCourses(r));
-    getData(USER_INFO).then((user) => {
-      if (user) {
-        if (user.role == 'PROFESSOR') {
-          setIsProf(true);
+    const unsubscribe = navigation.addListener('focus', () => {
+      setCourses(null);
+      setTop5(null);
+      getTop5()
+      .then((r) => {
+        setTop5(r)
+      })
+      .catch((e) => console.log(e.response))
+  
+      getCourses().then((r) => setCourses(r));
+      getData(USER_INFO).then((user) => {
+        if (user) {
+          if (user.role == 'PROFESSOR') {
+            setIsProf(true);
+          }
         }
-      }
+  
+        setLoading(false);
+      })
+    });
 
-      setLoading(false);
-    })
-    return () => {
-      setCourses([]);
-    };
-  }, [])
+    return unsubscribe;
+  }, [navigation])
 
   const _renderItem = ({item, index}) => {
     return (
@@ -98,7 +101,7 @@ export default PrincipalScreen = ({navigation}) => {
             <ActivityIndicator size="large" color={BASE_COLOR} />
             :
             <Carousel 
-              data={courses} 
+              data={courses.slice(1).slice(-5)} 
               renderItem={_renderItem}
               sliderWidth={SLIDER_WIDTH}
               itemWidth={ITEM_WIDTH}

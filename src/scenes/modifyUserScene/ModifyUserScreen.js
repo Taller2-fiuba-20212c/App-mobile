@@ -2,6 +2,7 @@ import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { View, Text, ActivityIndicator, ScrollView } from 'react-native'
 import { getData, storeData, modifyUser, getAvatarTitle } from './../../model'
 import { Avatar } from 'react-native-elements'
+import * as ImagePicker from 'expo-image-picker';
 import { 
   NormalButton, NormalInput, EmailInput, HorizontalBoxes, Alert 
 } from './../../components'
@@ -15,6 +16,7 @@ export default ModifyUserScreen = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const [disableButton, setDisableButton] = useState(false)
   const [visible, setVisible] = useState(false);
+  const [errorEmail, setErrorEmail] = useState(false)
   const [alertInfo, setAlertInfo] = useState({
     title: '',
     msg: ''
@@ -42,6 +44,36 @@ export default ModifyUserScreen = ({navigation}) => {
     setVisible(true)
   }
 
+  const changeImg = async () => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          setAlertInfo({ 
+            title: NORMAL_ERROR_TITLE, 
+            msg: getErrorPermissionMsg('camera roll permissions', 'change this image')
+          })
+          setVisible(true)
+          return
+        }
+      }
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+        base64: true,
+      });
+  
+      if (!result.cancelled) {
+        handleChange(
+          'data:image/png;base64,' + result.base64, 
+          'image'
+        )
+      }
+    })();
+  }
+
   const modifyDataSaved = (r) => {
     const aux = Object.assign({}, userInfoSaved);
     const newUserInfo = Object.assign(aux, r);
@@ -50,14 +82,18 @@ export default ModifyUserScreen = ({navigation}) => {
 
   const saveChange = async () => {
     setLoading(true);
-    await modifyUser(
-      userInfo.uid, userInfo.email, userInfo.role, 
-      userInfo.name, userInfo.lastname, userInfo.active
-    )
+    await modifyUser(userInfo.uid, {
+      email: userInfo.email,
+      role: userInfo.role,
+      name: userInfo.name,
+      lastname: userInfo.lastname,
+      active: userInfo.active,
+      image: userInfo.image
+    })
     .then(r => {
-      setLoading(false);
       modifyDataSaved(r);
-      navigation.navigate('ProfileScreen')
+      setLoading(false);
+      navigation.navigate('User')
     })
     .catch(err => handleError(err))
     setLoading(false);
@@ -66,19 +102,21 @@ export default ModifyUserScreen = ({navigation}) => {
   useEffect(() => {
     getData(USER_INFO)
     .then(r => {
-      setUserInfo(r);
       setUserInfoSaved(r);
+      setUserInfo(r);
       setLoadingScreen(false);
     })
   }, []);
 
+  useEffect(() => {
+    setDisableButton(
+      JSON.stringify(userInfo) == JSON.stringify(userInfoSaved) || errorEmail
+    );
+  }, [userInfo, errorEmail]);
+
   const handleChange = (value, name) => {
     setUserInfo({ ...userInfo, [name]: value });
   };
-
-  const handleErrorEmail = (value) => {
-    setDisableButton(value)
-  }
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -88,7 +126,6 @@ export default ModifyUserScreen = ({navigation}) => {
   });
 
 	return (
-    
 		<View style={{flex: 1}}>
       {
         loadingScreen ?
@@ -110,12 +147,15 @@ export default ModifyUserScreen = ({navigation}) => {
             }}>
               <Avatar
                 rounded
+                source={userInfo.image ? { uri: userInfo.image } : null}
                 size='xlarge'
                 title={getAvatarTitle(userInfoSaved.name, userInfoSaved.lastname)}
                 containerStyle={{ 
-                  backgroundColor: BASE_COLOR 
+                  backgroundColor: userInfo.image ? 'white' : BASE_COLOR 
                 }}
-              />
+              >
+                <Avatar.Accessory name='edit' onPress={() => changeImg()} size={40} />
+              </Avatar>
             </View>
             <View>
               <NormalInput 
@@ -137,7 +177,7 @@ export default ModifyUserScreen = ({navigation}) => {
                   value={userInfo.email}
                   validate={true} 
                   onChangeText={(value) => handleChange(value, "email")}
-                  error={(value) => handleErrorEmail(value)}
+                  error={(value) => setErrorEmail(value)}
                 />
               </View>
               <View>

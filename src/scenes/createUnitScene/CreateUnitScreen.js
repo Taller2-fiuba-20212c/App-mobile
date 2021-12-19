@@ -39,8 +39,21 @@ export default CreateUnitScreen = ({route, navigation}) => {
       return
     }
 
+    const now = new Date(Date.now());
     navigation.navigate('EditCourseScreen', {
-      courseId: route.params.courseId,
+      course: {
+        ...route.params.course,
+        units: route.params.course.units.concat([{
+          name: unit.name,
+          contentType: 'VIDEO',
+          content: {
+            videoId: unit.videoId
+          },
+          creatorId: route.params.course.creatorId,
+          creationDate: now.toISOString(),
+          lastModificationDate: now.toISOString(),
+        }])
+      },
     })
   }
 
@@ -92,12 +105,6 @@ export default CreateUnitScreen = ({route, navigation}) => {
               placeholder='Video' 
             />
           </View>
-          <NormalButton 
-            title='Add exam' 
-            onPress={() => navigation.navigate('CreateExamScreen', {
-              unit: unit,
-            })}
-          />
         </View>
         <View style={{ paddingBottom: 10 }}>
           <NormalButton 

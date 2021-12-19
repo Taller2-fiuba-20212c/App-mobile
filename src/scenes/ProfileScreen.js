@@ -48,10 +48,11 @@ export default ProfileScreen = ({navigation}) => {
           }}>
             <Avatar
               rounded
+              source={userInfo.image ? { uri: userInfo.image } : null}
               size='xlarge'
               title={getAvatarTitle(userInfo.name, userInfo.lastname)}
               containerStyle={{ 
-                backgroundColor: BASE_COLOR 
+                backgroundColor: userInfo.image ? 'white' : BASE_COLOR
               }}
             />
           </View>

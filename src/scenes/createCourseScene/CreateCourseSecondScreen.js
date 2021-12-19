@@ -41,7 +41,9 @@ export default CreateCourseSecondScreen = ({navigation, route}) => {
     const courseInfo = {
       ...route.params.courseInfo,
       category: category.item,
-      suscriptionIncluded: subLevel.item,
+      suscriptionIncluded: SUBCRIPTIONS_TYPES.filter((u, i) => 
+        i <= SUBCRIPTIONS_TYPES.indexOf(subLevel.item)
+      ),
     }
 
     navigation.navigate('CreateCourseThirdScreen', {

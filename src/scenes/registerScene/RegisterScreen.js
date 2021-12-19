@@ -65,7 +65,9 @@ export default RegisterScreen = ({navigation}) => {
     .then(r => {
       setLoading(false);
       storeData(USER_INFO, JSON.stringify(r));
-      navigation.navigate('ExtraInfoScreen');
+      navigation.navigate('ExtraInfoScreen', {
+        userInfo: r
+      });
     })
     .catch(err => handleError(err))
     setLoading(false);

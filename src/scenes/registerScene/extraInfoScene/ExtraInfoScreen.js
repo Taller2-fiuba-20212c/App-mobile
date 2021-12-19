@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, ActivityIndicator } from 'react-native';
 import ExtraInfoStyles from './ExtraInfoStyles'
-import { BASE_COLOR, CATEGORIES_TYPES } from './../../../consts'
-import { getPlace } from './../../../model'
+import { BASE_COLOR, CATEGORIES_TYPES, USER_INFO } from './../../../consts'
+import { getPlace, modifyUser, storeData, addCategory } from './../../../model'
 import { NormalButton, Dropdown } from './../../../components'
 
 const categories = CATEGORIES_TYPES.map((c) => {
@@ -12,9 +12,13 @@ const categories = CATEGORIES_TYPES.map((c) => {
   }
 })
 
-export default ExtraInfoScreen = ({ navigation }) => {
+const uid_prueba = 'iIfY6cLrGpgFoDev2YmDknXizHG3'
+
+export default ExtraInfoScreen = ({ navigation, route }) => {
   const [place, setPlace] = useState(null);
   const [selectedTeams, setSelectedTeams] = useState([])
+  const [disabled, setDisabled] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   const xorBy = (l1, l2) => {
     return l1.filter(x => !l2.includes(x)).concat(l2.filter(x => !l1.includes(x)));
@@ -25,20 +29,57 @@ export default ExtraInfoScreen = ({ navigation }) => {
   }
 
   useEffect(() => {
+    setDisabled(
+      selectedTeams.length == 0 || !place
+    )
+  }, [selectedTeams, place])
+
+  useEffect(() => {
     getPlace().then((p) => setPlace(p));
   }, []);
 
-  const handleStart = () => {
-    // Post to add information /users
-    console.log({
-      country: place[0].country,
-      categories: selectedTeams.map((i) => {
-        return i.item
+  const saveNewInfo = async () => {
+    // const user = route.params.userInfo;
+    try {
+      let r = await modifyUser(uid_prueba, {
+        // email: user.email,
+        // name: user.name,
+        // lastname: user.lastname,
+        // country: place[0].country,
+        email: 'paul_acosta@gmail.com',
+        name: 'Paul',
+        lastname: 'Acosta',
+        country: 'United states',
       })
-    });
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'PrincipalScreen'}]
+
+      for (let c of selectedTeams) {
+        console.log(c.item)
+        await addCategory(uid_prueba, c.item)
+      }
+
+      await storeData(USER_INFO, JSON.stringify({
+        ...r,
+        categories: selectedTeams.map(c => c.item)
+      }))
+
+      return
+    } catch (e) {
+      console.error(e)
+      throw e;
+    }
+  }
+
+  const handleStart = () => {
+    setSaving(true);
+    saveNewInfo().then(r => {
+      setSaving(false);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'PrincipalScreen'}]
+      })
+    }).catch(err => {
+      // console.log(err.response)
+      setSaving(false)
     })
   }
 
@@ -75,10 +116,16 @@ export default ExtraInfoScreen = ({ navigation }) => {
         </View>
         <View style={{ paddingHorizontal: 20 }}>
           <View style={{ paddingVertical: 20 }}>
-            <NormalButton 
-              title="Start"
-              onPress={() => handleStart()}
-            />
+            {
+              saving ?
+              <ActivityIndicator size="large" color={BASE_COLOR} />
+              :
+              <NormalButton 
+                disabled={disabled}
+                title="Start"
+                onPress={() => handleStart()}
+              />
+            }
           </View>
         </View>
         </View>

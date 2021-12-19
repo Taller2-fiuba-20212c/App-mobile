@@ -34,18 +34,20 @@ export default EditCourseScreen = ({route, navigation}) => {
   const [newCourse, setNewCourse] = useState(route.params.course);
 
   useEffect(() => {
-    navigation.setOptions({
-      headerShown: true,
-      title: 'Edit course'
-    });
-
-    setNewCourse(newCourse);
-    setTags({
-      tag: '',
-      tagsArray: newCourse.tags
-    })
-    setLoading(false)
-  }, []);
+    if (route.params?.course) {
+      navigation.setOptions({
+        headerShown: true,
+        title: 'Edit course'
+      });
+  
+      setNewCourse(route.params.course);
+      setTags({
+        tag: '',
+        tagsArray: route.params.course.tags
+      })
+      setLoading(false)
+    }
+  }, [route.params]);
 
   useEffect(() => {
     setDisabled(
@@ -67,14 +69,17 @@ export default EditCourseScreen = ({route, navigation}) => {
     setSaving(true)
     updateCourse({
       ...newCourse,
-      tags: tags.tagsArray
+      tags: tags.tagsArray,
+      units: []
     })
     .then(r => {
       setSaving(false)
+      console.log(r)
       navigation.navigate('CourseScreen', {
         course: {
           ...newCourse, 
-          tags: tags.tagsArray
+          tags: tags.tagsArray,
+          units: []
         },
       })
     })
@@ -119,26 +124,21 @@ export default EditCourseScreen = ({route, navigation}) => {
   }
 
   const createUnit = () => {
-    const today = new Date(Date.now());
-    console.log(
-      Array(10).fill({
-        name: name,
-        contentType: contentType,
-        content: content,
-        creatorId: newCourse.creatorId,
-        creationDate: today.toISOString(),
-        lastModificationDate: today.toISOString()
-      })
-    )
+    navigation.navigate('CreateUnitScreen', {
+      course: newCourse
+    })
   }
 
   const createExam = () => {
-    console.log(newCourse)
+    console.log({
+      ...newCourse,
+      image: null
+    })
   }
 
   const handlePublish = () => {
     if (newCourse.units.length > 0) {
-      setIsPublish(!newCourse.published)
+      handleChange(!newCourse.published, 'published')
     } else {
       setAlertInfo({
         title: NORMAL_ERROR_TITLE, 
@@ -252,7 +252,7 @@ export default EditCourseScreen = ({route, navigation}) => {
                       SUBCRIPTIONS_TYPES.filter((u, i) => 
                         i <= SUBCRIPTIONS_TYPES.indexOf(value)
                       ), 
-                      'subscriptionIncluded'
+                      'suscriptionIncluded'
                     )
                   }
                 />

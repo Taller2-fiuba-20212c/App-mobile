@@ -50,26 +50,33 @@ export default CreateCourseScreen = ({navigation, route}) => {
 
   const handleCreateCourse = () => {
     setCreating(true);
+    const today = new Date(Date.now());
     const courseInfo = {
       ...route.params.courseInfo,
       country: place[0].country,
       tags: tags.tagsArray,
       creatorId: creatorId,
+      creationDate: today.toISOString(),
+      lastModificationDate: today.toISOString(),
+      published: 'false',
+      units: []
     }
 
     createCourse(courseInfo)
     .then(r => {
       setCreating(false);
+      console.log(r);
       navigation.reset({
         index: 1,
         routes: [
           {name: 'PrincipalScreen'},
           {name: 'CourseScreen',
           params: {
-            courseId: r.id,
-            isOwner: true
-          }
-          }
+            course: {
+              ...courseInfo,
+              id: r.id,
+            }
+          }}
         ],
       })
     })

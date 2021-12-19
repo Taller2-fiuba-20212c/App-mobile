@@ -14,25 +14,6 @@ export default CourseScreen = ({route, navigation}) => {
   const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        isOwner &&
-        <Icon 
-          name='edit'
-          size={24}
-          type='font-awesome'
-          color={BASE_COLOR}
-          onPress={() => {
-            navigation.navigate('EditCourseScreen', {
-              course: route.params.course
-            })
-          }}
-        />
-      ),
-    })
-  }, [isOwner])
-
-  useEffect(() => {
     if (route.params?.course) {
       setCourse(route.params.course);
       getUser(route.params.course.creatorId).then((r) => {
@@ -41,11 +22,26 @@ export default CourseScreen = ({route, navigation}) => {
       getData(USER_INFO).then((r) => {
         if (r.uid == route.params.course.creatorId) {
           setIsOwner(true);
+          navigation.setOptions({
+            headerShown: true,
+            headerRight: () => (
+              <Icon 
+                name='edit'
+                size={24}
+                type='font-awesome'
+                color={BASE_COLOR}
+                onPress={() => {
+                  navigation.navigate('EditCourseScreen', {
+                    course: route.params.course
+                  })
+                }}
+              />
+            ),
+          })
         }
       })
       setLoading(false)
       navigation.setOptions({
-        headerShown: true,
         title: route.params.course.name
       });
     }
@@ -135,7 +131,7 @@ export default CourseScreen = ({route, navigation}) => {
                   }}
                 />
                 <ListItem.Content>
-                  <ListItem.Title>{creator.name + ' ' +creator.lastname}</ListItem.Title>
+                  <ListItem.Title>{creator.name + ' ' + creator.lastname}</ListItem.Title>
                   <ListItem.Subtitle>{capitalize(creator.role)}</ListItem.Subtitle>
                 </ListItem.Content>
                 <ListItem.Chevron/>
