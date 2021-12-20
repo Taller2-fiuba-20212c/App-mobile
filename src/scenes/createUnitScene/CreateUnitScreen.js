@@ -39,22 +39,20 @@ export default CreateUnitScreen = ({route, navigation}) => {
       return
     }
 
+    // Put addUnit courses
     const now = new Date(Date.now());
-    navigation.navigate('EditCourseScreen', {
-      course: {
-        ...route.params.course,
-        units: route.params.course.units.concat([{
-          name: unit.name,
-          contentType: 'VIDEO',
-          content: {
-            videoId: unit.videoId
-          },
-          creatorId: route.params.course.creatorId,
-          creationDate: now.toISOString(),
-          lastModificationDate: now.toISOString(),
-        }])
+    const newUnit = {
+      name: unit.name,
+      contentType: 'VIDEO',
+      content: {
+        videoId: unit.videoId
       },
-    })
+      creatorId: route.params.creatorId,
+      creationDate: now.toISOString(),
+      lastModificationDate: now.toISOString(),
+    }
+
+    navigation.navigate('CourseScreen')
   }
 
   return (

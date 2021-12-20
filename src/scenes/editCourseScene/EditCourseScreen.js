@@ -11,12 +11,6 @@ import { getErrorPermissionMsg, getCourse, updateCourse } from '../../model'
 import EditCourseStyles from './EditCourseStyles'
 import TagInput from 'react-native-tags-input';
 
-const name = 'unit name'
-const contentType = 'VIDEO'
-const content = {
-  videoId: 'DUG-43FErsc'
-}
-
 export default EditCourseScreen = ({route, navigation}) => {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -34,6 +28,15 @@ export default EditCourseScreen = ({route, navigation}) => {
   const [newCourse, setNewCourse] = useState(route.params.course);
 
   useEffect(() => {
+    if (route.params?.newUnit) {
+      let units = newCourse.units.slice();
+      units[route.params.newUnitNumber] = route.params.newUnit
+      setNewCourse({
+        ...newCourse,
+        units: units
+      })
+    }
+
     if (route.params?.course) {
       navigation.setOptions({
         headerShown: true,
@@ -70,7 +73,6 @@ export default EditCourseScreen = ({route, navigation}) => {
     updateCourse({
       ...newCourse,
       tags: tags.tagsArray,
-      units: []
     })
     .then(r => {
       setSaving(false)
@@ -79,7 +81,6 @@ export default EditCourseScreen = ({route, navigation}) => {
         course: {
           ...newCourse, 
           tags: tags.tagsArray,
-          units: []
         },
       })
     })
@@ -121,19 +122,6 @@ export default EditCourseScreen = ({route, navigation}) => {
         )
       }
     })();
-  }
-
-  const createUnit = () => {
-    navigation.navigate('CreateUnitScreen', {
-      course: newCourse
-    })
-  }
-
-  const createExam = () => {
-    console.log({
-      ...newCourse,
-      image: null
-    })
   }
 
   const handlePublish = () => {
@@ -205,15 +193,12 @@ export default EditCourseScreen = ({route, navigation}) => {
                 value={newCourse.description} 
                 onChangeText={(value) => handleChange(value, "description")} 
               />
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={EditCourseStyles.section}>Content</Text>
-                <View style={{ flexDirection: 'row' }}>
-                  <View style={{ marginRight: 10 }} >
-                    <NormalButton title='Add Unit' onPress={() => createUnit()}/>
-                  </View>
-                  <NormalButton title='Add Exam' onPress={() => createExam()}/> 
+              {
+                newCourse.units.length != 0 &&
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text style={EditCourseStyles.section}>Content</Text>
                 </View>
-              </View>
+              }
               {
                 <View>
                   <View>
@@ -239,7 +224,7 @@ export default EditCourseScreen = ({route, navigation}) => {
                   }
                 </View>
               }
-              <View style={{paddingTop: 20}} >
+              <View style={{paddingTop: newCourse.units.length != 0 ? 20 : 0}} >
                 <Text style={EditCourseStyles.section}>Subscription included</Text>
               </View>
               <View style={{ paddingHorizontal: 10 }} >

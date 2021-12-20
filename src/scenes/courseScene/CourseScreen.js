@@ -1,10 +1,10 @@
-import React, {useEffect, useLayoutEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { Text, View, ScrollView, ActivityIndicator } from 'react-native'
 import { Image, PricingCard, ListItem, Avatar, Icon, Switch } from 'react-native-elements';
 import IconB from 'react-native-vector-icons/MaterialCommunityIcons';
-import { NormalButton, AccordionListItem } from '../../components'
-import { BASE_COLOR, WIDTH_SCREEN, MAX_UNITS, USER_INFO, DEFAULT_IMG } from '../../consts'
-import { getAvatarTitle, capitalize, getCourse, getUser, getData } from '../../model'
+import { NormalButton, AccordionListItem, Alert } from '../../components'
+import { BASE_COLOR, WIDTH_SCREEN, MAX_UNITS, USER_INFO, DEFAULT_IMG, NORMAL_ERROR_TITLE } from '../../consts'
+import { getAvatarTitle, capitalize, getErrorPermissionMsg, getUser, getData } from '../../model'
 import CourseStyles from './CourseStyles'
 
 export default CourseScreen = ({route, navigation}) => {
@@ -12,6 +12,11 @@ export default CourseScreen = ({route, navigation}) => {
   const [course, setCourse] = useState(route.params.course);
   const [creator, setCreator] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [alertInfo, setAlertInfo] = useState({
+    title: '',
+    msg: ''
+  })
 
   useEffect(() => {
     if (route.params?.course) {
@@ -53,6 +58,30 @@ export default CourseScreen = ({route, navigation}) => {
     })
   }
 
+  const createUnit = () => {
+    navigation.navigate('CreateUnitScreen', {
+      courseId: course.id,
+      creatorId: course.creatorId
+    })
+  }
+
+  const createExam = () => {
+    // if (course.units.length == 0) {
+    //   setAlertInfo({
+    //     title: NORMAL_ERROR_TITLE, 
+    //     msg: getErrorPermissionMsg('at least 1 unit created', 'add an exam')
+    //   })
+
+    //   setVisible(true)
+    //   return
+    // }
+    navigation.navigate('CreateExamScreen', {
+      courseId: course.id,
+      creatorId: course.creatorId,
+      units: course.units
+    })
+  }
+
 	return (
     <View style={{flex: 1}}>
     {
@@ -82,12 +111,21 @@ export default CourseScreen = ({route, navigation}) => {
             <View style={CourseStyles.text}>
               <Text style={CourseStyles.description}>{course.description}</Text>
             </View>
+            <View style={{ paddingHorizontal: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={CourseStyles.section}>Content</Text>
+              {
+                isOwner &&
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ marginRight: 10 }} >
+                    <NormalButton title='Add Unit' onPress={() => createUnit()}/>
+                  </View>
+                  <NormalButton title='Add Exam' onPress={() => createExam()}/> 
+                </View>
+              }
+            </View>
             {
               course.units.length > 0 && 
               <View>
-                <View style={CourseStyles.text}>
-                  <Text style={CourseStyles.section}>Content</Text>
-                </View>
                 <View>
                   {
                     course.units.slice(0, MAX_UNITS).map((u, i) => (
@@ -215,6 +253,12 @@ export default CourseScreen = ({route, navigation}) => {
               />
             }
           </View>
+          <Alert 
+            isVisible={visible}
+            alertInfo={alertInfo}
+            onBackdropPress={() => setVisible(false)}
+            onButtonPress={() => setVisible(false)}
+          />
         </ScrollView>
       }
     </View>

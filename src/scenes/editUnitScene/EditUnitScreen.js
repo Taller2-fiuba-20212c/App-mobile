@@ -41,8 +41,14 @@ export default EditUnitScreen = ({route, navigation}) => {
     }
 
     navigation.navigate('EditCourseScreen', {
-      newUnit: courseInfo,
-      newUnitNumber: props.number
+      newUnit: {
+        ...oldUnit,
+        name: unit.name,
+        content: {
+          videoId: unit.videoId
+        }
+      },
+      newUnitNumber: route.params.number
     })
   }
 

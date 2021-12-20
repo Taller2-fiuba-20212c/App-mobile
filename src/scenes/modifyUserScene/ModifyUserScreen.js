@@ -74,10 +74,11 @@ export default ModifyUserScreen = ({navigation}) => {
     })();
   }
 
-  const modifyDataSaved = (r) => {
+  const modifyDataSaved = async (r) => {
     const aux = Object.assign({}, userInfoSaved);
     const newUserInfo = Object.assign(aux, r);
-    storeData(USER_INFO, JSON.stringify(newUserInfo));
+    await storeData(USER_INFO, JSON.stringify(newUserInfo));
+    return
   }
 
   const saveChange = async () => {
@@ -91,9 +92,10 @@ export default ModifyUserScreen = ({navigation}) => {
       image: userInfo.image
     })
     .then(r => {
-      modifyDataSaved(r);
-      setLoading(false);
-      navigation.navigate('User')
+      modifyDataSaved(r).then(() => {
+        setLoading(false);
+        navigation.navigate('User');
+      });
     })
     .catch(err => handleError(err))
     setLoading(false);

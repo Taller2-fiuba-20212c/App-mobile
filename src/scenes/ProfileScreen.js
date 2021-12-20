@@ -26,12 +26,16 @@ export default ProfileScreen = ({navigation}) => {
   }
 
   useEffect(() => {
-    getData(USER_INFO)
-    .then(r => {
-      setUserInfo(r);
-      setLoading(false);
+    const unsubscribe = navigation.addListener('focus', () => {
+      getData(USER_INFO)
+      .then(r => {
+        setUserInfo(r);
+        setLoading(false);
+      })
     })
-  }, [])
+
+    return unsubscribe;
+  }, [navigation])
 
 	return (
     <View style={{flex: 1}}>
