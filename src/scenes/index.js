@@ -12,4 +12,4 @@ export { CreateUnitScreen } from './createUnitScene'
 export { EditUnitScreen } from './editUnitScene'
 export { CreateExamScreen, CreateQuestionScreen } from './exam'
 export { ChatScreen } from './chat'
-export { CourseScreen, ContentCourseScreen, VideoClassScreen } from './courseScene';
+export { CourseScreen, ContentCourseScreen, VideoClassScreen, TextClassScreen } from './courseScene';

@@ -1,2 +1,2 @@
 export { default as CourseScreen } from './CourseScreen';
-export { ContentCourseScreen, VideoClassScreen } from './content';
+export { ContentCourseScreen, VideoClassScreen, TextClassScreen } from './content';

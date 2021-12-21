@@ -9,7 +9,7 @@ import {
   PrincipalScreen, CourseScreen, ContentCourseScreen, SearchScreen, VideoClassScreen, 
   UserScreen, EditCourseScreen, CreateCourseScreen, CreateCourseSecondScreen, 
   CreateCourseThirdScreen, ExtraInfoScreen, CreateUnitScreen, EditUnitScreen,
-  CreateExamScreen, ChatScreen, CreateQuestionScreen
+  CreateExamScreen, ChatScreen, CreateQuestionScreen, TextClassScreen
 } from './src/scenes';
 
 const Tab = createBottomTabNavigator();
@@ -62,6 +62,8 @@ function MyStack() {
       },
     }}>
       <Stack.Screen name="WelcomeScreen" component={WelcomeScreen}/>
+      <Stack.Screen name="CreateUnitScreen" component={CreateUnitScreen}/>
+      <Stack.Screen name="TextClassScreen" component={TextClassScreen}/>
       <Stack.Screen name="LoginScreen" component={LoginScreen}/>
       <Stack.Screen name="EditCourseScreen" component={EditCourseScreen}/>
       <Stack.Screen name="ChatScreen" component={ChatScreen}/>
@@ -70,7 +72,6 @@ function MyStack() {
       <Stack.Screen name="VideoClassScreen" component={VideoClassScreen}/>
       <Stack.Screen name="ExtraInfoScreen" component={ExtraInfoScreen}/>
       <Stack.Screen name="CreateCourseSecondScreen" component={CreateCourseSecondScreen}/>
-      <Stack.Screen name="CreateUnitScreen" component={CreateUnitScreen}/>
       <Stack.Screen name="EditUnitScreen" component={EditUnitScreen}/>
       <Stack.Screen name="CreateCourseThirdScreen" component={CreateCourseThirdScreen}/>
       <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>

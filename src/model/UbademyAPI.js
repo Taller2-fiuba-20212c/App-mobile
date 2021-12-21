@@ -43,6 +43,10 @@ export const getCourses = async () => {
   return fetchFromURL('/courses');
 }
 
+export const addUnit = async (cid, unit) => {
+  return putDataToURL(`/courses/${cid}/addUnit`, {}, JSON.stringify(unit));
+}
+
 export const getTop5 = async () => {
   return fetchFromURL('/courses/getTop5Courses')
 }

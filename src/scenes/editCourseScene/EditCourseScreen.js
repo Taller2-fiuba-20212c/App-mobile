@@ -309,14 +309,14 @@ export default EditCourseScreen = ({route, navigation}) => {
                 </View>
                 <Switch value={newCourse.published} color={BASE_COLOR} onChange={() => handlePublish()}/>
               </View>
+              <View style={{ paddingTop: 10, paddingBottom: 20 }}>
               {
                 saving ?
                 <ActivityIndicator size="large" color={BASE_COLOR} />
                 :
-                <View style={{ paddingTop: 10, paddingBottom: 20 }}>
-                  <NormalButton disabled={disabled} title='Save' onPress={() => saveChanges()} />
-                </View>
+                <NormalButton disabled={disabled} title='Save' onPress={() => saveChanges()} />
               }
+              </View>
             </View>
           </View>
           <Alert 

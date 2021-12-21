@@ -43,3 +43,15 @@ export const getPlace = async () => {
 export const getErrorPermissionMsg = (requirement, action) => {
   return 'We need ' + requirement + ' to ' + action
 }
+
+export const validateUrl = (url) => {
+  var regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  var match = url.match(regExp);
+  return match && match[2].length == 11
+}
+
+export const getVideoId = (url) => {
+  var regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  var match = url.match(regExp);
+  return match[2]
+}

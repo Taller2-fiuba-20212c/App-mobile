@@ -1,9 +1,13 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import { Text, View, ScrollView } from 'react-native'
-import { NormalButton, NormalInput, Alert } from '../../components'
+import { NormalButton, NormalInput, Alert, HorizontalBoxes } from '../../components'
+import { UNIT_TYPES, BASE_COLOR } from '../../consts'
+import { validateUrl, getVideoId } from './../../model'
+import { RichEditor, RichToolbar, actions } from 'react-native-pell-rich-editor'
 
 export default EditUnitScreen = ({route, navigation}) => {
   const oldUnit = route.params.unit;
+  const RichText = useRef();
 
   useEffect(() => {
     navigation.setOptions({
@@ -14,15 +18,17 @@ export default EditUnitScreen = ({route, navigation}) => {
 
   const [disableButton, setDisableButton] = useState(true);
   const [unit, setUnit] = useState({
-    name: oldUnit.name,
-    videoId: ''
+    ...oldUnit,
+    content: {
+      videoId: '',
+      text: ''
+    }
   });
   const [visible, setVisible] = useState(false);
   const [alertInfo, setAlertInfo] = useState({
     title: '',
     msg: ''
   });
-  const [error, setError] = useState(false);
 
   const handleChange = (value, name) => {
     setUnit({ ...unit, [name]: value });
@@ -30,24 +36,49 @@ export default EditUnitScreen = ({route, navigation}) => {
 
   useEffect(() => {
     setDisableButton(
-      Object.values(unit).some(x => x == null || x == '')
+      unit.name == '' || unit.contentType == '' ||
+      (unit.contentType == 'TEXT' && unit.content.text == '') ||
+      (unit.contentType == 'VIDEO' && unit.content.videoId == '')
     );
   }, [unit]);
 
   const save = () => {
-    if (error) {
-      setVisible(true);
+    if (unit.contentType == 'VIDEO') {
+      if (!validateUrl(unit.content.videoId)) {
+        setAlertInfo({
+          title: "Error",
+          msg: 'Invalid video link'
+        })
+  
+        setVisible(true)
+      } else {
+        const now = new Date(Date.now());
+        const newUnit = {
+          ...unit,
+          content: {
+            videoId: getVideoId(unit.content.videoId)
+          },
+          lastModificationDate: now.toISOString(),
+        }
+        navigation.navigate('EditCourseScreen', {
+          newUnit: newUnit,
+          newUnitNumber: route.params.number
+        })
+      }
       return
     }
 
-    navigation.navigate('EditCourseScreen', {
-      newUnit: {
-        ...oldUnit,
-        name: unit.name,
-        content: {
-          videoId: unit.videoId
-        }
+    const now = new Date(Date.now());
+    const newUnit = {
+      ...unit,
+      content: {
+        text: unit.content.text
       },
+      lastModificationDate: now.toISOString(),
+    }
+
+    navigation.navigate('EditCourseScreen', {
+      newUnit: newUnit,
       newUnitNumber: route.params.number
     })
   }
@@ -76,31 +107,68 @@ export default EditUnitScreen = ({route, navigation}) => {
               placeholder='Name' 
             />
           </View>
-          <View>
-            <NormalInput 
-              containerStyle={{
-                paddingTop: 20,
-                height: 110
-              }}
-              onChangeText={(url) => {
-                var regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-                var match = url.match(regExp);
-                if (match && match[2].length == 11) {
-                  handleChange(match[2], "videoId")
-                  setError(false)
-                } else {
-                  setAlertInfo({
-                    title: "Error",
-                    msg: 'Invalid video link'
-                  })
-                  handleChange(url, "videoId")
-                  setError(true)
-                }
-              }} 
-              label="Video link"
-              placeholder='Video' 
-            />
-          </View>
+          <Text style={{
+            paddingLeft: 10, 
+            color: 'gray', 
+            fontWeight: 'bold',
+            fontSize: 16
+          }}>Type</Text>
+          <HorizontalBoxes 
+            options={UNIT_TYPES} 
+            value={unit.contentType}
+            onChange={(value) => {
+              RichText.current?.blurContentEditor();
+              handleChange(value.toUpperCase(), 'contentType');
+            }}
+          />
+          {
+            unit.contentType != '' &&
+            (
+              unit.contentType == UNIT_TYPES[0] ?
+              <View>
+                <Text style={{
+                  paddingLeft: 10, 
+                  color: 'gray', 
+                  fontWeight: 'bold',
+                  fontSize: 16
+                }}>Text</Text>
+                <RichEditor
+                  ref={RichText}
+                  initialContentHTML={unit.content.text}
+                  placeholder={"Start Writing Here"}
+                  onChange={(text) => handleChange({...unit.content, text: text}, 'content')}
+                />
+                <RichToolbar 
+                  editor={RichText}
+                  actions={[
+                    actions.setBold,
+                    actions.setItalic,
+                    actions.insertBulletsList,
+                    actions.insertOrderedList,
+                    actions.setUnderline,
+                    actions.undo,
+                    actions.redo,
+                    actions.alignLeft,
+                    actions.alignCenter,
+                    actions.alignRight
+                  ]}
+                  selectedIconTint={BASE_COLOR}
+                />
+              </View>
+              :
+              <View>
+                <NormalInput 
+                  containerStyle={{
+                    paddingTop: 20,
+                    height: 110
+                  }}
+                  onChangeText={(url) => handleChange({...unit.content, videoId: url}, "content")} 
+                  label="Video link"
+                  placeholder='Video' 
+                />
+              </View>
+            )
+          }
         </View>
         <View style={{ paddingBottom: 10 }}>
           <NormalButton 

@@ -13,18 +13,33 @@ export default AccordionListItem = (props) => {
   const renderUnit = (item) => {
     return (
       <View 
-        style={{ 
-          flex: 1, 
-          height: 200
-        }}
+        style={{ flex: 1 }}
       >
-        <View style={{ alignItems: 'center'}}>
-          <YoutubeVideo 
-            height={175}
-            width={300}
-            videoId={item.content.videoId}
-          />
-        </View>
+        {
+          item.contentType == 'VIDEO' ?
+          <View style={{ alignItems: 'center'}}>
+            <YoutubeVideo 
+              height={175}
+              width={300}
+              videoId={item.content.videoId}
+            />
+          </View>
+          :
+          <ListItem 
+            style={{paddingLeft: 20}} 
+            onPress={() => {
+              console.log(item)
+              navigation.navigate('TextClassScreen', {
+                title: item.name,
+                text: item.content.text
+              })
+            }}
+          >
+            <ListItem.Content>
+              <ListItem.Title>Texto</ListItem.Title>
+            </ListItem.Content>
+          </ListItem>
+        }
         {
           item.exam &&
           <ListItem>
