@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Overlay, CheckBox, Button } from 'react-native-elements';
 import { Text, View, TouchableNativeFeedback } from 'react-native'
-import { CheckBoxList } from './../list'
 import { BASE_COLOR } from './../../consts'
 
 export default MultiSelect = ({options, value, placeholder, onChange}) => {

@@ -38,11 +38,10 @@ export default CreateQuestionScreen = ({route, navigation}) => {
     for (let q of exam.examQuestions) {
       totalPuntuation += q.maxGrade
     }
-    console.log(totalPuntuation);
     if (totalPuntuation + parseInt(question.maxGrade) > 100) {
       setAlertInfo({
         title: NORMAL_ERROR_TITLE,
-        msg: 'Decrease Maximun Grade field, exceeds the total maximum: 100'
+        msg: 'Maximun grade exceeded, suggestion: ' + (100 - totalPuntuation)
       })
       setVisible(true)
       return

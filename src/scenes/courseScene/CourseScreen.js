@@ -78,7 +78,7 @@ export default CourseScreen = ({route, navigation}) => {
     navigation.navigate('CreateExamScreen', {
       courseId: course.id,
       creatorId: course.creatorId,
-      units: course.units
+      unitsNames: course.units.map(u => u.name)
     })
   }
 

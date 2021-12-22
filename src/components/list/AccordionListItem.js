@@ -28,7 +28,6 @@ export default AccordionListItem = (props) => {
           <ListItem 
             style={{paddingLeft: 20}} 
             onPress={() => {
-              console.log(item)
               navigation.navigate('TextClassScreen', {
                 title: item.name,
                 text: item.content.text
@@ -42,7 +41,10 @@ export default AccordionListItem = (props) => {
         }
         {
           item.exam &&
-          <ListItem>
+          <ListItem onPress={() => navigation.navigate('CompleteExamScreen', {
+            title: item.exam.name,
+            exam: item.exam
+          })}>
             <ListItem.Content>
               <ListItem.Title>Exam</ListItem.Title>
             </ListItem.Content>

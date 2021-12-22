@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, ScrollView } from 'react-native'
-import { NormalButton, NormalInput } from './../../components'
+import { Text, View, ScrollView, ActivityIndicator } from 'react-native'
+import { NormalButton, NormalInput, MultiSelect } from './../../components'
+import { addExam } from './../../model'
 import { ListItem } from 'react-native-elements'
+import { BASE_COLOR } from './../../consts'
 
 export default CreateExamScreen = ({navigation, route}) => {
   const [exam, setExam] = useState({
@@ -9,11 +11,15 @@ export default CreateExamScreen = ({navigation, route}) => {
     description: '',
     examQuestions: [],
     examResolutions: [],
-    state: 'CREATED',
+    state: 'PUBLISHED',
     minimumGrade: 0,
     creatorId: route.params.creatorId,
   })
   const [disabled, setDisabled] = useState(true)
+  const [unitSelected, setUnitSelected] = useState(null)
+  const [units, setUnits] = useState(route.params.unitsNames)
+  const [courseId, setCourseId] = useState(route.params.courseId)
+  const [creating, setCreating] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
@@ -33,12 +39,22 @@ export default CreateExamScreen = ({navigation, route}) => {
       exam.description == '' 
       || 
       exam.examQuestions.length == 0
+      ||
+      unitSelected == null
     )
-  }, [exam])
+  }, [exam, unitSelected])
 
   useEffect(() => {
     if (route.params?.exam) {
       setExam(route.params.exam);
+    }
+
+    if (route.params?.unitsNames) {
+      setUnits(route.params?.unitsNames);
+    }
+
+    if (route.params?.courseId) {
+      setCourseId(route.params?.courseId);
     }
   }, [route.params]);
 
@@ -49,7 +65,23 @@ export default CreateExamScreen = ({navigation, route}) => {
   }
 
   const handleCreateExam = () => {
-    console.log(exam)
+    setCreating(true);
+    const now = new Date(Date.now());
+    addExam(courseId, {
+      ...exam,
+      creationDate: now.toISOString(),
+      lastModificationDate: now.toISOString()
+    })
+    .then(r => {
+      setCreating(false)
+      navigation.navigate('CourseScreen', {
+        course: r
+      })
+    })
+    .catch(err => {
+      console.error(err.response)
+      setCreating(false)
+    })
   }
 
   return (
@@ -74,9 +106,23 @@ export default CreateExamScreen = ({navigation, route}) => {
               label='Description'
               placeholder='Description'
             />
+            <Text style={{
+              paddingLeft: 10, 
+              color: 'gray', 
+              fontWeight: 'bold',
+              fontSize: 16
+            }}>Unit</Text>
+            <View style={{ paddingHorizontal: 10 }}>
+              <MultiSelect 
+                options={units} 
+                value={unitSelected} 
+                placeholder='Select unit' 
+                onChange={(unit) => setUnitSelected(unit)}
+              />
+            </View>
             {
               exam.examQuestions.length > 0 &&
-              <View style={{ }}>
+              <View style>
                 <Text style={{
                   paddingLeft: 10, 
                   color: 'gray', 
@@ -97,14 +143,24 @@ export default CreateExamScreen = ({navigation, route}) => {
                 </View>
               </View>
             }
-            <NormalButton title="Add question" onPress={() => createQuestion()} />
+            {
+              exam.examQuestions.reduce((partial_sum, a) => partial_sum + a.maxGrade, 0) < 100 &&
+              <View style={{ paddingTop: 20 }}>
+                <NormalButton title="Add question" onPress={() => createQuestion()} />
+              </View>
+            }
           </View>
           <View style={{ paddingVertical: 20 }}>
-            <NormalButton 
-              disabled={disabled}
-              onPress={() => handleCreateExam()}
-              title="Create exam"
-            />
+            {
+              creating ?
+              <ActivityIndicator size="large" color={BASE_COLOR} />
+              :
+              <NormalButton 
+                disabled={disabled}
+                onPress={() => handleCreateExam()}
+                title="Create exam"
+              />
+            }
           </View>
         </View>
       </ScrollView>
