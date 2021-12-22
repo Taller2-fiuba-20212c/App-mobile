@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1009954428277",
+    "project_id": "taller2-ubademy",
+    "storage_bucket": "taller2-ubademy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1009954428277:android:73fc6e0bd531bdfa016f3c",
+        "android_client_info": {
+          "package_name": "com.alex1161.Ubademy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1009954428277-7r76dls7ql9e4c84crph6rkm41c9klst.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2q3ZIWowPKQjZEW18ZYtKWqQF2MivyGw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1009954428277-7r76dls7ql9e4c84crph6rkm41c9klst.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

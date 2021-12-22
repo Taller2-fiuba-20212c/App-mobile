@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import { Text, View, ActivityIndicator } from 'react-native'
-import { NormalButton, Alert, EmailInput,PasswordInput } from './../components'
+import { NormalButton, Alert, EmailInput, PasswordInput } from './../components'
 import UserStyles from './../style/UserStyles'
 import { login, storeData } from './../model'
 import { USER_INFO, BASE_COLOR } from  './../consts'
+import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
+import { Platform } from 'react-native'
 
 export default LoginScreen = ({navigation}) => {
   const initialState = {
@@ -19,6 +22,40 @@ export default LoginScreen = ({navigation}) => {
     title: '',
     msg: ''
   });
+  const [token, setToken] = useState(undefined);
+
+  React.useEffect(() => {
+    registerForPushNotificationsAsync()
+    .then(token => setToken(token))
+  }, []);
+
+  const registerForPushNotificationsAsync = async() => {
+    let token;
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        return;
+      }
+      
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+    }
+  
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+  
+    return token;
+  }
 
   const handleChangeText = (value, name) => {
     setUser({ ...user, [name]: value });
@@ -55,8 +92,13 @@ export default LoginScreen = ({navigation}) => {
   }
 
   const handleLogin = async () => {
+    if (loading) {
+      return;
+    }
+
     setLoading(true);
-    login(user.email, user.password)
+
+    login(user.email, user.password, token)
     .then(r => {
       setLoading(false);
       storeData(USER_INFO, JSON.stringify(r));
@@ -65,8 +107,10 @@ export default LoginScreen = ({navigation}) => {
         routes: [{ name: 'PrincipalScreen'}]
       })
     })
-    .catch(e => handleError(e));
-    setLoading(false);
+    .catch(e => {
+      setLoading(false)
+      handleError(e)
+    });
   }
 
 	return (

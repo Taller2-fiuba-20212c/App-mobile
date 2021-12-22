@@ -1,7 +1,7 @@
 import { deleteDataFromURL, fetchFromURL, postDataToURL, putDataToURL } from './FetchAPI';
 
-export const login = async (email, password) => {
-  return postDataToURL(`/auth/login`, {}, { email: email, password: password });
+export const login = async (email, password, expo_token) => {
+  return postDataToURL(`/auth/login`, {}, { email: email, password: password, expo_token });
 }
 
 export const register = async (email, password, role, name, lastname) => {
