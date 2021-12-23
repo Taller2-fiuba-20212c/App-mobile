@@ -25,27 +25,29 @@ export default LoginScreen = ({navigation}) => {
   };
 
   const handleError = (err) => {
-    switch (err.response.status){
-      case 400: {
-        setAlertInfo({
-          title: err.response.data.errors[0].param, 
-          msg: err.response.data.errors[0].msg
-        });
-        break;
-      }
-      case 403: {
-        setAlertInfo({
-          title: err.response.data.errors[0].param, 
-          msg: err.response.data.errors[0].msg
-        });
-        break;
-      }
-      default: {
-        setAlertInfo({
-          title: 'Something went wrong',
-          msg: ''
-        });
-        break;
+    if (err.response?.status) {
+      switch (err.response.status){
+        case 400: {
+          setAlertInfo({
+            title: err.response.data.errors[0].param, 
+            msg: err.response.data.errors[0].msg
+          });
+          break;
+        }
+        case 403: {
+          setAlertInfo({
+            title: err.response.data.errors[0].param, 
+            msg: err.response.data.errors[0].msg
+          });
+          break;
+        }
+        default: {
+          setAlertInfo({
+            title: 'Something went wrong',
+            msg: ''
+          });
+          break;
+        }
       }
     }
 
@@ -54,7 +56,7 @@ export default LoginScreen = ({navigation}) => {
 
   const handleLogin = async () => {
     setLoading(true);
-    await login(user.email, user.password)
+    login(user.email, user.password)
     .then(r => {
       storeData(USER_INFO, JSON.stringify(r)).then(r => {
         setLoading(false);

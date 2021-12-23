@@ -12,6 +12,10 @@ import {
   CreateExamScreen, ChatScreen, CreateQuestionScreen, TextClassScreen,
   CompleteExamScreen, MarkExamScreen
 } from './src/scenes';
+import AppLoading from 'expo-app-loading';
+import { getData } from './src/model';
+import { USER_INFO } from './src/consts';
+import { GlobalAuthActionsContext, GlobalAuthContext } from './src/model/ContextFactory';
 
 const Tab = createBottomTabNavigator();
 
@@ -100,16 +104,44 @@ function MyStack() {
   )
 }
 
+const loadSession = async () => {
+  return getData(USER_INFO);
+}
+
 export default function App() {
+  const [loading, setLoading] = React.useState(true);
+  const [appAuthContext, setAppAuthContext] = React.useState({ user: undefined });
+
   return (
     <SafeAreaProvider>
-      <NavigationContainer theme={{
-        colors: {
-          background: '#ffffff',
-        }
-      }}>
-        <MyStack />
-      </NavigationContainer>
+      <GlobalAuthContext.Provider value={appAuthContext}>
+				<GlobalAuthActionsContext.Provider value={setAppAuthContext}>
+          {loading ?
+            <AppLoading
+                startAsync={loadSession}
+                onFinish={(userSession) => {
+                  if (userSession !== undefined) {
+                    setAppAuthContext(prevState => ({ ...prevState, user: userSession }))
+                  }
+
+                  setLoading(false)
+                }}
+                onError={(e) => {
+                  console.error(e);
+                  setLoading(false);
+                }}
+            />
+          :
+            <NavigationContainer theme={{
+              colors: {
+                background: '#ffffff',
+              }
+            }}>
+              <MyStack />
+            </NavigationContainer>
+          }
+        </GlobalAuthActionsContext.Provider>
+      </GlobalAuthContext.Provider>
     </SafeAreaProvider>
   );
 }

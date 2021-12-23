@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getUserToken } from './Utils';
 
 const axiosInstance = axios.create({ baseURL: "https://ubademy-ms-api-gateway2.herokuapp.com" });
 
@@ -6,9 +7,11 @@ const REQUEST_TIMEOUT = 10000;
 
 axiosInstance.interceptors.request.use(
   async config => {
+    const userToken = await getUserToken();
     config.headers = {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userToken}`
     }
 
     return config;

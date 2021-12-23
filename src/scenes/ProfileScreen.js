@@ -5,8 +5,11 @@ import UserStyles from './../style/UserStyles'
 import { getData, capitalize, getAvatarTitle } from './../model'
 import { NormalButton, NormalInput, EmailInput } from './../components'
 import { BASE_COLOR, USER_INFO } from  './../consts'
+import { useGlobalAuthActionsContext } from '../model/ContextFactory'
+import { removeData } from '../model/Utils'
 
-export default ProfileScreen = ({navigation}) => {
+export default ProfileScreen = ({navigation, route}) => {
+  const setAppAuthContext = useGlobalAuthActionsContext();
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const disabledValue = true;
@@ -36,6 +39,15 @@ export default ProfileScreen = ({navigation}) => {
 
     return unsubscribe;
   }, [navigation])
+
+  const handleLogout = async () => {
+    await removeData(USER_INFO);
+    setAppAuthContext(prevState => ({ ...prevState, user: undefined }));
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'LoginScreen'}]
+    })
+  }
 
 	return (
     <View style={{flex: 1}}>
@@ -92,6 +104,9 @@ export default ProfileScreen = ({navigation}) => {
           </View>
           <View>
             <NormalButton onPress={() => goToModifyUser()} title="Edit Profile"/>
+          </View>
+          <View>
+            <NormalButton onPress={() => handleLogout()} title="Sign out"/>
           </View>
         </View>
         :

@@ -8,8 +8,11 @@ import {
 } from './../../components'
 import { BASE_COLOR, USER_INFO, ROLES_REGISTER } from  './../../consts'
 import ModifyUserStyles from './ModifyUserStyles'
+import { useGlobalAuthActionsContext } from '../../model/ContextFactory'
 
 export default ModifyUserScreen = ({navigation}) => {
+  const setAppAuthContext = useGlobalAuthActionsContext();
+
   const [userInfoSaved, setUserInfoSaved] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [loadingScreen, setLoadingScreen] = useState(true);
@@ -77,8 +80,6 @@ export default ModifyUserScreen = ({navigation}) => {
   const modifyDataSaved = async (r) => {
     const aux = Object.assign({}, userInfoSaved);
     const newUserInfo = Object.assign(aux, r);
-    console.log('----------------saving----------------')
-    console.log(newUserInfo);
     await storeData(USER_INFO, JSON.stringify(newUserInfo));
     return
   }
@@ -102,15 +103,7 @@ export default ModifyUserScreen = ({navigation}) => {
 
     await modifyUser(userInfo.uid, newUserInfo)
     .then(r => {
-      console.log('----------------reply----------------')
-      console.log(r)
-      modifyDataSaved(r).then(() => {
-        setLoading(false);
-        navigation.navigate('User');
-      });
-    })
-    .catch(err => {
-      handleError(err)
+      setAppAuthContext(prevState => ({ ...prevState, user: { ...r, accessToken: prevState.user.accessToken, refreshToken: prevState.user.refreshToken }}));
       setLoading(false);
     })
   }
