@@ -9,7 +9,7 @@ import {
   PrincipalScreen, CourseScreen, ContentCourseScreen, SearchScreen, VideoClassScreen, 
   UserScreen, EditCourseScreen, CreateCourseScreen, CreateCourseSecondScreen, 
   CreateCourseThirdScreen, ExtraInfoScreen, CreateUnitScreen, EditUnitScreen,
-  CreateExamScreen, ChatScreen, CreateQuestionScreen, TextClassScreen,
+  CreateExamScreen, CreateQuestionScreen, TextClassScreen,
   CompleteExamScreen, MarkExamScreen, AddCollaboratorsScreen
 } from './src/scenes';
 import AppLoading from 'expo-app-loading';
