@@ -1,12 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, ScrollView, ActivityIndicator } from 'react-native'
 import { NormalButton, NormalInput } from './../../components'
-import { addExamResolution, getData } from './../../model'
+import { addExam, getData } from './../../model'
 import { BASE_COLOR, USER_INFO } from './../../consts'
 
-export default CompleteExamScreen = ({navigation, route}) => {
+const exam = {
+  creatorId: "iIfY6cLrGpgFoDev2YmDknXizHG3",
+  description: "En este examen demostraras cuanto has aprendido sobre el tema visto en clase.",
+  examQuestions: [
+    {
+      creationDate: "2021-12-22T14:56:07.003Z",
+      lastModificationDate: "2021-12-22T14:56:07.003Z",
+      maxGrade: 50,
+      question: {
+        question: "¿Cuantos años tienes?",
+      },
+      questionType: "TEXT",
+    },
+    {
+      creationDate: "2021-12-22T14:56:45.054Z",
+      lastModificationDate: "2021-12-22T14:56:45.054Z",
+      maxGrade: 50,
+      question: {
+        question: "¿Como te llamas?",
+      },
+      questionType: "TEXT",
+    },
+  ],
+  // examResolutions: [
+  //   {
+  //     answers: List[Answer] = []
+  //     grade: Optional[int]
+  //     #APPROVED, DISAPPROVED 
+  //     state: Optional[str] = None
+  //     creatorId: str
+  //     creationDate: datetime
+  //     lastModificationDate: datetime
+  //   }
+  // ],
+  minimumGrade: 40,
+  name: "Titulo de prueba",
+  state: "PUBLISHED",
+}
+
+export default MarkExamScreen = ({navigation, route}) => {
   const [sending, setSending] = useState(false);
-  const exam = route.params.exam;
+  // const exam = route.params.exam;
   const [examResolution, setExamResolution] = useState({
     answers: Array(exam.examQuestions.length).fill(''),
     creatorId: '',
@@ -19,7 +58,8 @@ export default CompleteExamScreen = ({navigation, route}) => {
   useEffect(() => {
     navigation.setOptions({
       headerShown: true,
-      title: route.params.title,
+      // title: route.title
+      title: exam.name
     })
 
     getData(USER_INFO).then((data) => {
@@ -45,21 +85,9 @@ export default CompleteExamScreen = ({navigation, route}) => {
       creationDate: now.toISOString(),
       lastModificationDate: now.toISOString()
     }
-    addExamResolution(
-      route.params.cid, 
-      route.params.unitName,
-      {
-        examResolution: examR
-      }
-    )
-    .then(r => {
-      console.log(r);
-      setSending(false);
-    })
-    .catch(err => {
-      console.error(err.response)
-      setSending(false);
-    })
+    // put addResolution
+    console.log(examR)
+    setSending(false);
   }
 
   const changeAnswer = (value, i) => {
@@ -83,24 +111,6 @@ export default CompleteExamScreen = ({navigation, route}) => {
             <Text style={{
               fontSize: 16,
             }}>{exam.description}</Text>
-            <View style={{ 
-              flex:1, 
-              paddingTop: 20,
-              flexDirection: 'row', 
-            }}>
-              <Text style={{
-                paddingLeft: 10, 
-                color: 'gray', 
-                fontWeight: 'bold',
-                fontSize: 16
-              }}>Minimun Grade: </Text>
-              <Text style={{
-                paddingLeft: 10, 
-                color: 'black', 
-                fontWeight: 'bold',
-                fontSize: 16
-              }}>{exam.minimumGrade}</Text>
-            </View>
             {
               <View style>
                 <Text style={{

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, ScrollView, ActivityIndicator } from 'react-native'
-import { NormalButton, NormalInput, MultiSelect } from './../../components'
+import { NormalButton, NormalInput, MultiSelect, Alert } from './../../components'
 import { addExam } from './../../model'
 import { ListItem } from 'react-native-elements'
-import { BASE_COLOR } from './../../consts'
+import { BASE_COLOR, NORMAL_ERROR_TITLE, MAX_GRADE } from './../../consts'
 
 export default CreateExamScreen = ({navigation, route}) => {
   const [exam, setExam] = useState({
@@ -12,7 +12,7 @@ export default CreateExamScreen = ({navigation, route}) => {
     examQuestions: [],
     examResolutions: [],
     state: 'PUBLISHED',
-    minimumGrade: 0,
+    minimumGrade: null,
     creatorId: route.params.creatorId,
   })
   const [disabled, setDisabled] = useState(true)
@@ -20,6 +20,12 @@ export default CreateExamScreen = ({navigation, route}) => {
   const [units, setUnits] = useState(route.params.unitsNames)
   const [courseId, setCourseId] = useState(route.params.courseId)
   const [creating, setCreating] = useState(false);
+
+  const [visible, setVisible] = useState(false);
+  const [alertInfo, setAlertInfo] = useState({
+    title: '',
+    msg: ''
+  })
 
   useEffect(() => {
     navigation.setOptions({
@@ -39,6 +45,8 @@ export default CreateExamScreen = ({navigation, route}) => {
       exam.description == '' 
       || 
       exam.examQuestions.length == 0
+      ||
+      exam.minimumGrade == null
       ||
       unitSelected == null
     )
@@ -65,9 +73,30 @@ export default CreateExamScreen = ({navigation, route}) => {
   }
 
   const handleCreateExam = () => {
+    if (exam.examQuestions.reduce((partial_sum, a) => partial_sum + a.maxGrade, 0) < MAX_GRADE) {
+      setAlertInfo({
+        title: NORMAL_ERROR_TITLE,
+        msg: 'Please add more question, total point should be equal to ' + MAX_GRADE
+      })
+
+      setVisible(true)
+      return
+    }
+
+    if (exam.minimumGrade > MAX_GRADE) {
+      setAlertInfo({
+        title: NORMAL_ERROR_TITLE,
+        msg: "Minimun grade shouldn't surpass the maximun exam grade: " + MAX_GRADE
+      })
+
+      setVisible(true)
+      return
+    }
+
     setCreating(true);
     const now = new Date(Date.now());
-    addExam(courseId, {
+    console.log(exam)
+    addExam(courseId, unitSelected, {
       ...exam,
       creationDate: now.toISOString(),
       lastModificationDate: now.toISOString()
@@ -106,6 +135,13 @@ export default CreateExamScreen = ({navigation, route}) => {
               label='Description'
               placeholder='Description'
             />
+            <NormalInput 
+              onChangeText={(value) => handleChange(value, "minimumGrade")} 
+              maxLength={3}
+              keyboardType='numeric'
+              label='Minimun Grade'
+              placeholder='Minimun Grade'
+            />
             <Text style={{
               paddingLeft: 10, 
               color: 'gray', 
@@ -124,6 +160,7 @@ export default CreateExamScreen = ({navigation, route}) => {
               exam.examQuestions.length > 0 &&
               <View style>
                 <Text style={{
+                  paddingTop: 20,
                   paddingLeft: 10, 
                   color: 'gray', 
                   fontWeight: 'bold',
@@ -144,7 +181,7 @@ export default CreateExamScreen = ({navigation, route}) => {
               </View>
             }
             {
-              exam.examQuestions.reduce((partial_sum, a) => partial_sum + a.maxGrade, 0) < 100 &&
+              exam.examQuestions.reduce((partial_sum, a) => partial_sum + a.maxGrade, 0) < MAX_GRADE &&
               <View style={{ paddingTop: 20 }}>
                 <NormalButton title="Add question" onPress={() => createQuestion()} />
               </View>
@@ -163,6 +200,12 @@ export default CreateExamScreen = ({navigation, route}) => {
             }
           </View>
         </View>
+        <Alert 
+          isVisible={visible}
+          alertInfo={alertInfo}
+          onBackdropPress={() => setVisible(false)}
+          onButtonPress={() => setVisible(false)}
+        />
       </ScrollView>
     </View>
   )

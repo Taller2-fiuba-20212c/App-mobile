@@ -69,8 +69,10 @@ export default RegisterScreen = ({navigation}) => {
         userInfo: r
       });
     })
-    .catch(err => handleError(err))
-    setLoading(false);
+    .catch(err => {
+      setLoading(false);
+      handleError(err)
+    })
   } 
 
   useEffect(() => {

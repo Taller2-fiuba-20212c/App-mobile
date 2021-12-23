@@ -48,11 +48,8 @@ export default PrincipalScreen = ({navigation}) => {
       getCourses().then((r) => setCourses(r));
       getData(USER_INFO).then((user) => {
         if (user) {
-          if (user.role == 'PROFESSOR') {
-            setIsProf(true);
-          }
+          setIsProf(user.role == 'PROFESSOR');
         }
-  
         setLoading(false);
       })
     });

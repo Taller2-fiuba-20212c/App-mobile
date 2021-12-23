@@ -77,28 +77,42 @@ export default ModifyUserScreen = ({navigation}) => {
   const modifyDataSaved = async (r) => {
     const aux = Object.assign({}, userInfoSaved);
     const newUserInfo = Object.assign(aux, r);
+    console.log('----------------saving----------------')
+    console.log(newUserInfo);
     await storeData(USER_INFO, JSON.stringify(newUserInfo));
     return
   }
 
   const saveChange = async () => {
     setLoading(true);
-    await modifyUser(userInfo.uid, {
+    let newUserInfo = {
       email: userInfo.email,
       role: userInfo.role,
       name: userInfo.name,
       lastname: userInfo.lastname,
       active: userInfo.active,
-      image: userInfo.image
-    })
+    };
+
+    if (userInfoSaved.image != userInfo.image) {
+      newUserInfo = {
+        ...newUserInfo,
+        image: userInfo.image
+      }
+    }
+
+    await modifyUser(userInfo.uid, newUserInfo)
     .then(r => {
+      console.log('----------------reply----------------')
+      console.log(r)
       modifyDataSaved(r).then(() => {
         setLoading(false);
         navigation.navigate('User');
       });
     })
-    .catch(err => handleError(err))
-    setLoading(false);
+    .catch(err => {
+      handleError(err)
+      setLoading(false);
+    })
   }
 
   useEffect(() => {
@@ -112,7 +126,15 @@ export default ModifyUserScreen = ({navigation}) => {
 
   useEffect(() => {
     setDisableButton(
-      JSON.stringify(userInfo) == JSON.stringify(userInfoSaved) || errorEmail
+      JSON.stringify(userInfo) == JSON.stringify(userInfoSaved) 
+      || 
+      errorEmail
+      ||
+      userInfo.name == ''
+      ||
+      userInfo.lastname == ''
+      ||
+      userInfo.email == ''
     );
   }, [userInfo, errorEmail]);
 

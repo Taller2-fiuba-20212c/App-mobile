@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const axiosInstance = axios.create({ baseURL: "https://ubademy-ms-api-gateway.herokuapp.com" });
+const axiosInstance = axios.create({ baseURL: "https://ubademy-ms-api-gateway2.herokuapp.com" });
 
 const REQUEST_TIMEOUT = 10000;
 

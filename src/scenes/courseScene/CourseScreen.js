@@ -11,12 +11,32 @@ export default CourseScreen = ({route, navigation}) => {
   const [loading, setLoading] = useState(true)
   const [course, setCourse] = useState(route.params.course);
   const [creator, setCreator] = useState(null);
-  const [isOwner, setIsOwner] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [userRole, setUserRole] = useState('');
   const [alertInfo, setAlertInfo] = useState({
     title: '',
     msg: ''
   })
+  const [userPermission, setUserPermission] = useState({
+    owner: false,
+    suscripted: false,
+    colaborator: false,
+  });
+
+  const updatePermissions = (userData, courseData) => {
+    setUserPermission({
+      ...userPermission, 
+      owner: userData.uid == courseData.creatorId,
+      suscripted: courseData.students.includes(userData.uid),
+      colaborator: courseData.collaborators.includes(userData.uid)
+    });
+
+    // Para probrar
+    // setUserPermission({
+    //   ...userPermission, 
+    //   owner: true
+    // });
+  }
 
   useEffect(() => {
     if (route.params?.course) {
@@ -25,8 +45,9 @@ export default CourseScreen = ({route, navigation}) => {
         setCreator(r);
       }).catch(err => console.log(err.response));
       getData(USER_INFO).then((r) => {
+        setUserRole(r.role)
+        updatePermissions(r, route.params.course);
         if (r.uid == route.params.course.creatorId) {
-          setIsOwner(true);
           navigation.setOptions({
             headerShown: true,
             headerRight: () => (
@@ -54,7 +75,9 @@ export default CourseScreen = ({route, navigation}) => {
 
   const watchContentCourse = () => {
     navigation.navigate('ContentCourseScreen', {
-      content: course.units
+      content: course.units,
+      userPermission: userPermission,
+      cid: course.id,
     })
   }
 
@@ -114,7 +137,7 @@ export default CourseScreen = ({route, navigation}) => {
             <View style={{ paddingHorizontal: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
               <Text style={CourseStyles.section}>Content</Text>
               {
-                isOwner &&
+                userPermission.owner &&
                 <View style={{ flexDirection: 'row' }}>
                   <View style={{ marginRight: 10 }} >
                     <NormalButton title='Add Unit' onPress={() => createUnit()}/>
@@ -129,7 +152,14 @@ export default CourseScreen = ({route, navigation}) => {
                 <View>
                   {
                     course.units.slice(0, MAX_UNITS).map((u, i) => (
-                      <AccordionListItem navigation={navigation} item={u} key={i} number={i} />
+                      <AccordionListItem 
+                        navigation={navigation} 
+                        item={u} 
+                        key={i} 
+                        number={i} 
+                        cid = {course.id}
+                        userPermission={userPermission}
+                      />
                     ))
                   }
                 </View>
@@ -155,7 +185,7 @@ export default CourseScreen = ({route, navigation}) => {
               <ListItem 
                 containerStyle={{paddingHorizontal: 20}}
                 onPress={() => {
-                  isOwner ?
+                  userPermission.owner ?
                   navigation.navigate('ProfileScreen')
                   :
                   navigation.navigate('UserScreen', {userInfo: creator})
@@ -182,7 +212,7 @@ export default CourseScreen = ({route, navigation}) => {
               <Text style={CourseStyles.description}>{course.category}</Text>
             </View>
             { 
-              isOwner &&
+              userPermission.owner &&
               <View>
                 <View style={CourseStyles.text}>
                   <Text style={CourseStyles.section}>Subscription included</Text>
@@ -217,7 +247,7 @@ export default CourseScreen = ({route, navigation}) => {
               </View>
             </View>
             {
-              isOwner && 
+              userPermission.owner && 
               <View style={{ 
                 paddingHorizontal: 20, 
                 flexDirection: 'row', 
@@ -232,11 +262,10 @@ export default CourseScreen = ({route, navigation}) => {
               </View>
             }
             {
-              !isOwner &&
+              !userPermission.owner &&
               <PricingCard
                 color={BASE_COLOR}
                 title={course.suscriptionIncluded[course.suscriptionIncluded.length - 1]}
-                price="$5"
                 button={
                   <NormalButton 
                     title="SUBSCRIBE" 

@@ -10,6 +10,9 @@ export { SearchScreen } from './searchScene'
 export { EditCourseScreen } from './editCourseScene'
 export { CreateUnitScreen } from './createUnitScene'
 export { EditUnitScreen } from './editUnitScene'
-export { CreateExamScreen, CreateQuestionScreen, CompleteExamScreen } from './exam'
+export { 
+  CreateExamScreen, CreateQuestionScreen, CompleteExamScreen, 
+  MarkExamScreen
+} from './exam'
 export { ChatScreen } from './chat'
 export { CourseScreen, ContentCourseScreen, VideoClassScreen, TextClassScreen } from './courseScene';

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { View } from 'react-native';
-import { NORMAL_ERROR_TITLE } from './../../consts'
+import { NORMAL_ERROR_TITLE, MAX_GRADE } from './../../consts'
 import { NormalButton, NormalInput, Alert } from './../../components'
 
 export default CreateQuestionScreen = ({route, navigation}) => {
@@ -38,10 +38,10 @@ export default CreateQuestionScreen = ({route, navigation}) => {
     for (let q of exam.examQuestions) {
       totalPuntuation += q.maxGrade
     }
-    if (totalPuntuation + parseInt(question.maxGrade) > 100) {
+    if (totalPuntuation + parseInt(question.maxGrade) > MAX_GRADE) {
       setAlertInfo({
         title: NORMAL_ERROR_TITLE,
-        msg: 'Maximun grade exceeded, suggestion: ' + (100 - totalPuntuation)
+        msg: 'Maximun grade exceeded, suggestion: ' + (MAX_GRADE - totalPuntuation)
       })
       setVisible(true)
       return
@@ -88,10 +88,9 @@ export default CreateQuestionScreen = ({route, navigation}) => {
           label='Maximun Grade'
           placeholder='Maximun Grade'
         />
-
       </View>
       <View style={{ paddingVertical: 20 }}>
-        <NormalButton disabled={disabled} title="Create exam" onPress={() => handleCreateQuestion()}/>
+        <NormalButton disabled={disabled} title="Add question" onPress={() => handleCreateQuestion()}/>
       </View>
       <Alert 
         isVisible={visible}

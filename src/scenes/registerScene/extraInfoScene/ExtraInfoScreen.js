@@ -12,8 +12,6 @@ const categories = CATEGORIES_TYPES.map((c) => {
   }
 })
 
-const uid_prueba = 'iIfY6cLrGpgFoDev2YmDknXizHG3'
-
 export default ExtraInfoScreen = ({ navigation, route }) => {
   const [place, setPlace] = useState(null);
   const [selectedTeams, setSelectedTeams] = useState([])
@@ -39,22 +37,17 @@ export default ExtraInfoScreen = ({ navigation, route }) => {
   }, []);
 
   const saveNewInfo = async () => {
-    // const user = route.params.userInfo;
+    const user = route.params.userInfo;
     try {
-      let r = await modifyUser(uid_prueba, {
-        // email: user.email,
-        // name: user.name,
-        // lastname: user.lastname,
-        // country: place[0].country,
-        email: 'paul_acosta@gmail.com',
-        name: 'Paul',
-        lastname: 'Acosta',
-        country: 'United states',
+      let r = await modifyUser(user.uid, {
+        email: user.email,
+        name: user.name,
+        lastname: user.lastname,
+        country: place[0].country,
       })
 
       for (let c of selectedTeams) {
-        console.log(c.item)
-        await addCategory(uid_prueba, c.item)
+        await addCategory(user.uid, c.item)
       }
 
       await storeData(USER_INFO, JSON.stringify({
@@ -78,7 +71,7 @@ export default ExtraInfoScreen = ({ navigation, route }) => {
         routes: [{ name: 'PrincipalScreen'}]
       })
     }).catch(err => {
-      // console.log(err.response)
+      console.log(err.response)
       setSaving(false)
     })
   }

@@ -64,7 +64,14 @@ export default EditCourseScreen = ({route, navigation}) => {
 
   const watchContentCourse = () => {
     navigation.navigate('ContentCourseScreen', {
-      content: newCourse.units
+      content: newCourse.units,
+      userPermission: {
+        owner: true,
+        suscripted: false,
+        colaborator: false,
+      },
+      cid: newCourse.id,
+      edit: true
     })
   }
 
@@ -76,7 +83,6 @@ export default EditCourseScreen = ({route, navigation}) => {
     })
     .then(r => {
       setSaving(false)
-      console.log(r)
       navigation.navigate('CourseScreen', {
         course: {
           ...newCourse, 
@@ -85,7 +91,7 @@ export default EditCourseScreen = ({route, navigation}) => {
       })
     })
     .catch(err => {
-      console.error(err.response)
+      console.error(err.response.data)
       setSaving(false)
     })
   }
@@ -134,6 +140,15 @@ export default EditCourseScreen = ({route, navigation}) => {
       })
       setVisible(true)
     }
+  }
+
+  const handleDeleteUnit = (i) => {
+    let units = newCourse.units.slice();
+    units.splice(i, 1)
+    setNewCourse({
+      ...newCourse,
+      units: units
+    })
   }
 
 	return (
@@ -209,7 +224,13 @@ export default EditCourseScreen = ({route, navigation}) => {
                           item={u} 
                           key={i} 
                           number={i} 
+                          userPermission={{
+                            owner: true,
+                            suscripted: false,
+                            colaborator: false,
+                          }}
                           edit={true}
+                          delete={i => handleDeleteUnit(i)}
                         />
                       ))
                     }

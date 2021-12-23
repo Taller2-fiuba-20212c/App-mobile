@@ -1,5 +1,4 @@
 import { deleteDataFromURL, fetchFromURL, postDataToURL, putDataToURL } from './FetchAPI';
-import { SUBCRIPTIONS_TYPES } from '../consts';
 
 export const login = async (email, password) => {
   return postDataToURL(`/auth/login`, {}, { email: email, password: password });
@@ -16,7 +15,7 @@ export const register = async (email, password, role, name, lastname) => {
 }
 
 export const addCategory = async (uid, category) => {
-  return putDataToURL(`users/${uid}/addCategory`, {}, 
+  return postDataToURL(`users/${uid}/addCategory`, {}, 
   { 
     category: category
   });
@@ -47,8 +46,12 @@ export const addUnit = async (cid, unit) => {
   return putDataToURL(`/courses/${cid}/addUnit`, {}, JSON.stringify(unit));
 }
 
-export const addExam = async (cid, body) => {
-  return putDataToURL(`/courses/${cid}/addExam`, {}, JSON.stringify(body));
+export const addExam = async (cid, unitName, body) => {
+  return putDataToURL(`/courses/${cid}/addExam`, {unitName}, body);
+}
+
+export const addExamResolution = async (cid, unitName, body) => {
+  return putDataToURL(`/courses/${cid}/addExamResolution`, {unitName}, body);
 }
 
 export const getTop5 = async () => {
@@ -69,7 +72,12 @@ export const updateCourse = async (course) => {
 }
 
 export const searchCourses = async (search) => {
-  return fetchFromURL('/courses/getTop5Courses', {
+  console.log({
+    randomText: search.text,
+    suscription: search.subType,
+    category: search.catTypes.toString(),
+  })
+  return fetchFromURL('/courses/searchByText', {
     randomText: search.text,
     suscription: search.subType,
     category: search.catTypes.toString(),

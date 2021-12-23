@@ -10,14 +10,15 @@ export default SearchScreen = ({navigation}) => {
   const [searchText, setSearchText] = useState('');
   const [isVisible, setIsVisible] = useState(false);
   const [applyEnable, setApplyEnable] = useState(false);
+  const [noResults, setNoResults] = useState(false);
 
   const initialFilters = {
-    subType: SUBCRIPTIONS_TYPES[3],
+    subType: SUBCRIPTIONS_TYPES[0],
     catTypes: [],
   }
   const [filters, setFilters] = useState(initialFilters);
 
-  const [subTypeSelected, setSubTypeSelected] = useState(SUBCRIPTIONS_TYPES[3]);
+  const [subTypeSelected, setSubTypeSelected] = useState(SUBCRIPTIONS_TYPES[0]);
   const [categoriesSelected, setCategoriesSelected] = useState([]);
 
   const compareArrays = (array1, array2) => {
@@ -44,10 +45,13 @@ export default SearchScreen = ({navigation}) => {
     });
     setApplyEnable(false);
     setIsVisible(false);
+  };
+
+  useEffect(() => {
     if (searchText) {
       handleSearchCourses()
     }
-  };
+  }, [filters])
 
   const cancel = () => {
     setSubTypeSelected(filters.subType);
@@ -69,7 +73,12 @@ export default SearchScreen = ({navigation}) => {
       text: searchText,
     })
     .then(r => {
-      setResult(r);
+      if(r.length == 0) {
+        setNoResults(true);
+      } else {
+        setNoResults(false);
+        setResult(r);
+      }
       setSearching(false);
     })
     .catch(err => console.log(err.response));
@@ -118,14 +127,14 @@ export default SearchScreen = ({navigation}) => {
     });
   });
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      setSearchText('')
-      setResult(null)
-    });
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     setSearchText('')
+  //     setResult(null)
+  //   });
 
-    return unsubscribe;
-  }, [navigation]);
+  //   return unsubscribe;
+  // }, [navigation]);
 
   return(
     <View>
@@ -133,7 +142,18 @@ export default SearchScreen = ({navigation}) => {
         searching ? 
         <ActivityIndicator size="large" color={BASE_COLOR} />
         : 
-        <ScrollView>
+        noResults ?
+        <View style={{ 
+          flexDirection: 'row', 
+          justifyContent: 'center',
+        }}>
+          <Text style={{
+            color: 'gray',
+            fontWeight: 'bold'
+          }}>No results found</Text>
+        </View>
+        :
+        <ScrollView showsVerticalScrollIndicator={false}>
           {
             result && result.map((l, i) => (
               <ListItem 
