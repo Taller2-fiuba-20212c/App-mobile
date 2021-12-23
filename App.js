@@ -125,8 +125,12 @@ export default function App() {
   const loadSession = async () => {
     getData(USER_INFO)
     .then(userSession => {
+      console.log("Sesion almacenada", userSession);
       if (userSession !== undefined) {
-        setAppAuthContext(prevState => ({ ...prevState, user: userSession }))
+        setAppAuthContext(prevState => ({ ...prevState, user: userSession }));
+      }
+      else {
+        setAppAuthContext(prevState => ({ ...prevState, user: undefined }));
       }
     })
   }

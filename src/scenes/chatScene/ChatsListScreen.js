@@ -20,12 +20,14 @@ export default function ChatsListScreen ({ navigation }) {
           title: 'Chat'
         });
         
-        getChats(appAuthContext.user.uid)
-        .then(chats => setConversations(chats))
-        .catch(e => {
-            console.log(e);
-            Alert.alert("Error retrieving conversations", "There was an error retrieving your conversations");
-        })
+        if (appAuthContext.user.uid) {
+            getChats(appAuthContext.user.uid)
+            .then(chats => setConversations(chats))
+            .catch(e => {
+                console.log(e);
+                Alert.alert("Error retrieving conversations", "There was an error retrieving your conversations");
+            })
+        }
 
         return () => {
             clearTimeout(searchTimeout.current);

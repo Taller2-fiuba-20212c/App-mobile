@@ -33,12 +33,21 @@ export const removeData = async (key_name) => {
 }
 
 export const capitalize = (string) => {
-  const s = string.toLowerCase();
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  if (string) {
+    const s = string.toLowerCase();
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }
+  
+  return "";
 }
 
 export const getAvatarTitle = (name, lastname) => {
-  return name[0].toUpperCase() + lastname[0].toUpperCase()
+  if (name) {
+    return name[0].toUpperCase() + lastname[0].toUpperCase();
+  }
+  else {
+    return "Unknown user";
+  }
 }
 
 export const getPlace = async () => {

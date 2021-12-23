@@ -2,13 +2,17 @@ import React, { useState } from 'react'
 import { Text, View, ActivityIndicator } from 'react-native'
 import { NormalButton, Alert, EmailInput, PasswordInput } from './../components'
 import UserStyles from './../style/UserStyles'
-import { login, storeData } from './../model'
+import { login, socialLogin, storeData } from './../model'
 import { USER_INFO, BASE_COLOR } from  './../consts'
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native'
+import * as Facebook from 'expo-facebook';
+import { useGlobalAuthActionsContext } from '../model/ContextFactory'
 
 export default LoginScreen = ({navigation}) => {
+  const setAppAuthContext = useGlobalAuthActionsContext();
+
   const initialState = {
     email: '',
     password: '',
@@ -99,20 +103,52 @@ export default LoginScreen = ({navigation}) => {
     setLoading(true);
 
     login(user.email, user.password, token)
-    .then(r => {
-      storeData(USER_INFO, JSON.stringify(r)).then(r => {
-        setLoading(false);
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'PrincipalScreen'}]
-        })
-      })
-    })
+    .then(logIntoApplication)
     .catch(e => {
       setLoading(false)
       handleError(e)
     });
   }
+
+  const logIntoApplication = r => {
+    storeData(USER_INFO, JSON.stringify(r)).then(r => {
+      setAppAuthContext(prevState => ({ ...prevState, user: r }));
+      setLoading(false);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'PrincipalScreen'}]
+      })
+    })
+  }
+
+  const tryFacebookLogin = () => {
+		Facebook.initializeAsync({
+			appId: "7356507071041878"
+		})
+		.then(() => {
+			Facebook.getAuthenticationCredentialAsync()
+			.then(auth => {
+				if (auth) {
+					socialLogin(auth.token, "facebook")
+          .then(logIntoApplication)
+          .catch(handleError)
+				}
+				else {
+					Facebook.logInWithReadPermissionsAsync({
+						permissions: ['public_profile', 'email']
+					})
+					.then((res) => {
+						if (res.type === 'success') {
+							socialLogin(res.token, "facebook")
+              .then(logIntoApplication)
+              .catch(handleError)
+						}
+					})
+				}
+			})
+		})
+		.catch(e => handleApplicationError(e));
+	}
 
 	return (
 		<View style={UserStyles.container}>
@@ -135,6 +171,10 @@ export default LoginScreen = ({navigation}) => {
           <NormalButton 
             onPress={() => handleLogin()}
             title="Sign in"
+          />
+          <NormalButton 
+            onPress={tryFacebookLogin}
+            title="Enter with Facebook"
           />
         </View>
       }
