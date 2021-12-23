@@ -17,7 +17,6 @@ export default ExtraInfoStyles = StyleSheet.create({
 	},
   dropdown: {
     paddingHorizontal: 10, 
-    height: HEIGHT_SCREEN*0.6
   },
   loading: {
     flex: 1,

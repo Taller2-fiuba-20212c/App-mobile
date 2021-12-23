@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, ActivityIndicator } from 'react-native'
 import { Avatar } from 'react-native-elements'
 import UserStyles from './../style/UserStyles'
 import { getData, capitalize, getAvatarTitle } from './../model'
@@ -11,6 +11,7 @@ import { removeData } from '../model/Utils'
 export default ProfileScreen = ({navigation, route}) => {
   const setAppAuthContext = useGlobalAuthActionsContext();
   const [userInfo, setUserInfo] = useState(null);
+  const [loading, setLoading] = useState(true);
   const disabledValue = true;
 
   useLayoutEffect(() => {
@@ -27,14 +28,17 @@ export default ProfileScreen = ({navigation, route}) => {
     navigation.navigate('ModifyUserScreen')
   }
 
-  const goToCreateCourse = () => {
-    navigation.navigate('CreateCourseScreen')
-  }
-
   useEffect(() => {
-    getData(USER_INFO)
-    .then(r => setUserInfo(r))
-  }, [])
+    const unsubscribe = navigation.addListener('focus', () => {
+      getData(USER_INFO)
+      .then(r => {
+        setUserInfo(r);
+        setLoading(false);
+      })
+    })
+
+    return unsubscribe;
+  }, [navigation])
 
   const handleLogout = async () => {
     await removeData(USER_INFO);
@@ -48,77 +52,75 @@ export default ProfileScreen = ({navigation, route}) => {
 	return (
     <View style={{flex: 1}}>
     {
-      userInfo != null ?
-      <View style={UserStyles.container}>
-        <View style={{ 
-          alignItems: 'center'
-        }}>
-          <Avatar
-            rounded
-            size='xlarge'
-            title={getAvatarTitle(userInfo.name, userInfo.lastname)}
-            containerStyle={{ 
-              backgroundColor: BASE_COLOR 
+      loading ?
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <ActivityIndicator size="large" color={BASE_COLOR} />
+        </View>
+        :
+        userInfo != null ?
+        <View style={UserStyles.container}>
+          <View style={{ 
+            alignItems: 'center'
+          }}>
+            <Avatar
+              rounded
+              source={userInfo.image ? { uri: userInfo.image } : null}
+              size='xlarge'
+              title={getAvatarTitle(userInfo.name, userInfo.lastname)}
+              containerStyle={{ 
+                backgroundColor: userInfo.image ? 'white' : BASE_COLOR
+              }}
+            />
+          </View>
+          <View>
+            <NormalInput 
+              disabled={disabledValue}
+              value={userInfo.name}
+              placeholder='Name' 
+              iconName='user' 
+            />
+          </View>
+          <View>
+            <NormalInput 
+              disabled={disabledValue}
+              value={userInfo.lastname}
+              placeholder='Last name' 
+              iconName='user' 
+            />
+          </View>
+          <View>
+            <NormalInput 
+              disabled={disabledValue}
+              value={capitalize(userInfo.role)}
+              placeholder='Role' 
+              iconName='graduation-cap' 
+            />
+          </View>
+          <View>
+            <EmailInput 
+              disabled={disabledValue} 
+              value={userInfo.email} 
+            />
+          </View>
+          <View>
+            <NormalButton onPress={() => goToModifyUser()} title="Edit Profile"/>
+          </View>
+          <View>
+            <NormalButton onPress={() => handleLogout()} title="Sign out"/>
+          </View>
+        </View>
+        :
+        <View style={ UserStyles.container }>
+          <Text style={{ fontSize: 20, textAlign: 'center'}}>Have not logged in yet?</Text>
+          <NormalButton 
+            title='Sing in' onPress={() => {
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'LoginScreen'}]
+              })
             }}
           />
         </View>
-        <View>
-          <NormalInput 
-            disabled={disabledValue}
-            value={userInfo.name}
-            placeholder='Name' 
-            iconName='user' 
-          />
-        </View>
-        <View>
-          <NormalInput 
-            disabled={disabledValue}
-            value={userInfo.lastname}
-            placeholder='Last name' 
-            iconName='user' 
-          />
-        </View>
-        <View>
-          <NormalInput 
-            disabled={disabledValue}
-            value={capitalize(userInfo.role)}
-            placeholder='Role' 
-            iconName='graduation-cap' 
-          />
-        </View>
-        <View>
-          <EmailInput 
-            disabled={disabledValue} 
-            value={userInfo.email} 
-          />
-        </View>
-        <View>
-          <NormalButton onPress={() => goToModifyUser()} title="Edit Profile"/>
-        </View>
-        <View>
-          <NormalButton onPress={() => handleLogout()} title="Sign out"/>
-        </View>
-        {
-          userInfo.role == 'PROFESSOR' ? 
-          <View style={{ paddingVertical: 10 }}>
-            <NormalButton onPress={() => goToCreateCourse()} title="Create new course"/>
-          </View>
-          :
-          null
-        }
-      </View>
-      :
-      <View style={ UserStyles.container }>
-        <Text style={{ fontSize: 20, textAlign: 'center'}}>Have not logged in yet?</Text>
-        <NormalButton 
-          title='Sing in' onPress={() => {
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'LoginScreen'}]
-            })
-          }}
-        />
-      </View>
     }
     </View>
 	)

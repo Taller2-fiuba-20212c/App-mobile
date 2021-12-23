@@ -1,9 +1,8 @@
 import { StyleSheet } from "react-native";
 import { BASE_COLOR } from  './../../consts'
 
-export default CrearCourseStyles = StyleSheet.create({
+export default CreateCourseStyles = StyleSheet.create({
 	container: {
-    justifyContent: 'center',
 		flex: 1,
     paddingHorizontal: 20
 	},

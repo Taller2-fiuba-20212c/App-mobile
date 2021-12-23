@@ -1,5 +1,4 @@
 import React from 'react';
-import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -8,7 +7,10 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { 
   LoginScreen, RegisterScreen, ModifyUserScreen, ProfileScreen, WelcomeScreen,
   PrincipalScreen, CourseScreen, ContentCourseScreen, SearchScreen, VideoClassScreen, 
-  UserScreen, CreateCourseScreen, ExtraInfoScreen
+  UserScreen, EditCourseScreen, CreateCourseScreen, CreateCourseSecondScreen, 
+  CreateCourseThirdScreen, ExtraInfoScreen, CreateUnitScreen, EditUnitScreen,
+  CreateExamScreen, ChatScreen, CreateQuestionScreen, TextClassScreen,
+  CompleteExamScreen, MarkExamScreen
 } from './src/scenes';
 import AppLoading from 'expo-app-loading';
 import { getData } from './src/model';
@@ -65,9 +67,22 @@ function MyStack() {
       },
     }}>
       <Stack.Screen name="WelcomeScreen" component={WelcomeScreen}/>
+      <Stack.Screen name="MarkExamScreen" component={MarkExamScreen}/>
+      <Stack.Screen name="LoginScreen" component={LoginScreen}/>
+      <Stack.Screen name="CompleteExamScreen" component={CompleteExamScreen}/>
+      <Stack.Screen name="CreateUnitScreen" component={CreateUnitScreen}/>
+      <Stack.Screen name="TextClassScreen" component={TextClassScreen}/>
+      <Stack.Screen name="EditCourseScreen" component={EditCourseScreen}/>
+      <Stack.Screen name="ChatScreen" component={ChatScreen}/>
+      <Stack.Screen name="CreateExamScreen" component={CreateExamScreen}/>
+      <Stack.Screen name="CreateQuestionScreen" component={CreateQuestionScreen}/>
+      <Stack.Screen name="VideoClassScreen" component={VideoClassScreen}/>
+      <Stack.Screen name="ExtraInfoScreen" component={ExtraInfoScreen}/>
+      <Stack.Screen name="CreateCourseSecondScreen" component={CreateCourseSecondScreen}/>
+      <Stack.Screen name="EditUnitScreen" component={EditUnitScreen}/>
+      <Stack.Screen name="CreateCourseThirdScreen" component={CreateCourseThirdScreen}/>
       <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
       <Stack.Screen name="PrincipalScreen" component={TabScreen} />
-      <Stack.Screen name="LoginScreen" component={LoginScreen}/>
       <Stack.Screen name="UserScreen" component={UserScreen}/>
       <Stack.Screen name="CourseScreen" 
         component={CourseScreen}
@@ -82,9 +97,7 @@ function MyStack() {
           title: 'Content'
         }}
       />
-      <Stack.Screen name="ExtraInfoScreen" component={ExtraInfoScreen}/>
       <Stack.Screen name="ModifyUserScreen" component={ModifyUserScreen}/>
-      <Stack.Screen name="VideoClassScreen" component={VideoClassScreen}/>
       <Stack.Screen name="CreateCourseScreen" component={CreateCourseScreen}/>
       <Stack.Screen name="ProfileScreen" component={ProfileScreen}/>
     </Stack.Navigator>
