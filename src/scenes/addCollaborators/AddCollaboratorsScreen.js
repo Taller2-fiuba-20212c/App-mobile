@@ -1,10 +1,9 @@
-import React, {useLayoutEffect, useState, useEffect} from 'react';
-import { View, Text, Pressable, ScrollView, ActivityIndicator } from 'react-native'
-import { SearchBar, Icon, BottomSheet, Divider, Slider, ListItem } from 'react-native-elements'
-import { CheckBoxList, LongCardCourse } from '../../components'
-import { BASE_COLOR, SUBCRIPTIONS_TYPES, CATEGORIES_TYPES } from '../../consts';
+import React, { useLayoutEffect, useState } from 'react';
+import { View, Text, ScrollView, ActivityIndicator } from 'react-native'
+import { SearchBar, Icon, ListItem } from 'react-native-elements'
+import { BASE_COLOR } from '../../consts';
 import AddCollaboratorsStyles from './AddCollaboratorsStyles'
-import { searchUsers } from './../../model'
+import { searchUsers, getAvatarTitle } from './../../model'
 
 export default AddCollaboratorsScreen = ({navigation}) => {
   const [searchText, setSearchText] = useState('');
@@ -16,7 +15,6 @@ export default AddCollaboratorsScreen = ({navigation}) => {
     setSearching(true);
     searchUsers({
       name: searchText,
-      lastname: searchText,
       role: 'COLABORATOR'
     })
     .then(r => {
@@ -93,16 +91,18 @@ export default AddCollaboratorsScreen = ({navigation}) => {
         <ScrollView showsVerticalScrollIndicator={false}>
           {
             result && result.map((l, i) => (
-              <ListItem 
-                key={i} 
-                containerStyle={{ 
-                  padding: 0,
-                  paddingVertical: 5
-                }}
-              >
+              <ListItem key={i} bottomDivider onPress={() => console.log('seleccionar' + {i})}>
+                <Avatar
+                  rounded
+                  title={getAvatarTitle(creator.name, creator.lastname)}
+                  containerStyle={{ 
+                    backgroundColor: BASE_COLOR 
+                  }}
+                />
                 <ListItem.Content>
-                  <LongCardCourse navigation={navigation} course={l} />
+                  <ListItem.Title style={{ fontWeight: 'bold' }}>{user.name} {user.lastname}</ListItem.Title>
                 </ListItem.Content>
+                <ListItem.Chevron color="gray" />
               </ListItem>
             ))
           }
