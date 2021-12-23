@@ -10,6 +10,7 @@ export { SearchScreen } from './searchScene'
 export { EditCourseScreen } from './editCourseScene'
 export { CreateUnitScreen } from './createUnitScene'
 export { EditUnitScreen } from './editUnitScene'
+export { AddCollaboratorsScreen } from './addCollaborators'
 export { 
   CreateExamScreen, CreateQuestionScreen, CompleteExamScreen, 
   MarkExamScreen

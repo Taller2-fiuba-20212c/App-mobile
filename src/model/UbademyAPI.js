@@ -38,6 +38,10 @@ export const getUser = async (userId) => {
   return fetchFromURL(`/users/get/${userId}`);
 }
 
+export const searchUsers = async (params) => {
+  return fetchFromURL(`/users`, params);
+}
+
 export const getCourses = async () => {
   return fetchFromURL('/courses');
 }

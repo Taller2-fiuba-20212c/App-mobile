@@ -56,6 +56,7 @@ export default AccordionListItem = (props) => {
         {
           item.exam &&
           <ListItem 
+            style={{paddingLeft: 40}} 
             disabled={userPermission.owner}
             onPress={() => handlePressExam()}
           >
