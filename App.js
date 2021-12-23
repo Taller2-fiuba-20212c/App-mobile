@@ -9,7 +9,7 @@ import {
   PrincipalScreen, CourseScreen, ContentCourseScreen, SearchScreen, VideoClassScreen, 
   UserScreen, EditCourseScreen, CreateCourseScreen, CreateCourseSecondScreen, 
   CreateCourseThirdScreen, ExtraInfoScreen, CreateUnitScreen, EditUnitScreen,
-  CreateExamScreen, ChatScreen, CreateQuestionScreen, TextClassScreen,
+  CreateExamScreen, CreateQuestionScreen, TextClassScreen,
   CompleteExamScreen, MarkExamScreen
 } from './src/scenes';
 import AppLoading from 'expo-app-loading';
@@ -88,7 +88,6 @@ function MyStack() {
       <Stack.Screen name="CreateUnitScreen" component={CreateUnitScreen}/>
       <Stack.Screen name="TextClassScreen" component={TextClassScreen}/>
       <Stack.Screen name="EditCourseScreen" component={EditCourseScreen}/>
-      <Stack.Screen name="ChatScreen" component={ChatScreen}/>
       <Stack.Screen name="CreateExamScreen" component={CreateExamScreen}/>
       <Stack.Screen name="CreateQuestionScreen" component={CreateQuestionScreen}/>
       <Stack.Screen name="VideoClassScreen" component={VideoClassScreen}/>
