@@ -26,7 +26,8 @@ export default CourseScreen = ({route, navigation}) => {
     setUserPermission({
       ...userPermission, 
       owner: userData.uid == courseData.creatorId,
-      suscripted: courseData.students.includes(userData.uid),
+      // suscripted: courseData.students.includes(userData.uid),
+      suscripted: true,
       colaborator: courseData.collaborators.includes(userData.uid)
     });
 
