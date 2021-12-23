@@ -1,18 +1,27 @@
-import React from 'react';
-import { View } from 'react-native'
-import YoutubePlayer from "react-native-youtube-iframe";
-import { WIDTH_SCREEN, WINDOW_HEIGHT } from '../../../consts'
+import React, {useEffect} from 'react';
+import { View, Text } from 'react-native'
+import { WIDTH_SCREEN } from './../../../consts'
+import { YoutubeVideo } from './../../../components'
 
-export default VideoClassScreen = ({route}) => {
-  const videoID = route.params.videoID;
+export default VideoClassScreen = ({navigation, route}) => {
+  const videoId = route.params.unit.videoId;
+  const title = route.params.unit.name;
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerShown: true,
+      title: title
+    });
+  }, []);
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <YoutubePlayer 
-        height={WINDOW_HEIGHT*0.40}
+    <View 
+      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+    >
+      <YoutubeVideo 
+        height={WIDTH_SCREEN*0.56}
         width={WIDTH_SCREEN}
-        videoId={videoID}
-        play={true}
+        videoId={videoId}
       />
     </View>
   )

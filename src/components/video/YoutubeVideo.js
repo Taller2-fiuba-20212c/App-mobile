@@ -32,6 +32,7 @@ export default function YoutubeVideo({ videoId, height, width }) {
         width={ready ? width : 0}
         onError={e => console.log(e)}
         onReady={() => setReady(true)}
+        forceAndroidAutoplay={true}
       />
       {!ready && 
         <View style={styles.loadingContainer}>

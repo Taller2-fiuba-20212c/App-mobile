@@ -5,6 +5,14 @@ export { WelcomeScreen } from './welcomeScene';
 export { PrincipalScreen } from './principalScene';
 export { RegisterScreen, ExtraInfoScreen } from './registerScene';
 export { ModifyUserScreen } from './modifyUserScene';
-export { CreateCourseScreen } from './createCourseScene'
+export { CreateCourseScreen, CreateCourseSecondScreen, CreateCourseThirdScreen } from './createCourseScene'
 export { SearchScreen } from './searchScene'
-export { CourseScreen, ContentCourseScreen, VideoClassScreen } from './courseScene';
+export { EditCourseScreen } from './editCourseScene'
+export { CreateUnitScreen } from './createUnitScene'
+export { EditUnitScreen } from './editUnitScene'
+export { 
+  CreateExamScreen, CreateQuestionScreen, CompleteExamScreen, 
+  MarkExamScreen
+} from './exam'
+export { ChatScreen } from './chat'
+export { CourseScreen, ContentCourseScreen, VideoClassScreen, TextClassScreen } from './courseScene';

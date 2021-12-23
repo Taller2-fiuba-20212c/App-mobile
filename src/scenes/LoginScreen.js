@@ -100,11 +100,12 @@ export default LoginScreen = ({navigation}) => {
 
     login(user.email, user.password, token)
     .then(r => {
-      setLoading(false);
-      storeData(USER_INFO, JSON.stringify(r));
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'PrincipalScreen'}]
+      storeData(USER_INFO, JSON.stringify(r)).then(r => {
+        setLoading(false);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'PrincipalScreen'}]
+        })
       })
     })
     .catch(e => {

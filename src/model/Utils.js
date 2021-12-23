@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Location from 'expo-location';
 import { USER_INFO } from '../consts';
 
 export const getData = async (key_name) => {
@@ -38,4 +39,33 @@ export const capitalize = (string) => {
 
 export const getAvatarTitle = (name, lastname) => {
   return name[0].toUpperCase() + lastname[0].toUpperCase()
+}
+
+export const getPlace = async () => {
+  let { status } = await Location.requestForegroundPermissionsAsync();
+
+  let location = await Location.getCurrentPositionAsync({});
+
+  const place = await Location.reverseGeocodeAsync({
+    latitude : location.coords.latitude,
+    longitude : location.coords.longitude
+  });
+
+  return place
+}
+
+export const getErrorPermissionMsg = (requirement, action) => {
+  return 'We need ' + requirement + ' to ' + action
+}
+
+export const validateUrl = (url) => {
+  var regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  var match = url.match(regExp);
+  return match && match[2].length == 11
+}
+
+export const getVideoId = (url) => {
+  var regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  var match = url.match(regExp);
+  return match[2]
 }

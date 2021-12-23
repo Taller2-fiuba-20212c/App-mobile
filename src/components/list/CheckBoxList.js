@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import { View } from 'react-native'
 import { CheckBox } from 'react-native-elements';
+import {BASE_COLOR} from './../../consts'
 
 export default CheckBoxList = (props) => {
   const list = props.list;
@@ -23,6 +24,7 @@ export default CheckBoxList = (props) => {
       {
         list.map((u, i) => (
           <CheckBox
+            checkedColor={BASE_COLOR}
             key={i}
             title={u}
             checked={checkedBoxes[i]}

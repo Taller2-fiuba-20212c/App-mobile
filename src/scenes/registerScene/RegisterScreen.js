@@ -4,7 +4,7 @@ import {
   NormalButton, NormalInput, EmailInput, PasswordInput, HorizontalBoxes, Alert 
 } from './../../components'
 import RegisterStyles from './RegisterStyles'
-import { BASE_COLOR, USER_INFO } from './../../consts'
+import { BASE_COLOR, USER_INFO, ROLES_REGISTER } from './../../consts'
 import { register, storeData } from './../../model'
 
 export default RegisterScreen = ({navigation}) => {
@@ -36,9 +36,18 @@ export default RegisterScreen = ({navigation}) => {
         break;
       }
       default: {
+        let msg;
+        let title;
+        if (err.response.data.errors[0].param == 'email') {
+          title = 'Sorry'
+          msg = err.response.data.errors[0].msg;
+        } else {
+          title = 'Something went wrong';
+          msg = '';
+        }
         setAlertInfo({
-          title: 'Something went wrong',
-          msg: ''
+          title: title,
+          msg: msg
         });
         break;
       }
@@ -56,10 +65,14 @@ export default RegisterScreen = ({navigation}) => {
     .then(r => {
       setLoading(false);
       storeData(USER_INFO, JSON.stringify(r));
-      navigation.navigate('ExtraInfoScreen');
+      navigation.navigate('ExtraInfoScreen', {
+        userInfo: r
+      });
     })
-    .catch(err => handleError(err))
-    setLoading(false);
+    .catch(err => {
+      setLoading(false);
+      handleError(err)
+    })
   } 
 
   useEffect(() => {
@@ -119,7 +132,7 @@ export default RegisterScreen = ({navigation}) => {
             fontSize: 16
           }}
         >Role</Text>
-        <HorizontalBoxes onChange={(value) => handleChange(value, 'role')}/>
+        <HorizontalBoxes options={ROLES_REGISTER} onChange={(value) => handleChange(value, 'role')}/>
       </View>
 			<View>
         <PasswordInput 
