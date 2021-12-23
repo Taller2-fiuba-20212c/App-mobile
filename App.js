@@ -16,14 +16,28 @@ import AppLoading from 'expo-app-loading';
 import { getData } from './src/model';
 import { USER_INFO } from './src/consts';
 import { GlobalAuthActionsContext, GlobalAuthContext } from './src/model/ContextFactory';
+import { ChatsListScreen } from './src/scenes/chatScene';
+import ChatScreen from './src/scenes/chatScene/ChatScreen';
 
 const Tab = createBottomTabNavigator();
+
+function ChatStack() {
+  const Chats = createNativeStackNavigator();
+
+  return (
+    <Chats.Navigator>
+      <Chats.Screen name="ChatsList" component={ChatsListScreen} />
+      <Chats.Screen name="Chat" component={ChatScreen} />
+    </Chats.Navigator>
+  );
+}
 
 function TabScreen() {
   return (
     <Tab.Navigator 
       initialRouteName="Home"
       screenOptions={({ route }) => ({
+        tabBarButton: ["ChatsStack"].includes(route.name) ? () => null : undefined,
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           if (route.name === 'Home') {
@@ -52,6 +66,7 @@ function TabScreen() {
       <Tab.Screen name="Home" component={PrincipalScreen} />
       <Tab.Screen name="Search" component={SearchScreen} />
       <Tab.Screen name="User" component={ProfileScreen} />
+      <Tab.Screen name="ChatsStack" component={ChatStack} />
     </Tab.Navigator>
    );
 }
@@ -104,13 +119,18 @@ function MyStack() {
   )
 }
 
-const loadSession = async () => {
-  return getData(USER_INFO);
-}
-
 export default function App() {
   const [loading, setLoading] = React.useState(true);
   const [appAuthContext, setAppAuthContext] = React.useState({ user: undefined });
+
+  const loadSession = async () => {
+    getData(USER_INFO)
+    .then(userSession => {
+      if (userSession !== undefined) {
+        setAppAuthContext(prevState => ({ ...prevState, user: userSession }))
+      }
+    })
+  }
 
   return (
     <SafeAreaProvider>
@@ -119,13 +139,7 @@ export default function App() {
           {loading ?
             <AppLoading
                 startAsync={loadSession}
-                onFinish={(userSession) => {
-                  if (userSession !== undefined) {
-                    setAppAuthContext(prevState => ({ ...prevState, user: userSession }))
-                  }
-
-                  setLoading(false)
-                }}
+                onFinish={() => setLoading(false)}
                 onError={(e) => {
                   console.error(e);
                   setLoading(false);

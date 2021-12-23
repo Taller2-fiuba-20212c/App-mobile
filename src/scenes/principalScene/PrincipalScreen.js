@@ -29,7 +29,7 @@ export default PrincipalScreen = ({navigation}) => {
           containerStyle={{
             paddingRight: 20
           }}
-          onPress={() => navigation.navigate('ChatScreen')}
+          onPress={() => navigation.navigate("ChatsStack")}
         />
       ),
     });
