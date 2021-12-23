@@ -105,8 +105,8 @@ export default ProfileScreen = ({navigation, route}) => {
           <View>
             <NormalButton onPress={() => goToModifyUser()} title="Edit Profile"/>
           </View>
-          <View>
-            <NormalButton onPress={() => handleLogout()} title="Sign out"/>
+          <View style={{ paddingTop: 10 }}>
+            <NormalButton onPress={() => handleLogout()} title="Sign out" />
           </View>
         </View>
         :

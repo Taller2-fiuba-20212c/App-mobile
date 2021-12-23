@@ -1,9 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-<<<<<<< HEAD
 import * as Location from 'expo-location';
-=======
 import { USER_INFO } from '../consts';
->>>>>>> production
 
 export const getData = async (key_name) => {
   try {
