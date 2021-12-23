@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getUserToken } from './Utils';
 
-const axiosInstance = axios.create({ baseURL: "http://192.168.0.86:3001" });
+const axiosInstance = axios.create({ baseURL: "https://ubademy-ms-api-gateway2.herokuapp.com" });
 
 const REQUEST_TIMEOUT = 10000;
 

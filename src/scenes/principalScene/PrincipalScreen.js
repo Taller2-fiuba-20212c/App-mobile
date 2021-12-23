@@ -65,16 +65,18 @@ export default PrincipalScreen = ({navigation}) => {
           containerStyle={{
             paddingRight: 20
           }}
+          onPress={() => navigation.navigate("ChatsStack")}
         />
       ),
     });
   });
 
   useEffect(() => {
-    getCourses().then((r) => setCourses(r));
-    return () => {
+    getCourses().then((r) => setCourses(r))
+    .catch(e => {
+      console.log(e);
       setCourses([]);
-    };
+    });
   }, [])
 
   const _renderItem = ({item, index}) => {

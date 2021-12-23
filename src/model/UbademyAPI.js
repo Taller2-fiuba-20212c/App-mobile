@@ -42,3 +42,18 @@ export const getCourses = async () => {
   return fetchFromURL('/courses');
 }
 
+export const searchUsersLike = async (name) => {
+  return fetchFromURL(`/users`, { name });
+}
+
+export const sendMessage = async (sender, receiver, msg) => {
+  return postDataToURL('/messages', {}, { sender, receiver, msg });
+}
+
+export const getChats = async (uid) => {
+  return fetchFromURL(`/chats/${uid}`);
+}
+
+export const getConversation = async (user1, user2) => {
+  return fetchFromURL('/messages', { user1, user2 });
+}
