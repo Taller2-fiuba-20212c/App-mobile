@@ -12,7 +12,6 @@ export default CourseScreen = ({route, navigation}) => {
   const [course, setCourse] = useState(route.params.course);
   const [creator, setCreator] = useState(null);
   const [visible, setVisible] = useState(false);
-  const [userRole, setUserRole] = useState('');
   const [alertInfo, setAlertInfo] = useState({
     title: '',
     msg: ''
@@ -45,7 +44,9 @@ export default CourseScreen = ({route, navigation}) => {
         setCreator(r);
       }).catch(err => console.log(err.response));
       getData(USER_INFO).then((r) => {
-        setUserRole(r.role)
+        if (!r) {
+          return
+        }
         updatePermissions(r, route.params.course);
         if (r.uid == route.params.course.creatorId) {
           navigation.setOptions({
@@ -102,6 +103,12 @@ export default CourseScreen = ({route, navigation}) => {
       courseId: course.id,
       creatorId: course.creatorId,
       unitsNames: course.units.map(u => u.name)
+    })
+  }
+
+  const handleAddCollaborators = () => {
+    navigation.navigate('AddCollaboratorsScreen', {
+      cid: course.id
     })
   }
 
@@ -204,6 +211,23 @@ export default CourseScreen = ({route, navigation}) => {
                 </ListItem.Content>
                 <ListItem.Chevron/>
               </ListItem>
+            }
+            {
+              course.collaborators.length == 0 ?
+              userPermission.owner &&
+              <View style={{ paddingHorizontal: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text style={CourseStyles.section}>Collaborators</Text>
+                {
+                  userPermission.owner &&
+                  <View style={{ flexDirection: 'row' }}>
+                    <NormalButton title='Add Collaborators' onPress={() => handleAddCollaborators()}/>
+                  </View>
+                }
+              </View>
+              :
+              <View style={{ paddingHorizontal: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text style={CourseStyles.section}>Collaborators</Text>
+              </View>
             }
             <View style={CourseStyles.text}>
               <Text style={CourseStyles.section}>Category</Text>
