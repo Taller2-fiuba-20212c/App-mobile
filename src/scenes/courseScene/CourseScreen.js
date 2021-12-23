@@ -214,18 +214,15 @@ export default CourseScreen = ({route, navigation}) => {
               </ListItem>
             }
             {
-              course.collaborators.length == 0 ?
-              userPermission.owner &&
+              userPermission.owner ?
               <View style={{ paddingHorizontal: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={CourseStyles.section}>Collaborators</Text>
-                {
-                  userPermission.owner &&
                   <View style={{ flexDirection: 'row' }}>
                     <NormalButton title='Add Collaborators' onPress={() => handleAddCollaborators()}/>
                   </View>
-                }
               </View>
               :
+              course.collaborators.length == 0 &&
               <View style={{ paddingHorizontal: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={CourseStyles.section}>Collaborators</Text>
               </View>
