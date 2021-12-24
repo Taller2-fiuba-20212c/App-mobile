@@ -202,8 +202,9 @@ export default CourseScreen = ({route, navigation}) => {
                 <Avatar
                   rounded
                   title={getAvatarTitle(creator.name, creator.lastname)}
+                  source={creator.image ? { uri: creator.image } : null}
                   containerStyle={{ 
-                    backgroundColor: BASE_COLOR 
+                    backgroundColor: creator.image ? 'white' : BASE_COLOR 
                   }}
                 />
                 <ListItem.Content>

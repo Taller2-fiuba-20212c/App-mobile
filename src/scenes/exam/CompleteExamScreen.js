@@ -22,14 +22,14 @@ export default CompleteExamScreen = ({navigation, route}) => {
       title: route.params.title,
     })
 
-    getData(USER_INFO).then((data) => {
-      handleChange(data.uid, 'creatorId')
-    })
+    // getData(USER_INFO).then((data) => {
+    //   handleChange(data.uid, 'creatorId')
+    // })
   }, [])
 
   const handleSendExam = () => {
     const now = new Date(Date.now());
-    setSending(true);
+    // setSending(true);
     const examR = {
       answers: exam.examQuestions.map((u, i) => {
         return {
@@ -41,25 +41,31 @@ export default CompleteExamScreen = ({navigation, route}) => {
           lastModificationDate: now.toISOString()
         }
       }),
+      description: exam.description,
       creatorId: examResolution.creatorId,
       creationDate: now.toISOString(),
       lastModificationDate: now.toISOString()
     }
-    addExamResolution(
-      route.params.cid, 
-      route.params.unitName,
-      {
-        examResolution: examR
-      }
-    )
-    .then(r => {
-      console.log(r);
-      setSending(false);
+
+    console.log(examR)
+    navigation.navigate('MarkExamScreen', {
+      examResolution: examR
     })
-    .catch(err => {
-      console.error(err.response)
-      setSending(false);
-    })
+    // addExamResolution(
+    //   route.params.cid, 
+    //   route.params.unitName,
+    //   {
+    //     examResolution: examR
+    //   }
+    // )
+    // .then(r => {
+    //   console.log(r);
+    //   setSending(false);
+    // })
+    // .catch(err => {
+    //   console.error(err.response)
+    //   setSending(false);
+    // })
   }
 
   const changeAnswer = (value, i) => {
@@ -128,11 +134,6 @@ export default CompleteExamScreen = ({navigation, route}) => {
                               fontWeight: 'bold',
                               fontSize: 16
                             }}>{(i + 1) + '. ' + u.question.question}</Text>
-                            <Text style={{
-                              color: 'gray', 
-                              fontWeight: 'bold',
-                              fontSize: 16
-                            }}>Points: {u.maxGrade}</Text>
                           </View>
                         }
                         placeholder='Answer'

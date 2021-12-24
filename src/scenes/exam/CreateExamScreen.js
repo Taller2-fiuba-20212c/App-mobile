@@ -13,12 +13,15 @@ export default CreateExamScreen = ({navigation, route}) => {
     examResolutions: [],
     state: 'PUBLISHED',
     minimumGrade: null,
-    creatorId: route.params.creatorId,
+    // creatorId: route.params.creatorId,
+    creatorId: '1',
   })
   const [disabled, setDisabled] = useState(true)
   const [unitSelected, setUnitSelected] = useState(null)
-  const [units, setUnits] = useState(route.params.unitsNames)
-  const [courseId, setCourseId] = useState(route.params.courseId)
+  // const [units, setUnits] = useState(route.params.unitsNames)
+  const [units, setUnits] = useState(['unit1', 'unit2', 'unit3'])
+  // const [courseId, setCourseId] = useState(route.params.courseId)
+  const [courseId, setCourseId] = useState('c2')
   const [creating, setCreating] = useState(false);
 
   const [visible, setVisible] = useState(false);
@@ -73,16 +76,6 @@ export default CreateExamScreen = ({navigation, route}) => {
   }
 
   const handleCreateExam = () => {
-    if (exam.examQuestions.reduce((partial_sum, a) => partial_sum + a.maxGrade, 0) < MAX_GRADE) {
-      setAlertInfo({
-        title: NORMAL_ERROR_TITLE,
-        msg: 'Please add more question, total point should be equal to ' + MAX_GRADE
-      })
-
-      setVisible(true)
-      return
-    }
-
     if (exam.minimumGrade > MAX_GRADE) {
       setAlertInfo({
         title: NORMAL_ERROR_TITLE,
@@ -93,24 +86,28 @@ export default CreateExamScreen = ({navigation, route}) => {
       return
     }
 
-    setCreating(true);
+    // setCreating(true);
     const now = new Date(Date.now());
     console.log(exam)
-    addExam(courseId, unitSelected, {
-      ...exam,
-      creationDate: now.toISOString(),
-      lastModificationDate: now.toISOString()
+    navigation.navigate('CompleteExamScreen', {
+      exam: exam,
+      title: exam.name
     })
-    .then(r => {
-      setCreating(false)
-      navigation.navigate('CourseScreen', {
-        course: r
-      })
-    })
-    .catch(err => {
-      console.error(err.response)
-      setCreating(false)
-    })
+    // addExam(courseId, unitSelected, {
+    //   ...exam,
+    //   creationDate: now.toISOString(),
+    //   lastModificationDate: now.toISOString()
+    // })
+    // .then(r => {
+    //   setCreating(false)
+    //   navigation.navigate('CourseScreen', {
+    //     course: r
+    //   })
+    // })
+    // .catch(err => {
+    //   console.error(err.response)
+    //   setCreating(false)
+    // })
   }
 
   return (
@@ -140,7 +137,7 @@ export default CreateExamScreen = ({navigation, route}) => {
               maxLength={3}
               keyboardType='numeric'
               label='Minimun Grade'
-              placeholder='Minimun Grade'
+              placeholder='0 - 100'
             />
             <Text style={{
               paddingLeft: 10, 
@@ -169,10 +166,9 @@ export default CreateExamScreen = ({navigation, route}) => {
                 <View>
                   {
                     exam.examQuestions.map((u,i) => (
-                      <ListItem key={i}>
+                      <ListItem key={i} bottomDivider>
                         <ListItem.Content>
                           <ListItem.Title>{i+1}. {u.question.question}</ListItem.Title>
-                          <ListItem.Subtitle>Value: {u.maxGrade}</ListItem.Subtitle>
                         </ListItem.Content>
                       </ListItem>
                     ))
@@ -180,12 +176,9 @@ export default CreateExamScreen = ({navigation, route}) => {
                 </View>
               </View>
             }
-            {
-              exam.examQuestions.reduce((partial_sum, a) => partial_sum + a.maxGrade, 0) < MAX_GRADE &&
-              <View style={{ paddingTop: 20 }}>
-                <NormalButton title="Add question" onPress={() => createQuestion()} />
-              </View>
-            }
+            <View style={{ paddingTop: 20 }}>
+              <NormalButton title="Add question" onPress={() => createQuestion()} />
+            </View>
           </View>
           <View style={{ paddingVertical: 20 }}>
             {
