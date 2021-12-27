@@ -139,7 +139,7 @@ export default CreateUnitScreen = ({route, navigation}) => {
                   color: 'gray', 
                   fontWeight: 'bold',
                   fontSize: 16
-                }}>Text</Text>
+                }}>Content</Text>
                 <RichEditor
                   ref={RichText}
                   initialContentHTML={unit.content.text}

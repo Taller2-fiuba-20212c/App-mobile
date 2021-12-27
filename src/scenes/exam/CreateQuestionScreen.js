@@ -7,14 +7,9 @@ export default CreateQuestionScreen = ({route, navigation}) => {
   const exam = route.params.exam;
   const [question, setQuestion] = useState({
     question: '',
-    maxGrade: '',
+    maxGrade: 100,
   })
   const [disabled, setDisabled] = useState(true)
-  const [visible, setVisible] = useState(false);
-  const [alertInfo, setAlertInfo] = useState({
-    title: '',
-    msg: ''
-  })
 
   const handleChange = (value, name) => {
     setQuestion({ ...question, [name]: value });
@@ -22,7 +17,7 @@ export default CreateQuestionScreen = ({route, navigation}) => {
 
   useEffect(() => {
     setDisabled(
-      question.question == '' || question.maxGrade == ''
+      question.question == ''
     )
   }, [question])
 
@@ -34,19 +29,6 @@ export default CreateQuestionScreen = ({route, navigation}) => {
   }, []);
 
   const handleCreateQuestion = () => {
-    let totalPuntuation = 0;
-    for (let q of exam.examQuestions) {
-      totalPuntuation += q.maxGrade
-    }
-    if (totalPuntuation + parseInt(question.maxGrade) > MAX_GRADE) {
-      setAlertInfo({
-        title: NORMAL_ERROR_TITLE,
-        msg: 'Maximun grade exceeded, suggestion: ' + (MAX_GRADE - totalPuntuation)
-      })
-      setVisible(true)
-      return
-    }
-
     const now = new Date(Date.now())
 
     const examModified = {
@@ -81,23 +63,10 @@ export default CreateQuestionScreen = ({route, navigation}) => {
           label='Question'
           placeholder='Question'
         />
-        <NormalInput 
-          onChangeText={(value) => handleChange(value, "maxGrade")} 
-          maxLength={3}
-          keyboardType='numeric'
-          label='Maximun Grade'
-          placeholder='Maximun Grade'
-        />
       </View>
       <View style={{ paddingVertical: 20 }}>
         <NormalButton disabled={disabled} title="Add question" onPress={() => handleCreateQuestion()}/>
       </View>
-      <Alert 
-        isVisible={visible}
-        alertInfo={alertInfo}
-        onBackdropPress={() => setVisible(false)}
-        onButtonPress={() => setVisible(false)}
-      />
     </View>
   )
 }

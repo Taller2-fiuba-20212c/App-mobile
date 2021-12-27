@@ -6,6 +6,7 @@ import { ShortCardCourse, LongCardCourse } from './../../components'
 import { BASE_COLOR, WIDTH_SCREEN, USER_INFO } from './../../consts';
 import { getCourses, getData, getTop5 } from './../../model'
 import PrincipalStyles from './PrincipalStyles'
+import OfferSubscription from './OfferSubscription'
 
 const SLIDER_WIDTH = WIDTH_SCREEN;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
@@ -15,22 +16,39 @@ export default PrincipalScreen = ({navigation}) => {
   const [top5, setTop5] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isProf, setIsProf] = useState(false)
+  const [visible, setVisible] = useState(false);
+
+  const handleSuscriptionOffer = () => {
+    setVisible(true)
+  }
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: true,
       title: 'Ubademy',
       headerRight: () => (
-        <Icon 
-          name='chatbubble-ellipses'
-          size={24}
-          type='ionicon'
-          color={BASE_COLOR}
-          containerStyle={{
-            paddingRight: 20
-          }}
-          onPress={() => navigation.navigate("ChatsStack")}
-        />
+        <View style={{flexDirection: 'row'}}>
+          <Icon 
+            name='shopping-cart'
+            size={24}
+            type='FontAwesome'
+            color={BASE_COLOR}
+            containerStyle={{
+              paddingRight: 20
+            }}
+            onPress={() => handleSuscriptionOffer()}
+          />
+          <Icon 
+            name='chatbubble-ellipses'
+            size={24}
+            type='ionicon'
+            color={BASE_COLOR}
+            containerStyle={{
+              paddingRight: 20
+            }}
+            onPress={() => navigation.navigate("ChatsStack")}
+          />
+        </View>
       ),
     });
   });
@@ -128,6 +146,11 @@ export default PrincipalScreen = ({navigation}) => {
             }
           </View>
         </View>
+        <OfferSubscription 
+          isVisible={visible}
+          onBackdropPress={() => setVisible(false)}
+          onButtonPress={() => setVisible(false)}
+        />
         </ScrollView>
       }
     </View>

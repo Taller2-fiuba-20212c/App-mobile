@@ -2,16 +2,25 @@ import React, { useLayoutEffect, useState } from 'react';
 import { View, Text, ScrollView, ActivityIndicator } from 'react-native'
 import { SearchBar, Icon, ListItem, Avatar } from 'react-native-elements'
 import { BASE_COLOR } from '../../consts';
+import { Alert } from './../../components'
 import AddCollaboratorsStyles from './AddCollaboratorsStyles'
-import { searchUsers, getAvatarTitle } from './../../model'
+import { searchUsers, getAvatarTitle, addCollaborators } from './../../model'
 import { useGlobalAuthContext } from '../../model/ContextFactory';
 
-export default AddCollaboratorsScreen = ({navigation}) => {
+export default AddCollaboratorsScreen = ({navigation, route}) => {
+  const cid = route.params.cid
   const [searchText, setSearchText] = useState('');
   const [noResults, setNoResults] = useState(false);
   const [result, setResult] = useState(null);
+  const [selected, setSelected] = useState([]);
   const [searching, setSearching] = useState(false);
   const appAuthContext = useGlobalAuthContext();
+
+  const [visible, setVisible] = useState(false);
+  const [alertInfo, setAlertInfo] = useState({
+    title: '',
+    msg: ''
+  })
 
   const handleSearchCourses = () => {
     setSearching(true);
@@ -24,14 +33,16 @@ export default AddCollaboratorsScreen = ({navigation}) => {
         setNoResults(true);
       } else {
         setNoResults(false);
-        setResult(response.filter(u => u.uid !== appAuthContext.user.uid))
+        const results = response.filter(u => u.uid !== appAuthContext.user.uid)
+        setResult(results)
+        setSelected(Array(results.length).fill(false))
       }
       setSearching(false);
     })
     .catch(e => {
-        console.log(e);
-        Alert.alert("Error searching", "There was an error searching for users");
-        setSearching(false);
+      console.log(e);
+      // Alert.alert("Error searching", "There was an error searching for users");
+      setSearching(false);
     })
   }
 
@@ -59,7 +70,7 @@ export default AddCollaboratorsScreen = ({navigation}) => {
             showLoading={true}
             round={true}
             lightTheme={true}
-            placeholder="search"
+            placeholder="Search collaborators"
             onChangeText={(v) => setSearchText(v)}
             value={searchText}
           />
@@ -71,11 +82,39 @@ export default AddCollaboratorsScreen = ({navigation}) => {
           size={24}
           type='ionicon'
           color={BASE_COLOR}
-          containerStyle={SearchStyles.optionsIcon}
+          onPress={() => handleAddCollaborators()}
         />
       ),
     });
   });
+
+  const handleAddCollaborators = () => {
+    if (selected.every(x => x == false)){
+      setAlertInfo({
+        title: 'Sorry',
+        msg: 'Select at least a collaborator'
+      })
+
+      setVisible(true)
+      return
+    }
+    
+    const collaborators = result.filter((u, i) => selected[i]).map(c => c.uid)
+
+    addCollaborators(cid, collaborators)
+    .then(r => {
+      navigation.navigate('CouseScreen', {
+        course: r
+      })
+    })
+    .catch(e => console.log(e.response))
+  }
+
+  const handleSelect = (i) => {
+    const newSelected = selected.slice();
+    newSelected[i] = !selected[i]
+    setSelected(newSelected)
+  }
 
   return(
     <View>
@@ -97,21 +136,38 @@ export default AddCollaboratorsScreen = ({navigation}) => {
         <ScrollView showsVerticalScrollIndicator={false}>
           {
             result && result.map((l, i) => (
-              <ListItem key={i} bottomDivider onPress={() => console.log('seleccionar' + {i})}>
+              <ListItem 
+                key={i} 
+                bottomDivider 
+                noIcon={true}
+                onPress={() => handleSelect(i)}
+              >
                 <Avatar
                   rounded
                   title={getAvatarTitle(l.name, l.lastname)}
+                  source={l.image ? { uri: l.image } : null}
                   containerStyle={{ 
-                    backgroundColor: BASE_COLOR 
+                    backgroundColor: l.image ? 'white' : BASE_COLOR  
                   }}
                 />
                 <ListItem.Content>
                   <ListItem.Title style={{ fontWeight: 'bold' }}>{l.name} {l.lastname}</ListItem.Title>
+                  <ListItem.Subtitle>{l.email}</ListItem.Subtitle>
                 </ListItem.Content>
-                <ListItem.Chevron color="gray" />
+                <ListItem.CheckBox 
+                  checked={selected[i]} 
+                  checkedColor={BASE_COLOR} 
+                  onPress={() => handleSelect(i)}
+                />
               </ListItem>
             ))
           }
+          <Alert 
+            isVisible={visible}
+            alertInfo={alertInfo}
+            onBackdropPress={() => setVisible(false)}
+            onButtonPress={() => setVisible(false)}
+          />
         </ScrollView>
       }
     </View>
