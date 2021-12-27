@@ -7,7 +7,7 @@ export default CreateQuestionScreen = ({route, navigation}) => {
   const exam = route.params.exam;
   const [question, setQuestion] = useState({
     question: '',
-    maxGrade: '',
+    maxGrade: 100,
   })
   const [disabled, setDisabled] = useState(true)
 

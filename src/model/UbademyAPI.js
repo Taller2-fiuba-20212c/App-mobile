@@ -70,6 +70,10 @@ export const addExam = async (cid, unitName, body) => {
   return putDataToURL(`/courses/${cid}/addExam`, {unitName}, body);
 }
 
+export const addCollaborators = async (cid, collabs) => {
+  return putDataToURL(`/courses/${cid}/addCollaborators`, {}, collabs);
+}
+
 export const addExamResolution = async (cid, unitName, body) => {
   return putDataToURL(`/courses/${cid}/addExamResolution`, {unitName}, body);
 }

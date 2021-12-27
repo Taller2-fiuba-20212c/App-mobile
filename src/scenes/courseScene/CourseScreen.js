@@ -11,6 +11,7 @@ export default CourseScreen = ({route, navigation}) => {
   const [loading, setLoading] = useState(true)
   const [course, setCourse] = useState(route.params.course);
   const [creator, setCreator] = useState(null);
+  const [colaborators, setColaborators] = useState([])
   const [visible, setVisible] = useState(false);
   const [alertInfo, setAlertInfo] = useState({
     title: '',
@@ -21,6 +22,7 @@ export default CourseScreen = ({route, navigation}) => {
     suscripted: false,
     colaborator: false,
   });
+  const [uid, setUid] = useState('')
 
   const updatePermissions = (userData, courseData) => {
     setUserPermission({
@@ -31,6 +33,8 @@ export default CourseScreen = ({route, navigation}) => {
       colaborator: courseData.collaborators.includes(userData.uid)
     });
 
+    setUid(userData.uid);
+
     // Para probrar
     // setUserPermission({
     //   ...userPermission, 
@@ -38,9 +42,29 @@ export default CourseScreen = ({route, navigation}) => {
     // });
   }
 
+  const buildCollabs = async (collabsId) => {
+    try {
+      let collabsInfo = []
+      for (let c of collabsId) {
+        const collabInfo = await getUser(c)
+        collabsInfo.push(collabInfo);
+      }
+      
+      return collabsInfo
+    } catch (e) {
+      console.error(e)
+      throw e;
+    }
+  }
+
   useEffect(() => {
     if (route.params?.course) {
       setCourse(route.params.course);
+      buildCollabs(route.params.course.collaborators).then(r => {
+        setColaborators(r);
+      })
+      .catch(err => console.log(err.response));
+      
       getUser(route.params.course.creatorId).then((r) => {
         setCreator(r);
       }).catch(err => console.log(err.response));
@@ -103,7 +127,7 @@ export default CourseScreen = ({route, navigation}) => {
     navigation.navigate('CreateExamScreen', {
       courseId: course.id,
       creatorId: course.creatorId,
-      unitsNames: course.units.map(u => u.name)
+      unitsNames: course.units.filter(u => u.exam == null).map(u => u.name)
     })
   }
 
@@ -150,7 +174,10 @@ export default CourseScreen = ({route, navigation}) => {
                   <View style={{ marginRight: 10 }} >
                     <NormalButton title='Add Unit' onPress={() => createUnit()}/>
                   </View>
-                  <NormalButton title='Add Exam' onPress={() => createExam()}/> 
+                  {
+                    course.units.filter(u => u.exam == null).length != 0 &&
+                    <NormalButton title='Add Exam' onPress={() => createExam()}/> 
+                  }
                 </View>
               }
             </View>
@@ -166,6 +193,7 @@ export default CourseScreen = ({route, navigation}) => {
                         key={i} 
                         number={i} 
                         cid = {course.id}
+                        uid = {uid}
                         userPermission={userPermission}
                       />
                     ))
@@ -179,6 +207,20 @@ export default CourseScreen = ({route, navigation}) => {
                   : 
                   null
                 }
+              </View>
+            }
+            {
+              (userPermission.owner || userPermission.colaborator) &&
+              <View style={{ paddingHorizontal: 20 }}>
+                <NormalButton title='Watch exams' onPress={() => navigation.navigate('ListExamsScreen', { 
+                  exams: course.units.filter(u => u.exam != null).map(u => {
+                    return {
+                      unitName: u.name,
+                      exam: u.exam
+                    }
+                  }),
+                  cid: course.id
+                })} />
               </View>
             }
             <View style={CourseStyles.text}>
@@ -223,10 +265,41 @@ export default CourseScreen = ({route, navigation}) => {
                   </View>
               </View>
               :
-              course.collaborators.length == 0 &&
-              <View style={{ paddingHorizontal: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
+              course.collaborators.length != 0 &&
+              <View style={{ paddingHorizontal: 20 }}>
                 <Text style={CourseStyles.section}>Collaborators</Text>
               </View>
+            }
+            {
+              course.collaborators.length == colaborators.length ?
+              colaborators.map((c,j) => (
+                <ListItem 
+                  key={j}
+                  containerStyle={{paddingHorizontal: 20}}
+                  onPress={() => {
+                    uid == c.uid ?
+                    navigation.navigate('ProfileScreen')
+                    :
+                    navigation.navigate('UserScreen', {userInfo: c})
+                  }}
+                >
+                  <Avatar
+                    rounded
+                    title={getAvatarTitle(c.name, c.lastname)}
+                    source={c.image ? { uri: c.image } : null}
+                    containerStyle={{ 
+                      backgroundColor: c.image ? 'white' : BASE_COLOR 
+                    }}
+                  />
+                  <ListItem.Content>
+                    <ListItem.Title>{c.name + ' ' + c.lastname}</ListItem.Title>
+                    <ListItem.Subtitle>{capitalize(c.role)}</ListItem.Subtitle>
+                  </ListItem.Content>
+                  <ListItem.Chevron/>
+                </ListItem>
+              ))
+              :
+              <ActivityIndicator size="large" color={BASE_COLOR} />
             }
             <View style={CourseStyles.text}>
               <Text style={CourseStyles.section}>Category</Text>

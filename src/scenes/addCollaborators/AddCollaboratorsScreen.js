@@ -4,10 +4,11 @@ import { SearchBar, Icon, ListItem, Avatar } from 'react-native-elements'
 import { BASE_COLOR } from '../../consts';
 import { Alert } from './../../components'
 import AddCollaboratorsStyles from './AddCollaboratorsStyles'
-import { searchUsers, getAvatarTitle } from './../../model'
+import { searchUsers, getAvatarTitle, addCollaborators } from './../../model'
 import { useGlobalAuthContext } from '../../model/ContextFactory';
 
-export default AddCollaboratorsScreen = ({navigation}) => {
+export default AddCollaboratorsScreen = ({navigation, route}) => {
+  const cid = route.params.cid
   const [searchText, setSearchText] = useState('');
   const [noResults, setNoResults] = useState(false);
   const [result, setResult] = useState(null);
@@ -39,9 +40,9 @@ export default AddCollaboratorsScreen = ({navigation}) => {
       setSearching(false);
     })
     .catch(e => {
-        console.log(e);
-        Alert.alert("Error searching", "There was an error searching for users");
-        setSearching(false);
+      console.log(e);
+      // Alert.alert("Error searching", "There was an error searching for users");
+      setSearching(false);
     })
   }
 
@@ -97,14 +98,16 @@ export default AddCollaboratorsScreen = ({navigation}) => {
       setVisible(true)
       return
     }
+    
+    const collaborators = result.filter((u, i) => selected[i]).map(c => c.uid)
 
-    const collaborators = result.map((u,i) => {
-      if (selected[i]) {
-        return u.uid
-      }
+    addCollaborators(cid, collaborators)
+    .then(r => {
+      navigation.navigate('CouseScreen', {
+        course: r
+      })
     })
-
-    console.log(collaborators)
+    .catch(e => console.log(e.response))
   }
 
   const handleSelect = (i) => {

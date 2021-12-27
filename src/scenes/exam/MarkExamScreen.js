@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, ScrollView, ActivityIndicator } from 'react-native'
 import { NormalButton, NormalInput, Alert } from './../../components'
-import { addExam, getData } from './../../model'
+import { addExamResolution } from './../../model'
 import { BASE_COLOR, USER_INFO } from './../../consts'
 
 export default MarkExamScreen = ({navigation, route}) => {
@@ -19,18 +19,13 @@ export default MarkExamScreen = ({navigation, route}) => {
   useEffect(() => {
     navigation.setOptions({
       headerShown: true,
-      // title: route.title
-      title: examResolution.name
+      title: route.params.title
     })
-
-    // getData(USER_INFO).then((data) => {
-    //   handleChange(data.uid, 'creatorId')
-    // })
   }, [])
 
   useEffect(() => {
     setDisabled(
-      examResolution.answers.some(e => !e.grade)
+      examResolution.answers.some(e => e.grade == 0 ? false : !e.grade)
     )
   }, [examResolution])
 
@@ -57,9 +52,8 @@ export default MarkExamScreen = ({navigation, route}) => {
       totalGrade += element.grade
     })
     if (totalGrade > 100) {
-      console.log(totalGrade)
       setAlertInfo({
-        title: 'Sorry',
+        title: 'Sorry!',
         msg: 'Maximun total grade is 100'
       })
 
@@ -68,9 +62,24 @@ export default MarkExamScreen = ({navigation, route}) => {
     }
     const now = new Date(Date.now());
     setSending(true);
-    // put addCorrection
-    console.log(examResolution)
-    setSending(false);
+    addExamResolution(route.params.cid, route.params.unitName, {
+      examResolution: {
+        ...examResolution,
+        grade: totalGrade,
+        state: totalGrade >= route.params.minGrade ? 'APPROVED' : 'DISAPPROVED',
+        lastModificationDate: now.toISOString()
+      }
+    })
+    .then(r => {
+      setSending(false)
+      navigation.navigate('CourseScreen', {
+        course: r
+      })
+    })
+    .catch(err => {
+      console.error(err.response)
+      setSending(false)
+    })
   }
 
   return (
@@ -87,7 +96,7 @@ export default MarkExamScreen = ({navigation, route}) => {
           <View style={{ paddingTop: 20 }}>
             <Text style={{
               fontSize: 16,
-            }}>{examResolution.description}</Text>
+            }}>{route.params.description}</Text>
             {
               <View style>
                 <Text style={{

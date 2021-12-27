@@ -13,15 +13,12 @@ export default CreateExamScreen = ({navigation, route}) => {
     examResolutions: [],
     state: 'PUBLISHED',
     minimumGrade: null,
-    // creatorId: route.params.creatorId,
-    creatorId: '1',
+    creatorId: route.params.creatorId,
   })
   const [disabled, setDisabled] = useState(true)
   const [unitSelected, setUnitSelected] = useState(null)
-  // const [units, setUnits] = useState(route.params.unitsNames)
-  const [units, setUnits] = useState(['unit1', 'unit2', 'unit3'])
-  // const [courseId, setCourseId] = useState(route.params.courseId)
-  const [courseId, setCourseId] = useState('c2')
+  const [units, setUnits] = useState(route.params.unitsNames)
+  const [courseId, setCourseId] = useState(route.params.courseId)
   const [creating, setCreating] = useState(false);
 
   const [visible, setVisible] = useState(false);
@@ -86,28 +83,23 @@ export default CreateExamScreen = ({navigation, route}) => {
       return
     }
 
-    // setCreating(true);
-    const now = new Date(Date.now());
-    console.log(exam)
-    navigation.navigate('CompleteExamScreen', {
-      exam: exam,
-      title: exam.name
+    const now = new Date(Date.now())
+    setCreating(true);
+    addExam(courseId, unitSelected, {
+      ...exam,
+      creationDate: now.toISOString(),
+      lastModificationDate: now.toISOString()
     })
-    // addExam(courseId, unitSelected, {
-    //   ...exam,
-    //   creationDate: now.toISOString(),
-    //   lastModificationDate: now.toISOString()
-    // })
-    // .then(r => {
-    //   setCreating(false)
-    //   navigation.navigate('CourseScreen', {
-    //     course: r
-    //   })
-    // })
-    // .catch(err => {
-    //   console.error(err.response)
-    //   setCreating(false)
-    // })
+    .then(r => {
+      setCreating(false)
+      navigation.navigate('CourseScreen', {
+        course: r
+      })
+    })
+    .catch(err => {
+      console.error(err.response)
+      setCreating(false)
+    })
   }
 
   return (

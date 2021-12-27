@@ -22,14 +22,14 @@ export default CompleteExamScreen = ({navigation, route}) => {
       title: route.params.title,
     })
 
-    // getData(USER_INFO).then((data) => {
-    //   handleChange(data.uid, 'creatorId')
-    // })
+    getData(USER_INFO).then((data) => {
+      handleChange(data.uid, 'creatorId')
+    })
   }, [])
 
   const handleSendExam = () => {
     const now = new Date(Date.now());
-    // setSending(true);
+    setSending(true);
     const examR = {
       answers: exam.examQuestions.map((u, i) => {
         return {
@@ -46,26 +46,24 @@ export default CompleteExamScreen = ({navigation, route}) => {
       creationDate: now.toISOString(),
       lastModificationDate: now.toISOString()
     }
-
-    console.log(examR)
-    navigation.navigate('MarkExamScreen', {
-      examResolution: examR
+    
+    addExamResolution(
+      route.params.cid, 
+      route.params.unitName,
+      {
+        examResolution: examR
+      }
+    )
+    .then(r => {
+      setSending(false);
+      navigation.navigate('CourseScreen', {
+        course: r
+      })
     })
-    // addExamResolution(
-    //   route.params.cid, 
-    //   route.params.unitName,
-    //   {
-    //     examResolution: examR
-    //   }
-    // )
-    // .then(r => {
-    //   console.log(r);
-    //   setSending(false);
-    // })
-    // .catch(err => {
-    //   console.error(err.response)
-    //   setSending(false);
-    // })
+    .catch(err => {
+      console.error(err.response)
+      setSending(false);
+    })
   }
 
   const changeAnswer = (value, i) => {
