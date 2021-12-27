@@ -28,18 +28,12 @@ export default CourseScreen = ({route, navigation}) => {
     setUserPermission({
       ...userPermission, 
       owner: userData.uid == courseData.creatorId,
-      // suscripted: courseData.students.includes(userData.uid),
-      suscripted: true,
+      suscripted: courseData.students.includes(userData.uid),
+      // suscripted: true,
       colaborator: courseData.collaborators.includes(userData.uid)
     });
 
     setUid(userData.uid);
-
-    // Para probrar
-    // setUserPermission({
-    //   ...userPermission, 
-    //   owner: true
-    // });
   }
 
   const buildCollabs = async (collabsId) => {
