@@ -1,32 +1,34 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { View, Text, ActivityIndicator, ScrollView } from 'react-native'
-import { getData, storeData, modifyUser, getAvatarTitle } from './../../model'
+import { getData, storeData, modifyUser, getAvatarTitle, addCategory, deleteCategory } from './../../model'
 import { Avatar } from 'react-native-elements'
 import * as ImagePicker from 'expo-image-picker';
-import { 
-  NormalButton, NormalInput, EmailInput, HorizontalBoxes, Alert 
-} from './../../components'
-import { BASE_COLOR, USER_INFO, ROLES_REGISTER } from  './../../consts'
+import { NormalButton, NormalInput, Alert, MultiSelect } from './../../components'
+import { BASE_COLOR, USER_INFO, CATEGORIES_TYPES } from  './../../consts'
 import ModifyUserStyles from './ModifyUserStyles'
 import { useGlobalAuthActionsContext } from '../../model/ContextFactory'
 
+const categories = CATEGORIES_TYPES.map((c,i) => {
+  return {
+    description: c,
+    id: i + 1
+  }
+})
+
 export default ModifyUserScreen = ({navigation}) => {
   const setAppAuthContext = useGlobalAuthActionsContext();
-
   const [userInfoSaved, setUserInfoSaved] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [loadingScreen, setLoadingScreen] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [disableButton, setDisableButton] = useState(false)
+  const [disableButton, setDisableButton] = useState(true)
   const [visible, setVisible] = useState(false);
-  const [errorEmail, setErrorEmail] = useState(false)
   const [alertInfo, setAlertInfo] = useState({
     title: '',
     msg: ''
   });
 
   const handleError = (err) => {
-    console.log(err.response)
     switch (err.response.status){
       case 400: {
         setAlertInfo({
@@ -84,7 +86,31 @@ export default ModifyUserScreen = ({navigation}) => {
     return
   }
 
-  const saveChange = async () => {
+  const updateCategories = async (oldCategories, newCategories) => {
+    if (compareCategories(oldCategories, newCategories)) {
+      return
+    }
+
+    for (let newCategory of newCategories) {
+      if (oldCategories.every(oldCategory => oldCategory.description != newCategory.description)) {
+        await addCategory(userInfo.uid, newCategory.description)
+      }
+    }
+
+    for (let oldCategory of oldCategories) {
+      if (newCategories.every(newCategory => newCategory.description != oldCategory.description)) {
+        await deleteCategory(userInfo.uid, oldCategory.description)
+      }
+    }
+  }
+
+  const handleUpdates = async (newUserInfo) => {
+    await updateCategories(userInfoSaved.categories, userInfo.categories);
+
+    return await modifyUser(userInfo.uid, newUserInfo)
+  }
+
+  const saveChange = () => {
     setLoading(true);
     let newUserInfo = {
       email: userInfo.email,
@@ -101,11 +127,18 @@ export default ModifyUserScreen = ({navigation}) => {
       }
     }
 
-    await modifyUser(userInfo.uid, newUserInfo)
-    .then(r => {
+    handleUpdates(newUserInfo).then(r => {
       setAppAuthContext(prevState => ({ ...prevState, user: { ...r, accessToken: prevState.user.accessToken, refreshToken: prevState.user.refreshToken }}));
-      setLoading(false);
+      modifyDataSaved(userInfo).then(r => {
+        setLoading(false);
+        navigation.navigate('User')
+      })
     })
+    .catch((err) => {
+      console.error(err.response)
+      handleError(err)
+      setLoading(false)
+    });
   }
 
   useEffect(() => {
@@ -117,19 +150,52 @@ export default ModifyUserScreen = ({navigation}) => {
     })
   }, []);
 
+  const compareCategories = (cat1, cat2) => {
+    if (cat1.length != cat2.length) {
+      return false;
+    }
+
+    return cat1.every(e1 => 
+      cat2.some(e2 => 
+        e1.description == e2.description
+      )
+    )
+  }
+
+  const equalObject = (o1, o2) => {
+    if (o1 == null || o2 == null) {
+      return true
+    }
+    
+    for(var p in o1){
+      if(o1.hasOwnProperty(p)){
+        if(o1[p] !== o2[p] && p !== 'categories'){
+          return false;
+        }
+      }
+    }
+    for(var p in o2){
+      if(o2.hasOwnProperty(p)){
+        if(o1[p] !== o2[p] && p !== 'categories'){
+          return false;
+        }
+      }
+    }
+
+    return compareCategories(o1.categories, o2.categories)
+  }
+
   useEffect(() => {
     setDisableButton(
-      JSON.stringify(userInfo) == JSON.stringify(userInfoSaved) 
-      || 
-      errorEmail
+      equalObject(userInfo, userInfoSaved)
       ||
       userInfo.name == ''
       ||
       userInfo.lastname == ''
       ||
-      userInfo.email == ''
+      userInfo.categories.length == 0
     );
-  }, [userInfo, errorEmail]);
+  }, [userInfo]);
 
   const handleChange = (value, name) => {
     setUserInfo({ ...userInfo, [name]: value });
@@ -141,6 +207,13 @@ export default ModifyUserScreen = ({navigation}) => {
       title: 'Edit Profile',
     });
   });
+
+  const handleSelect = (values) => {
+    setUserInfo({
+      ...userInfo,
+      categories: categories.filter(c => values.includes(c.description))
+    })
+  }
 
 	return (
 		<View style={{flex: 1}}>
@@ -189,27 +262,20 @@ export default ModifyUserScreen = ({navigation}) => {
                   iconName='user' 
                 />
               </View>
-              <View>
-                <EmailInput 
-                  value={userInfo.email}
-                  validate={true} 
-                  onChangeText={(value) => handleChange(value, "email")}
-                  error={(value) => setErrorEmail(value)}
-                />
-              </View>
-              <View>
-                <Text 
-                  style={{
-                    paddingLeft: 10, 
-                    color: 'gray', 
-                    fontWeight: 'bold',
-                    fontSize: 16
-                  }}
-                >Role</Text>
-                <HorizontalBoxes 
-                  options={ROLES_REGISTER}
-                  value={userInfo.role} 
-                  onChange={(value) => handleChange(value, 'role')}
+              <Text 
+                style={{
+                  paddingLeft: 10, 
+                  color: 'gray', 
+                  fontWeight: 'bold',
+                  fontSize: 16
+                }}
+              >Preferred categories</Text>
+              <View style={{ paddingHorizontal: 10, paddingBottom: 20 }} >
+                <MultiSelect 
+                  options={CATEGORIES_TYPES} 
+                  placeholder='Select a subscription' 
+                  value={userInfo ? userInfo.categories.map(c => c.description) : []}
+                  onChange={(values) => handleSelect(values)}
                 />
               </View>
               {

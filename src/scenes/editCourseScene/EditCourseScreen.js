@@ -249,7 +249,7 @@ export default EditCourseScreen = ({route, navigation}) => {
                 <Text style={EditCourseStyles.section}>Subscription included</Text>
               </View>
               <View style={{ paddingHorizontal: 10 }} >
-                <MultiSelect 
+                <Select 
                   options={SUBCRIPTIONS_TYPES} 
                   placeholder='Select a subscription' 
                   value={newCourse.suscriptionIncluded[newCourse.suscriptionIncluded.length - 1]}
@@ -267,7 +267,7 @@ export default EditCourseScreen = ({route, navigation}) => {
                 <Text style={EditCourseStyles.section}>Category</Text>
               </View>
               <View style={{ paddingHorizontal: 10 }} >
-                <MultiSelect 
+                <Select 
                   options={CATEGORIES_TYPES} 
                   placeholder='Select a category' 
                   value={newCourse.category}

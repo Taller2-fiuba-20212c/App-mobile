@@ -5,10 +5,10 @@ import { BASE_COLOR, CATEGORIES_TYPES, USER_INFO } from './../../../consts'
 import { getPlace, modifyUser, storeData, addCategory } from './../../../model'
 import { NormalButton, Dropdown } from './../../../components'
 
-const categories = CATEGORIES_TYPES.map((c) => {
+const categories = CATEGORIES_TYPES.map((c,i) => {
   return {
     item: c,
-    id: c.toUpperCase()
+    id: i + 1
   }
 })
 
@@ -52,7 +52,12 @@ export default ExtraInfoScreen = ({ navigation, route }) => {
 
       await storeData(USER_INFO, JSON.stringify({
         ...r,
-        categories: selectedTeams.map(c => c.item)
+        categories: selectedTeams.map(c => {
+          return {
+            description: c.item,
+            id: c.id
+          }
+        })
       }))
 
       return

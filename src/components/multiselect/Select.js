@@ -3,23 +3,22 @@ import { Overlay, CheckBox, Button } from 'react-native-elements';
 import { Text, View, TouchableNativeFeedback } from 'react-native'
 import { BASE_COLOR } from '../../consts'
 
-export default MultiSelect = ({options, value, placeholder, onChange}) => {
+export default Select = ({options, value, placeholder, onChange}) => {
   const [visible, setVisible] = useState(false);
   const [selected, setSelected] = useState(value)
   const initialCheckedBoxes = value ? 
-    options.map((u) => value.includes(u)) :
+    options.map((u) => u == value) :
     Array(options.length).fill(false);
   const [checkedBoxes, setCheckedBoxes] = useState(initialCheckedBoxes);
 
   const updateCheckedBoxes = (n) => {
-    var newCheckedBoxes = checkedBoxes.slice()
-    newCheckedBoxes[n] = !newCheckedBoxes[n]
+    var newCheckedBoxes = checkedBoxes.map((u,i) => i == n)
     setCheckedBoxes(newCheckedBoxes);
   }
 
   const select = () => {
-    setSelected(options.filter((o,i) => checkedBoxes[i]))
-    onChange(options.filter((o,i) => checkedBoxes[i]))
+    setSelected(options[checkedBoxes.indexOf(true)])
+    onChange(options[checkedBoxes.indexOf(true)])
     setVisible(false)
   }
 
@@ -30,25 +29,8 @@ export default MultiSelect = ({options, value, placeholder, onChange}) => {
           style={{ borderBottomWidth: 1, borderColor: 'gray', padding: 10 }}
         >
           {
-            selected.length != 0 ?
-            <View style={{
-              display: 'flex',
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-            }}>
-              {
-                selected.slice().map((s, i) => (
-                  <View key={i} style={{
-                    backgroundColor: BASE_COLOR,
-                    borderRadius: 20,
-                    marginHorizontal: 5,
-                    marginVertical: 2
-                  }}>
-                    <Text style={{color: 'white', margin: 10}}>{s}</Text>
-                  </View>
-                ))
-              }
-            </View>
+            selected ?
+            <Text style={{ color: 'black', fontSize: 17 }}>{selected}</Text>
             :
             <Text style={{ color: 'lightgray', fontSize: 17 }}>{placeholder}</Text>
           }

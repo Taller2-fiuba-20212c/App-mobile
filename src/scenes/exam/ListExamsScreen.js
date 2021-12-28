@@ -108,7 +108,7 @@ export default ListExamsScreen = ({navigation, route}) => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
     {
-      creators.size == 0 ?
+      creators.size == 0 && exams.length != 0 ?
       <ActivityIndicator size="large" color={BASE_COLOR} />
       :
       exams.length == 0 ?

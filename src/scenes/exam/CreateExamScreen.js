@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, ScrollView, ActivityIndicator } from 'react-native'
-import { NormalButton, NormalInput, MultiSelect, Alert } from './../../components'
+import { NormalButton, NormalInput, Select, Alert } from './../../components'
 import { addExam } from './../../model'
 import { ListItem } from 'react-native-elements'
 import { BASE_COLOR, NORMAL_ERROR_TITLE, MAX_GRADE } from './../../consts'
@@ -138,7 +138,7 @@ export default CreateExamScreen = ({navigation, route}) => {
               fontSize: 16
             }}>Unit</Text>
             <View style={{ paddingHorizontal: 10 }}>
-              <MultiSelect 
+              <Select 
                 options={units} 
                 value={unitSelected} 
                 placeholder='Select unit' 

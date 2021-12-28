@@ -21,6 +21,13 @@ export const addCategory = async (uid, category) => {
   });
 }
 
+export const deleteCategory = async (uid, category) => {
+  return deleteDataFromURL(`users/${uid}/deleteCategory`, {}, 
+  { 
+    category: category
+  });
+}
+
 export const modifyUser = async (uid, userInfo) => {
   return putDataToURL(`/users/edit/${uid}`, {}, userInfo);
 }
@@ -96,11 +103,6 @@ export const updateCourse = async (course) => {
 }
 
 export const searchCourses = async (search) => {
-  console.log({
-    randomText: search.text,
-    suscription: search.subType,
-    category: search.catTypes.toString(),
-  })
   return fetchFromURL('/courses/searchByText', {
     randomText: search.text,
     suscription: search.subType,
