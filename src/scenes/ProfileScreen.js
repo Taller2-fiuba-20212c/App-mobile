@@ -218,6 +218,34 @@ export default ProfileScreen = ({navigation, route}) => {
               value={userInfo.email} 
             />
           </View>
+          <Text 
+            style={{
+              paddingLeft: 10, 
+              paddingBottom: 10,
+              color: 'gray', 
+              fontWeight: 'bold',
+              fontSize: 16
+            }}
+          >Preferred categories</Text>
+          <View style={{
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            paddingBottom: 20
+          }}>
+            {
+              userInfo.categories.slice().map((s, i) => (
+                <View key={i} style={{
+                  backgroundColor: BASE_COLOR,
+                  borderRadius: 20,
+                  marginHorizontal: 5,
+                  marginVertical: 2
+                }}>
+                  <Text style={{color: 'white', margin: 10}}>{s.description}</Text>
+                </View>
+              ))
+            }
+          </View>
           <View>
             <WalletDisplay
               address={userInfo.address}

@@ -38,7 +38,7 @@ export default RegisterScreen = ({navigation}) => {
       default: {
         let msg;
         let title;
-        if (err.response?.data.errors[0].param == 'email') {
+        if (err.response.data?.errors[0].param == 'email') {
           title = 'Sorry'
           msg = err.response.data.errors[0].msg;
         } else {
