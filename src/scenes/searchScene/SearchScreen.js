@@ -13,12 +13,12 @@ export default SearchScreen = ({navigation}) => {
   const [noResults, setNoResults] = useState(false);
 
   const initialFilters = {
-    subType: SUBCRIPTIONS_TYPES[0],
+    subType: SUBCRIPTIONS_TYPES[3],
     catTypes: [],
   }
   const [filters, setFilters] = useState(initialFilters);
 
-  const [subTypeSelected, setSubTypeSelected] = useState(SUBCRIPTIONS_TYPES[0]);
+  const [subTypeSelected, setSubTypeSelected] = useState(SUBCRIPTIONS_TYPES[3]);
   const [categoriesSelected, setCategoriesSelected] = useState([]);
 
   const compareArrays = (array1, array2) => {
@@ -66,18 +66,31 @@ export default SearchScreen = ({navigation}) => {
   const [result, setResult] = useState(null);
   const [searching, setSearching] = useState(false);
 
+  const filter = (courses) => {
+    let filtered = [];
+    for (let i = 0; i <= SUBCRIPTIONS_TYPES.indexOf(filters.subType); i++) {
+      filtered = filtered.concat(courses.filter(
+        c => c.suscriptionIncluded[c.suscriptionIncluded.length - 1] == SUBCRIPTIONS_TYPES[i]
+      ))
+    }
+
+    return filtered
+  }
+
   const handleSearchCourses = () => {
     setSearching(true);
     searchCourses({
       ...filters,
+      subType: SUBCRIPTIONS_TYPES[0],
       text: searchText,
     })
     .then(r => {
-      if(r.length == 0) {
+      const result = filter(r);
+      if(result.length == 0) {
         setNoResults(true);
       } else {
         setNoResults(false);
-        setResult(r);
+        setResult(result);
       }
       setSearching(false);
     })
@@ -126,15 +139,6 @@ export default SearchScreen = ({navigation}) => {
       ),
     });
   });
-
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     setSearchText('')
-  //     setResult(null)
-  //   });
-
-  //   return unsubscribe;
-  // }, [navigation]);
 
   return(
     <View>

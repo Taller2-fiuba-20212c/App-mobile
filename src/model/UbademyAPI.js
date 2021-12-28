@@ -103,11 +103,6 @@ export const updateCourse = async (course) => {
 }
 
 export const searchCourses = async (search) => {
-  console.log({
-    randomText: search.text,
-    suscription: search.subType,
-    category: search.catTypes.toString(),
-  })
   return fetchFromURL('/courses/searchByText', {
     randomText: search.text,
     suscription: search.subType,
