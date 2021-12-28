@@ -4,7 +4,7 @@ import {
   NormalButton, NormalInput, EmailInput, PasswordInput, HorizontalBoxes, Alert 
 } from './../../components'
 import RegisterStyles from './RegisterStyles'
-import { BASE_COLOR, USER_INFO, ROLES_REGISTER } from './../../consts'
+import { BASE_COLOR, USER_INFO, ROLES_REGISTER, MIN_USER_PASSWORD_LENGTH } from './../../consts'
 import { register, storeData } from './../../model'
 
 export default RegisterScreen = ({navigation}) => {
@@ -38,7 +38,7 @@ export default RegisterScreen = ({navigation}) => {
       default: {
         let msg;
         let title;
-        if (err.response.data.errors[0].param == 'email') {
+        if (err.response?.data.errors[0].param == 'email') {
           title = 'Sorry'
           msg = err.response.data.errors[0].msg;
         } else {
@@ -57,6 +57,15 @@ export default RegisterScreen = ({navigation}) => {
   }
 
   const createNewUser = async () => {
+    if (userInfo.password.length < MIN_USER_PASSWORD_LENGTH) {
+      setAlertInfo({
+        title: 'Sorry!',
+        msg: 'Password is too short, minimun lenght: 6'
+      })
+      setVisible(true)
+      return
+    }
+
     setLoading(true);
     await register(
       userInfo.email, userInfo.password, userInfo.role, 
@@ -70,6 +79,7 @@ export default RegisterScreen = ({navigation}) => {
       });
     })
     .catch(err => {
+      console.log(err.response)
       setLoading(false);
       handleError(err)
     })

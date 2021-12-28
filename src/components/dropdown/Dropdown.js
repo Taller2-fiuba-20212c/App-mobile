@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BASE_COLOR, CATEGORIES_TYPES } from './../../consts'
+import { BASE_COLOR, HEIGHT_SCREEN } from './../../consts'
 import SelectBox from 'react-native-multi-selectbox'
 
 export default Dropdown = (props) => {
@@ -12,7 +12,10 @@ export default Dropdown = (props) => {
         fontWeight: 'bold',
       }}
       multiOptionContainerStyle={{
-        backgroundColor: BASE_COLOR,
+        backgroundColor: BASE_COLOR
+      }}
+      inputFilterContainerStyle={{
+        backgroundColor: BASE_COLOR
       }}
       multiOptionsLabelStyle={{
         fontSize: 16,

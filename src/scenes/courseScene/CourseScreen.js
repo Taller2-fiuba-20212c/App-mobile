@@ -109,15 +109,23 @@ export default CourseScreen = ({route, navigation}) => {
   }
 
   const createExam = () => {
-    // if (course.units.length == 0) {
-    //   setAlertInfo({
-    //     title: NORMAL_ERROR_TITLE, 
-    //     msg: getErrorPermissionMsg('at least 1 unit created', 'add an exam')
-    //   })
+    if (course.units.length == 0) {
+      setAlertInfo({
+        title: NORMAL_ERROR_TITLE, 
+        msg: getErrorPermissionMsg('at least 1 unit created', 'add an exam')
+      })
 
-    //   setVisible(true)
-    //   return
-    // }
+      setVisible(true)
+      return
+    } else if (course.units.every(u => u.exam)){
+      setAlertInfo({
+        title: NORMAL_ERROR_TITLE, 
+        msg: "There's no more units to add an exam"
+      })
+
+      setVisible(true)
+      return
+    }
     navigation.navigate('CreateExamScreen', {
       courseId: course.id,
       creatorId: course.creatorId,
@@ -168,10 +176,7 @@ export default CourseScreen = ({route, navigation}) => {
                   <View style={{ marginRight: 10 }} >
                     <NormalButton title='Add Unit' onPress={() => createUnit()}/>
                   </View>
-                  {
-                    course.units.filter(u => u.exam == null).length != 0 &&
-                    <NormalButton title='Add Exam' onPress={() => createExam()}/> 
-                  }
+                  <NormalButton title='Add Exam' onPress={() => createExam()}/> 
                 </View>
               }
             </View>
@@ -205,7 +210,7 @@ export default CourseScreen = ({route, navigation}) => {
             }
             {
               (userPermission.owner || userPermission.colaborator) &&
-              <View style={{ paddingHorizontal: 20 }}>
+              <View style={{ paddingHorizontal: 20, paddingTop: 10 }}>
                 <NormalButton title='Watch exams' onPress={() => navigation.navigate('ListExamsScreen', { 
                   exams: course.units.filter(u => u.exam != null).map(u => {
                     return {
