@@ -1,10 +1,13 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { View, Text, ActivityIndicator, ScrollView, Clipboard, Alert, ToastAndroid, TouchableOpacity, StyleSheet } from 'react-native'
-import { Avatar, Input } from 'react-native-elements'
+import { 
+  View, Text, ActivityIndicator, ScrollView, Clipboard, 
+  Alert, ToastAndroid, TouchableOpacity, StyleSheet 
+} from 'react-native'
+import { Avatar, Input, Button } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/Entypo';
 import UserStyles from './../style/UserStyles'
 import { getData, capitalize, getAvatarTitle } from './../model'
-import { NormalButton, NormalInput, MultiSelect, EmailInput } from './../components'
+import { NormalButton, NormalInput, EmailInput } from './../components'
 import { BASE_COLOR, USER_INFO } from  './../consts'
 import { useGlobalAuthActionsContext } from '../model/ContextFactory'
 import { removeData } from '../model/Utils'
@@ -176,7 +179,8 @@ export default ProfileScreen = ({navigation, route}) => {
         <View style={UserStyles.container}>
           <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{ 
-            alignItems: 'center'
+            alignItems: 'center',
+            paddingVertical: 20,
           }}>
             <Avatar
               rounded
@@ -255,8 +259,14 @@ export default ProfileScreen = ({navigation, route}) => {
           <View>
             <NormalButton onPress={() => goToModifyUser()} title="Edit Profile"/>
           </View>
-          <View style={{ paddingVertical: 10 }}>
-            <NormalButton onPress={() => handleLogout()} title="Sign out" />
+          <View style={{ paddingVertical: 20 }}>
+            <Button 
+              buttonStyle={{ 
+                backgroundColor: 'red'
+              }}
+              onPress={() => handleLogout()} 
+              title="Sign out" 
+            />
           </View>
           </ScrollView>
         </View>
