@@ -32,6 +32,7 @@ export default EmailInput = (props) => {
   return (
     <Input
       value={email}
+      autoCapitalize='none'
       disabled={props.disabled}
       placeholder='Email'
       onChangeText={newEmail => handleChangeText(newEmail)}

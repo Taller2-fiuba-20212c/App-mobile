@@ -1,86 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, ScrollView, ActivityIndicator } from 'react-native'
-import { NormalButton, NormalInput, Alert } from './../../components'
-import { addExamResolution } from './../../model'
-import { BASE_COLOR, USER_INFO } from './../../consts'
+import React, { useEffect } from 'react';
+import { Text, View, ScrollView } from 'react-native'
 
 export default WatchCorrectionExamScreen = ({navigation, route}) => {
-  const [sending, setSending] = useState(false);
-  const [examResolution, setExamResolution] = useState(route.params.examResolution)
-
-  const [disabled, setDisabled] = useState(true);
-
-  const [alertInfo, setAlertInfo] = useState({
-    title: '',
-    msg: ''
-  })
-  const [visible, setVisible] = useState(false)
-
+  const examResolution = route.params.examResolution
   useEffect(() => {
     navigation.setOptions({
       headerShown: true,
-      title: route.params.title
+      title: route.params.title,
+      description: route.params.description,
+      headerRight: () => (
+        <Text style={{
+          fontSize: 16,
+          fontWeight: 'bold',
+          color: examResolution.state == 'APPROVED'?
+          'green' : 'red'
+        }}
+        >{examResolution.grade}/100</Text>
+      )
     })
   }, [])
-
-  useEffect(() => {
-    setDisabled(
-      examResolution.answers.some(e => e.grade == 0 ? false : !e.grade)
-    )
-  }, [examResolution])
-
-  const putMark = (value, i) => {
-    const answers = examResolution.answers.slice();
-    let state = 'OK';
-    if (value == 0) {
-      state = 'WRONG'
-    }
-    answers[i] = {
-      ...answers[i],
-      grade: parseInt(value),
-      state: state
-    }
-    setExamResolution({
-      ...examResolution,
-      answers: answers,
-    })
-  }
-
-  const handleSendCorrection = () => {
-    let totalGrade = 0;
-    examResolution.answers.forEach(element => {
-      totalGrade += element.grade
-    })
-    if (totalGrade > 100) {
-      setAlertInfo({
-        title: 'Sorry!',
-        msg: 'Maximun total grade is 100'
-      })
-
-      setVisible(true)
-      return
-    }
-    const now = new Date(Date.now());
-    setSending(true);
-    addExamResolution(route.params.cid, route.params.unitName, {
-      examResolution: {
-        ...examResolution,
-        grade: totalGrade,
-        state: totalGrade >= route.params.minGrade ? 'APPROVED' : 'DISAPPROVED',
-        lastModificationDate: now.toISOString()
-      }
-    })
-    .then(r => {
-      setSending(false)
-      navigation.navigate('CourseScreen', {
-        course: r
-      })
-    })
-    .catch(err => {
-      console.error(err.response)
-      setSending(false)
-    })
-  }
 
   return (
     <View style={{ flex: 1, paddingHorizontal: 20 }}>
@@ -90,84 +28,75 @@ export default WatchCorrectionExamScreen = ({navigation, route}) => {
         contentContainerStyle={{ flexGrow: 1 }}
       >
         <View style={{ 
-          flex: 1,
-          justifyContent: 'space-between'
+          flex: 1
         }}>
-          {/* <View style={{ paddingTop: 20 }}>
+          <View style={{ paddingTop: 20 }}>
             <Text style={{
               fontSize: 16,
+              paddingBottom: 20
             }}>{route.params.description}</Text>
+            <View style={{ 
+              flex:1, 
+              flexDirection: 'row',
+              paddingBottom: 20
+            }}>
+              <Text style={{
+                color: 'gray', 
+                fontWeight: 'bold',
+                fontSize: 16
+              }}>Minimun Grade: </Text>
+              <Text style={{
+                paddingLeft: 10, 
+                color: 'black', 
+                fontWeight: 'bold',
+                fontSize: 16
+              }}>{route.params.minimumGrade}</Text>
+            </View>
             {
-              <View style>
+              <View>
                 <Text style={{
-                  paddingTop: 20,
-                  paddingBottom: 20,
                   color: 'gray', 
                   fontWeight: 'bold',
-                  fontSize: 16
+                  fontSize: 16,
+                  paddingBottom: 10
                 }}>Questions</Text>
-                <View>
+                <View style={{ paddingLeft: 10 }}>
                   {
                     examResolution.answers.map((u,i) => (
-                      <NormalInput 
-                        key={i}
-                        label={
-                          <View style={{
-                            flex:1, 
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            flexWrap: 'wrap'
-                          }}>
-                            <Text style={{
-                              color: 'gray', 
-                              fontWeight: 'bold',
-                              fontSize: 16
-                            }}>{(i + 1) + '. ' + u.question.question.question}</Text>
-                            <NormalInput 
-                              containerStyle={{
-                                width: 85,
-                                height: 50
-                              }} 
-                              placeholder="0 - 100"
-                              keyboardType='numeric'
-                              maxLength={3}
-                              onChangeText={(value) => putMark(value, i)} 
-                            />
-                          </View>
-                        }
-                        placeholder='Answer'
-                        disabledInputStyle={{
-                          color: 'black',
-                        }}
-                        value={u.value.answer == '' ? ' ' : u.value.answer}
-                        disabled={true}
-                      />
+                      <View key={i} style={{ paddingBottom: 20 }}>
+                        <View style={{
+                          flex:1, 
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          flexWrap: 'wrap'
+                        }}>
+                          <Text style={{
+                            color: 'gray', 
+                            fontWeight: 'bold',
+                            fontSize: 16,
+                            flex:9,
+                            paddingRight: 10
+                          }}>{(i + 1) + '. ' + u.question.question.question}</Text>
+                          <Text style={{
+                            fontWeight: 'bold',
+                            fontSize: 16,
+                            flex: 3
+                          }}>Points: {u.grade}</Text>
+                        </View>
+                        <View style={{ borderBottomWidth: 1, borderColor: 'gray', padding: 10 }}>
+                          <Text style={{
+                            fontSize: 16
+                          }}>{u.value.answer == '' ? ' ' : u.value.answer}</Text>
+                        </View>
+                      </View>
                     ))
                   }
                 </View>
               </View>
             }
           </View>
-          <View style={{ paddingVertical: 20 }}>
-            {
-              sending ?
-              <ActivityIndicator size="large" color={BASE_COLOR} />
-              :
-              <NormalButton 
-                disabled={disabled}
-                onPress={() => handleSendCorrection()}
-                title="Send correction"
-              />
-            }
-          </View> */}
         </View>
-        <Alert 
-          isVisible={visible}
-          alertInfo={alertInfo}
-          onBackdropPress={() => setVisible(false)}
-          onButtonPress={() => setVisible(false)}
-        />
       </ScrollView>
     </View>
   )

@@ -66,7 +66,7 @@ export default MarkExamScreen = ({navigation, route}) => {
       examResolution: {
         ...examResolution,
         grade: totalGrade,
-        state: totalGrade >= route.params.minGrade ? 'APPROVED' : 'DISAPPROVED',
+        state: totalGrade >= route.params.minimumGrade ? 'APPROVED' : 'DISAPPROVED',
         lastModificationDate: now.toISOString()
       }
     })
@@ -96,53 +96,68 @@ export default MarkExamScreen = ({navigation, route}) => {
           <View style={{ paddingTop: 20 }}>
             <Text style={{
               fontSize: 16,
+              paddingBottom: 20
             }}>{route.params.description}</Text>
+            <View style={{ 
+              flex:1, 
+              flexDirection: 'row',
+              paddingBottom: 20
+            }}>
+              <Text style={{
+                // paddingLeft: 10, 
+                color: 'gray', 
+                fontWeight: 'bold',
+                fontSize: 16
+              }}>Minimun Grade: </Text>
+              <Text style={{
+                paddingLeft: 10, 
+                color: 'black', 
+                fontWeight: 'bold',
+                fontSize: 16
+              }}>{route.params.minimumGrade}</Text>
+            </View>
             {
-              <View style>
+              <View>
                 <Text style={{
-                  paddingTop: 20,
-                  paddingBottom: 20,
                   color: 'gray', 
                   fontWeight: 'bold',
                   fontSize: 16
                 }}>Questions</Text>
-                <View>
+                <View style={{ paddingLeft: 10 }}>
                   {
                     examResolution.answers.map((u,i) => (
-                      <NormalInput 
-                        key={i}
-                        label={
-                          <View style={{
-                            flex:1, 
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            flexWrap: 'wrap'
-                          }}>
-                            <Text style={{
-                              color: 'gray', 
-                              fontWeight: 'bold',
-                              fontSize: 16
-                            }}>{(i + 1) + '. ' + u.question.question.question}</Text>
-                            <NormalInput 
-                              containerStyle={{
-                                width: 85,
-                                height: 50
-                              }} 
-                              placeholder="0 - 100"
-                              keyboardType='numeric'
-                              maxLength={3}
-                              onChangeText={(value) => putMark(value, i)} 
-                            />
-                          </View>
-                        }
-                        placeholder='Answer'
-                        disabledInputStyle={{
-                          color: 'black',
-                        }}
-                        value={u.value.answer == '' ? ' ' : u.value.answer}
-                        disabled={true}
-                      />
+                      <View key={i} style={{ paddingBottom: 20 }}>
+                        <View style={{
+                          flex:1, 
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          flexWrap: 'wrap'
+                        }}>
+                          <Text style={{
+                            color: 'gray', 
+                            fontWeight: 'bold',
+                            fontSize: 16,
+                            flex:10
+                          }}>{(i + 1) + '. ' + u.question.question.question}</Text>
+                          <NormalInput 
+                            containerStyle={{
+                              width: 85,
+                              height: 50,
+                              flex: 3
+                            }} 
+                            placeholder="0 - 100"
+                            keyboardType='numeric'
+                            maxLength={3}
+                            onChangeText={(value) => putMark(value, i)} 
+                          />
+                        </View>
+                        <View style={{ borderBottomWidth: 1, borderColor: 'gray', padding: 10 }}>
+                          <Text style={{
+                            fontSize: 16
+                          }}>{u.value.answer == '' ? ' ' : u.value.answer}</Text>
+                        </View>
+                      </View>
                     ))
                   }
                 </View>

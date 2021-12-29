@@ -116,6 +116,7 @@ export default SearchScreen = ({navigation}) => {
             inputStyle={{
               color: 'black'
             }}
+            autoCapitalize='none'
             returnKeyType='search'
             onSubmitEditing={handleSearchCourses}
             showLoading={true}

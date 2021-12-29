@@ -212,7 +212,7 @@ export default CourseScreen = ({route, navigation}) => {
             {
               (userPermission.owner || userPermission.colaborator) &&
               <View style={{ paddingHorizontal: 20, paddingTop: 10 }}>
-                <NormalButton title='Watch exams' onPress={() => navigation.navigate('ListExamsScreen', { 
+                <NormalButton title='Watch resolved exams' onPress={() => navigation.navigate('ListExamsScreen', { 
                   exams: course.units.filter(u => u.exam != null).map(u => {
                     return {
                       unitName: u.name,

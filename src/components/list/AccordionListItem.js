@@ -30,7 +30,10 @@ export default AccordionListItem = (props) => {
 
   const handlePressWatchCorrection = () => {
     navigation.navigate('WatchCorrectionExamScreen', {
-      examResolution: item.exam.examResolutions.find(e => e.creatorId == uid)
+      examResolution: item.exam.examResolutions.find(e => e.creatorId == uid),
+      title: item.exam.name,
+      description: item.exam.description,
+      minimumGrade: item.exam.minimumGrade
     })
   }
   
