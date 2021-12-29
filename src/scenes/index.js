@@ -13,7 +13,7 @@ export { EditUnitScreen } from './editUnitScene'
 export { AddCollaboratorsScreen } from './addCollaborators'
 export { 
   CreateExamScreen, CreateQuestionScreen, CompleteExamScreen, 
-  MarkExamScreen, ListExamsScreen,
+  MarkExamScreen, ListExamsScreen, WatchCorrectionExamScreen
 } from './exam'
 export { ChatScreen } from './chat'
 export { CourseScreen, ContentCourseScreen, VideoClassScreen, TextClassScreen } from './courseScene';

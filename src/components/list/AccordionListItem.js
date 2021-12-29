@@ -15,23 +15,23 @@ export default AccordionListItem = (props) => {
   const [corrected, setCorrected] = useState(false);
 
   useEffect(() => {
-    setCorrected(item.exam?.examResolutions.some(e => {
-      e.creatorId == uid && e.grade != null
-    }))
+    setCorrected(item.exam?.examResolutions.some(e => e.creatorId == uid && e.grade != null))
     setLoading(false);
-  }, [])
+  }, [props])
 
   const handlePressExam = () => {
-    if (item.exam.examResolutions.some(e => e.creatorId == uid)) {
-      console.log('Resuelto')
-    } else {
-      navigation.navigate('CompleteExamScreen', {
-        exam: item.exam,
-        title: item.exam.name,
-        unitName: item.name,
-        cid: props.cid
-      })
-    }
+    navigation.navigate('CompleteExamScreen', {
+      exam: item.exam,
+      title: item.exam.name,
+      unitName: item.name,
+      cid: props.cid
+    })
+  }
+
+  const handlePressWatchCorrection = () => {
+    navigation.navigate('WatchCorrectionExamScreen', {
+      examResolution: item.exam.examResolutions.find(e => e.creatorId == uid)
+    })
   }
   
   const renderUnit = (item) => {
@@ -72,8 +72,8 @@ export default AccordionListItem = (props) => {
               item.exam?.examResolutions.some(e => e.creatorId == uid) ?
               <NormalButton 
                 disabled={!corrected}
-                title={'See correction'}
-                onPress={() => handlePressExam()} 
+                title={'Watch correction'}
+                onPress={() => handlePressWatchCorrection()} 
               />
               :
               <NormalButton 

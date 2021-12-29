@@ -10,7 +10,8 @@ import {
   UserScreen, EditCourseScreen, CreateCourseScreen, CreateCourseSecondScreen, 
   CreateCourseThirdScreen, ExtraInfoScreen, CreateUnitScreen, EditUnitScreen,
   CreateExamScreen, CreateQuestionScreen, TextClassScreen,
-  CompleteExamScreen, MarkExamScreen, AddCollaboratorsScreen, ListExamsScreen
+  CompleteExamScreen, MarkExamScreen, AddCollaboratorsScreen, ListExamsScreen,
+  WatchCorrectionExamScreen
 } from './src/scenes';
 import AppLoading from 'expo-app-loading';
 import { getData } from './src/model';
@@ -83,6 +84,7 @@ function MyStack() {
     }}>
       <Stack.Screen name="WelcomeScreen" component={WelcomeScreen}/>
       <Stack.Screen name="CreateExamScreen" component={CreateExamScreen}/>
+      <Stack.Screen name="WatchCorrectionExamScreen" component={WatchCorrectionExamScreen}/>
       <Stack.Screen name="MarkExamScreen" component={MarkExamScreen}/>
       <Stack.Screen name="LoginScreen" component={LoginScreen}/>
       <Stack.Screen name="ListExamsScreen" component={ListExamsScreen}/>

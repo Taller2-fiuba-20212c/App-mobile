@@ -9,6 +9,7 @@ import { useGlobalAuthContext } from '../../model/ContextFactory';
 
 export default AddCollaboratorsScreen = ({navigation, route}) => {
   const cid = route.params.cid
+  const collaborators = route.params.collaborators
   const [searchText, setSearchText] = useState('');
   const [noResults, setNoResults] = useState(false);
   const [result, setResult] = useState(null);
@@ -29,11 +30,13 @@ export default AddCollaboratorsScreen = ({navigation, route}) => {
       role: 'COLABORATOR'
     })
     .then(response => {
-      if(response.length == 0) {
+      const results = response.filter(u => {
+        return u.uid !== appAuthContext.user.uid && !collaborators.includes(u.uid)
+      })
+      if(results.length == 0) {
         setNoResults(true);
       } else {
         setNoResults(false);
-        const results = response.filter(u => u.uid !== appAuthContext.user.uid)
         setResult(results)
         setSelected(Array(results.length).fill(false))
       }
@@ -103,7 +106,7 @@ export default AddCollaboratorsScreen = ({navigation, route}) => {
 
     addCollaborators(cid, collaborators)
     .then(r => {
-      navigation.navigate('CouseScreen', {
+      navigation.navigate('CourseScreen', {
         course: r
       })
     })
@@ -126,6 +129,7 @@ export default AddCollaboratorsScreen = ({navigation, route}) => {
         <View style={{ 
           flexDirection: 'row', 
           justifyContent: 'center',
+          paddingTop: 20
         }}>
           <Text style={{
             color: 'gray',

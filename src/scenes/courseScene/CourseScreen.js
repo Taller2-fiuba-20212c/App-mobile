@@ -28,8 +28,8 @@ export default CourseScreen = ({route, navigation}) => {
     setUserPermission({
       ...userPermission, 
       owner: userData.uid == courseData.creatorId,
-      suscripted: courseData.students.includes(userData.uid),
-      // suscripted: true,
+      // suscripted: courseData.students.includes(userData.uid),
+      suscripted: true,
       colaborator: courseData.collaborators.includes(userData.uid)
     });
 
@@ -135,7 +135,8 @@ export default CourseScreen = ({route, navigation}) => {
 
   const handleAddCollaborators = () => {
     navigation.navigate('AddCollaboratorsScreen', {
-      cid: course.id
+      cid: course.id,
+      collaborators: course.collaborators
     })
   }
 
