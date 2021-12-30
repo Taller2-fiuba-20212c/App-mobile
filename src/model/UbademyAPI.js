@@ -131,3 +131,11 @@ export const subscribe = async (uid, subscription) => {
 export const unsubscribe = async (uid) => {
   return postDataToURL(`/users/${uid}/cancelSubscription`, {}, {});
 }
+
+export const subscribeCourse = async (cid, uid) => {
+  return putDataToURL(`/courses/${cid}/addStudents`, {}, [uid]);
+}
+
+export const unsubscribeCourse = async (cid, uid) => {
+  return putDataToURL(`/courses/${cid}/removeStudent`, {studentId: uid}, {});
+}

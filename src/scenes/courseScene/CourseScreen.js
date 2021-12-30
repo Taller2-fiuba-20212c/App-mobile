@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react'
-import { Text, View, ScrollView, ActivityIndicator, BackHandler } from 'react-native'
-import { Image, PricingCard, ListItem, Avatar, Icon, Switch } from 'react-native-elements';
+import { Text, View, ScrollView, ActivityIndicator } from 'react-native'
+import { Button, Image, PricingCard, ListItem, Avatar, Icon, Switch } from 'react-native-elements';
 import IconB from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NormalButton, AccordionListItem, Alert } from '../../components'
 import { BASE_COLOR, WIDTH_SCREEN, MAX_UNITS, USER_INFO, SUBCRIPTIONS_TYPES, DEFAULT_IMG, NORMAL_ERROR_TITLE } from '../../consts'
-import { getAvatarTitle, capitalize, getErrorPermissionMsg, getUser, getData } from '../../model'
+import { getAvatarTitle, capitalize, getErrorPermissionMsg, getUser, getData, subscribeCourse, unsubscribeCourse } from '../../model'
 import CourseStyles from './CourseStyles'
-
+import OfferSubscription from './../principalScene/OfferSubscription'
 const PRICES = [1,2,3,5]
 
 export default CourseScreen = ({route, navigation}) => {
@@ -25,6 +25,9 @@ export default CourseScreen = ({route, navigation}) => {
     colaborator: false,
   });
   const [uid, setUid] = useState('')
+  const [subscribing, setSubscribing] = useState(false)
+  const [isUser, setIsUser] = useState(false)
+  const [userSubscription, setUserSubscription] = useState(null)
 
   const updatePermissions = (userData, courseData) => {
     setUserPermission({
@@ -68,6 +71,8 @@ export default CourseScreen = ({route, navigation}) => {
         if (!r) {
           return
         }
+        setIsUser(true)
+        setUserSubscription(r.subscription)
         updatePermissions(r, route.params.course);
         if (r.uid == route.params.course.creatorId) {
           navigation.setOptions({
@@ -139,6 +144,55 @@ export default CourseScreen = ({route, navigation}) => {
     navigation.navigate('AddCollaboratorsScreen', {
       cid: course.id,
       collaborators: course.collaborators
+    })
+  }
+
+  const [offerVisible, setOfferVisible] = useState(false)
+  const [errorSubVisible, setErrorSubVisible] = useState(false)
+
+  const handlePressSubscribe = () => {
+    if (!isUser) {
+      setAlertInfo({
+        title: 'Sorry!',
+        msg: 'You need an account to subscribe'
+      })
+      setVisible(true)
+      return
+    }
+
+    if (!userSubscription) {
+      setErrorSubVisible(true)
+      return
+    }
+    
+    setSubscribing(true)
+    // console.log({...course, image: null, units: []})
+    subscribeCourse(course.id, uid)
+    .then(r => {
+      setSubscribing(false)
+      setCourse(r)
+      setUserPermission({...userPermission, suscripted: true})
+    })
+    .catch(err => {
+      console.log(err.response)
+      setSubscribing(false)
+    })
+  }
+
+  const [unsubscribing, setUnsubscribing] = useState(false)
+
+  const handlePressUnsubscribe = () => {
+    setUnsubscribing(true)
+    unsubscribeCourse(course.id, uid)
+    .then(r => {
+      console.log(r)
+      setCourse(r)
+      setUserPermission({...userPermission, suscripted: false})
+      setUnsubscribing(false)
+    })
+    .catch(err => {
+      console.log(err.response)
+      setUnsubscribing(false)
     })
   }
 
@@ -367,25 +421,46 @@ export default CourseScreen = ({route, navigation}) => {
             }
             {
               !userPermission.owner &&
-              <PricingCard
-                color={BASE_COLOR}
-                title={course.suscriptionIncluded[course.suscriptionIncluded.length - 1]}
-                price={'$' + PRICES[SUBCRIPTIONS_TYPES.indexOf(course.suscriptionIncluded[course.suscriptionIncluded.length - 1])]}
-                info={['Total access', 'Content & Exams']}
-                button={
-                  <NormalButton 
-                    title="SUBSCRIBE" 
-                    onPress={() => console.log(course)}
-                    icon={
-                      <IconB
-                        name="bookshelf" 
-                        size={22} 
-                        color="white"
-                      />
+              (
+                (userPermission.suscripted && isUser) ?
+                (
+                  <View style={{ padding: 20 }} >
+                  {
+                    unsubscribing ? 
+                    <ActivityIndicator size="large" color={'red'} />
+                    :
+                    <Button 
+                      title="Unsubscribe" 
+                      buttonStyle={{ backgroundColor: 'red' }} 
+                      onPress={() => handlePressUnsubscribe()}
+                    />
                     }
-                  />
-                }
-              />
+                  </View>
+                )
+                :
+                <PricingCard
+                  color={BASE_COLOR}
+                  title={course.suscriptionIncluded[course.suscriptionIncluded.length - 1]}
+                  price={'$' + PRICES[SUBCRIPTIONS_TYPES.indexOf(course.suscriptionIncluded[course.suscriptionIncluded.length - 1])]}
+                  info={['Total access', 'Content & Exams']}
+                  button={
+                    subscribing ?
+                    <ActivityIndicator size="large" color={BASE_COLOR} />
+                    :
+                    <NormalButton 
+                      title="SUBSCRIBE" 
+                      onPress={() => handlePressSubscribe()}
+                      icon={
+                        <IconB
+                          name="bookshelf" 
+                          size={22} 
+                          color="white"
+                        />
+                      }
+                    />
+                  }
+                />
+              )
             }
           </View>
           <Alert 
@@ -393,6 +468,24 @@ export default CourseScreen = ({route, navigation}) => {
             alertInfo={alertInfo}
             onBackdropPress={() => setVisible(false)}
             onButtonPress={() => setVisible(false)}
+          />
+          <Alert 
+            isVisible={errorSubVisible}
+            alertInfo={{
+              title: 'Sorry!',
+              msg: "You can't subscribe to this course, Do you want to buy a subscription?"
+            }}
+            onBackdropPress={() => setErrorSubVisible(false)}
+            onButtonPress={() => {
+              setOfferVisible(true)
+              setErrorSubVisible(false)
+            }}
+          />
+          <OfferSubscription 
+            isVisible={offerVisible}
+            uid={uid}
+            onBackdropPress={() => setOfferVisible(false)}
+            onButtonPress={() => setOfferVisible(false)}
           />
         </ScrollView>
       }
