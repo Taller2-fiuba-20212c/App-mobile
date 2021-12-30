@@ -31,6 +31,7 @@ export default EmailInput = (props) => {
 
   return (
     <Input
+      {...props}
       value={email}
       autoCapitalize='none'
       disabled={props.disabled}

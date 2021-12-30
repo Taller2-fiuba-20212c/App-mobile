@@ -10,6 +10,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "facebookScheme": "fb7356507071041878",
+    "facebookAppId": "7356507071041878",
+    "facebookDisplayName": "ubademy",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
