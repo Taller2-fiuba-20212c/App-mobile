@@ -46,13 +46,20 @@ export default OfferSubscription = (props) => {
     setAskVisible(true)
   }
 
+  const modifyDataSaved = async (r) => {
+    const userInfoSaved = await getData(USER_INFO)
+    const aux = Object.assign({}, userInfoSaved);
+    const newUserInfo = Object.assign(aux, r);
+    await storeData(USER_INFO, JSON.stringify(newUserInfo));
+    return
+  }
+
   const handleSubscribe = () => {
     setAskVisible(false)
     setLoading(true)
     subscribe(props.uid, subscriptionRequested)
     .then(r => {
-      console.log(r)
-      storeData(USER_INFO, JSON.stringify(r))
+      modifyDataSaved(r)
       .then(n => {
         setLoading(false)
         props.onBackdropPress()

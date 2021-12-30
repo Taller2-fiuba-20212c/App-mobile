@@ -3,18 +3,26 @@ import { Text, ActivityIndicator } from 'react-native'
 import { Overlay, Button } from 'react-native-elements'
 import { Alert } from './../../components'
 import { WIDTH_SCREEN, ERROR_COLOR, USER_INFO } from './../../consts'
-import { storeData, unsubscribe } from './../../model'
+import { getData, storeData, unsubscribe } from './../../model'
 
 export default AskUnsubscription = (props) => {
   const [loading, setLoading] = useState(false)
 
   const [errorVisible, setErrorVisible] = useState(false)
 
+  const modifyDataSaved = async (r) => {
+    const userInfoSaved = await getData(USER_INFO)
+    const aux = Object.assign({}, userInfoSaved);
+    const newUserInfo = Object.assign(aux, r);
+    await storeData(USER_INFO, JSON.stringify(newUserInfo));
+    return
+  }
+
   const handleUnsubscription = () => {
     setLoading(true);
     unsubscribe(props.uid)
     .then(r => {
-      storeData(USER_INFO, JSON.stringify(r))
+      modifyDataSaved(r)
       .then(n => {
         setLoading(false)
         props.onBackdropPress()

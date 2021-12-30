@@ -40,7 +40,7 @@ export default PrincipalScreen = ({navigation}) => {
         isUser &&
         <View style={{flexDirection: 'row'}}>
           {
-            !userHasSubscription ?
+            userHasSubscription ?
             <Icon 
               name='remove-shopping-cart'
               size={24}
