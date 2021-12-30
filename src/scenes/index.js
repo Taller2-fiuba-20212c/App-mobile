@@ -16,4 +16,4 @@ export {
   MarkExamScreen, ListExamsScreen, WatchCorrectionExamScreen
 } from './exam'
 export { ChatScreen } from './chat'
-export { CourseScreen, ContentCourseScreen, VideoClassScreen, TextClassScreen } from './courseScene';
+export { CourseScreen, ContentCourseScreen, VideoClassScreen, TextClassScreen, ListStudentsScreen } from './courseScene';

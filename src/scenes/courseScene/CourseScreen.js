@@ -9,6 +9,7 @@ import CourseStyles from './CourseStyles'
 import OfferSubscription from './../principalScene/OfferSubscription'
 
 const PRICES = [1,2,3,5]
+const COLORS = ['#CD7F32', 'silver', 'gold', '#9AC5DB'] 
 
 export default CourseScreen = ({route, navigation}) => {
   const [loading, setLoading] = useState(true)
@@ -160,10 +161,10 @@ export default CourseScreen = ({route, navigation}) => {
       return
     }
 
-    if (!userSubscription) {
-      setErrorSubVisible(true)
-      return
-    }
+    // if (!userSubscription) {
+    //   setErrorSubVisible(true)
+    //   return
+    // }
     
     setSubscribing(true)
     // console.log({...course, image: null, units: []})
@@ -277,6 +278,11 @@ export default CourseScreen = ({route, navigation}) => {
                   }),
                   cid: course.id
                 })} />
+                <View style={{ paddingTop: 10 }}>
+                  <NormalButton title='List students' onPress={() => navigation.navigate('ListStudentsScreen', { 
+                    cid: course.id
+                  })} />
+                </View>
               </View>
             }
             <View style={CourseStyles.text}>
@@ -439,15 +445,18 @@ export default CourseScreen = ({route, navigation}) => {
                 )
                 :
                 <PricingCard
-                  color={BASE_COLOR}
+                  color={COLORS[SUBCRIPTIONS_TYPES.indexOf(course.suscriptionIncluded[course.suscriptionIncluded.length - 1])]}
                   title={course.suscriptionIncluded[course.suscriptionIncluded.length - 1]}
                   price={'$' + PRICES[SUBCRIPTIONS_TYPES.indexOf(course.suscriptionIncluded[course.suscriptionIncluded.length - 1])]}
                   info={['Total access', 'Content & Exams']}
                   button={
                     subscribing ?
-                    <ActivityIndicator size="large" color={BASE_COLOR} />
+                    <ActivityIndicator size="large" color={COLORS[SUBCRIPTIONS_TYPES.indexOf(course.suscriptionIncluded[course.suscriptionIncluded.length - 1])]} />
                     :
-                    <NormalButton 
+                    <Button 
+                      buttonStyle={{
+                        backgroundColor: COLORS[SUBCRIPTIONS_TYPES.indexOf(course.suscriptionIncluded[course.suscriptionIncluded.length - 1])]
+                      }}
                       title="SUBSCRIBE" 
                       onPress={() => handlePressSubscribe()}
                       icon={

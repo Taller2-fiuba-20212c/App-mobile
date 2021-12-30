@@ -23,7 +23,7 @@ export default AddCollaboratorsScreen = ({navigation, route}) => {
     msg: ''
   })
 
-  const handleSearchCourses = () => {
+  const handleSearchCollaborators = () => {
     setSearching(true);
     searchUsers({
       name: searchText,
@@ -70,7 +70,7 @@ export default AddCollaboratorsScreen = ({navigation, route}) => {
             }}
             autoCapitalize='none'
             returnKeyType='search'
-            onSubmitEditing={handleSearchCourses}
+            onSubmitEditing={handleSearchCollaborators}
             showLoading={true}
             round={true}
             lightTheme={true}

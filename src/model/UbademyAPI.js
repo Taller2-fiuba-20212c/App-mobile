@@ -57,6 +57,10 @@ export const getUserCourses = async (uid) => {
   return fetchFromURL('/courses/getUserCourses', {userId: uid});
 }
 
+export const getStudents = async (cid) => {
+  return fetchFromURL('/courses/getStudents', {id: cid});
+}
+
 export const searchUsersLike = async (name) => {
   return fetchFromURL(`/users`, { name });
 }
@@ -141,5 +145,5 @@ export const subscribeCourse = async (cid, uid) => {
 }
 
 export const unsubscribeCourse = async (cid, uid) => {
-  return putDataToURL(`/courses/${cid}/removeStudent`, {studentId: uid}, {});
+  return putDataToURL(`/courses/${cid}/removeStudent`, {}, {studentId: uid});
 }
