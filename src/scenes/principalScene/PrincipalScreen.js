@@ -18,6 +18,7 @@ export default PrincipalScreen = ({navigation}) => {
   const [isProf, setIsProf] = useState(false)
   const [isUser, setIsUser] = useState(false)
   const [visible, setVisible] = useState(false);
+  const [uid, setUid] = useState(null)
 
   const handleSuscriptionOffer = () => {
     setVisible(true)
@@ -70,6 +71,7 @@ export default PrincipalScreen = ({navigation}) => {
       if (user) {
         setIsProf(user.role == 'PROFESSOR');
         setIsUser(true);
+        setUid(user.uid)
       }
     } catch (e) {
       throw e;
@@ -159,6 +161,7 @@ export default PrincipalScreen = ({navigation}) => {
         </View>
         <OfferSubscription 
           isVisible={visible}
+          uid={uid}
           onBackdropPress={() => setVisible(false)}
           onButtonPress={() => setVisible(false)}
         />

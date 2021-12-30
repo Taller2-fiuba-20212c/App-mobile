@@ -121,3 +121,9 @@ export const searchCourses = async (search) => {
 export const createCourse = async (course) => {
   return postDataToURL('/courses', {}, JSON.stringify(course));
 }
+
+export const subscribe = async (uid ,subscription) => {
+  return postDataToURL(`/users/${uid}/subscribe`, {}, {
+    subscription: subscription.toUpperCase()
+  });
+}
