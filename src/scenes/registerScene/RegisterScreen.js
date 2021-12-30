@@ -7,17 +7,17 @@ import RegisterStyles from './RegisterStyles'
 import { BASE_COLOR, USER_INFO, ROLES_REGISTER, MIN_USER_PASSWORD_LENGTH } from './../../consts'
 import { register, storeData } from './../../model'
 
-export default RegisterScreen = ({navigation}) => {
+export default RegisterScreen = ({navigation, route}) => {
   const initialState = {
-    name: '',
-    lastname: '',
-    email: '',
+    name: route.params?.user?.name,
+    lastname: route.params?.user?.lastname,
+    email: route.params?.user?.email,
     role: '',
     password: '',
   }
   const [userInfo, setUserInfo] = useState(initialState);
   const [disableButton, setDisableButton] = useState(true);
-  const [error, setError] = useState(true);
+  const [error, setError] = useState(initialState.email === undefined);
   const [loading, setLoading] = useState(false);
 
   const [visible, setVisible] = useState(false);
@@ -69,7 +69,7 @@ export default RegisterScreen = ({navigation}) => {
     setLoading(true);
     await register(
       userInfo.email, userInfo.password, userInfo.role, 
-      userInfo.name, userInfo.lastname
+      userInfo.name, userInfo.lastname, route.params?.user.uid
     )
     .then(r => {
       setLoading(false);
@@ -116,7 +116,8 @@ export default RegisterScreen = ({navigation}) => {
         <NormalInput 
           onChangeText={(value) => handleChange(value, "name")} 
           placeholder='Name' 
-          iconName='user' 
+          iconName='user'
+          defaultValue={initialState.name}
         />
 			</View>
       <View>
@@ -124,6 +125,7 @@ export default RegisterScreen = ({navigation}) => {
           onChangeText={(value) => handleChange(value, "lastname")} 
           placeholder='Last name' 
           iconName='user' 
+          defaultValue={initialState.lastname}
         />
 			</View>
       <View>
@@ -131,6 +133,8 @@ export default RegisterScreen = ({navigation}) => {
           validate={true} 
           onChangeText={(value) => handleChange(value, "email")} 
           error={(value) => handleErrorEmail(value)}
+          disabled={initialState.email != undefined}
+          defaultValue={initialState.email}
         />
 			</View>
       <View>

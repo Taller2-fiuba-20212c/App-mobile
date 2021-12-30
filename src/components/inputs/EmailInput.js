@@ -31,6 +31,7 @@ export default EmailInput = (props) => {
 
   return (
     <Input
+      {...props}
       value={email}
       disabled={props.disabled}
       placeholder='Email'

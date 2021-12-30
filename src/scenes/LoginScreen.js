@@ -73,6 +73,7 @@ export default LoginScreen = ({navigation}) => {
             title: err.response.data.errors[0].param, 
             msg: err.response.data.errors[0].msg
           });
+          setVisible(true);
           break;
         }
         case 403: {
@@ -80,6 +81,11 @@ export default LoginScreen = ({navigation}) => {
             title: err.response.data.errors[0].param, 
             msg: err.response.data.errors[0].msg
           });
+          setVisible(true);
+          break;
+        }
+        case 422: {
+          navigation.navigate('RegisterScreen', { user: err.response.data.user })
           break;
         }
         default: {
@@ -87,12 +93,11 @@ export default LoginScreen = ({navigation}) => {
             title: 'Something went wrong',
             msg: ''
           });
+          setVisible(true);
           break;
         }
       }
     }
-
-    setVisible(true)
   }
 
   const handleLogin = async () => {
