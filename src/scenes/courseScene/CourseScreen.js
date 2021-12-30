@@ -3,9 +3,11 @@ import { Text, View, ScrollView, ActivityIndicator, BackHandler } from 'react-na
 import { Image, PricingCard, ListItem, Avatar, Icon, Switch } from 'react-native-elements';
 import IconB from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NormalButton, AccordionListItem, Alert } from '../../components'
-import { BASE_COLOR, WIDTH_SCREEN, MAX_UNITS, USER_INFO, DEFAULT_IMG, NORMAL_ERROR_TITLE } from '../../consts'
+import { BASE_COLOR, WIDTH_SCREEN, MAX_UNITS, USER_INFO, SUBCRIPTIONS_TYPES, DEFAULT_IMG, NORMAL_ERROR_TITLE } from '../../consts'
 import { getAvatarTitle, capitalize, getErrorPermissionMsg, getUser, getData } from '../../model'
 import CourseStyles from './CourseStyles'
+
+const PRICES = [1,2,3,5]
 
 export default CourseScreen = ({route, navigation}) => {
   const [loading, setLoading] = useState(true)
@@ -28,8 +30,8 @@ export default CourseScreen = ({route, navigation}) => {
     setUserPermission({
       ...userPermission, 
       owner: userData.uid == courseData.creatorId,
-      // suscripted: courseData.students.includes(userData.uid),
-      suscripted: true,
+      suscripted: courseData.students.includes(userData.uid),
+      // suscripted: true,
       colaborator: courseData.collaborators.includes(userData.uid)
     });
 
@@ -368,6 +370,8 @@ export default CourseScreen = ({route, navigation}) => {
               <PricingCard
                 color={BASE_COLOR}
                 title={course.suscriptionIncluded[course.suscriptionIncluded.length - 1]}
+                price={'$' + PRICES[SUBCRIPTIONS_TYPES.indexOf(course.suscriptionIncluded[course.suscriptionIncluded.length - 1])]}
+                info={['Total access', 'Content & Exams']}
                 button={
                   <NormalButton 
                     title="SUBSCRIBE" 
