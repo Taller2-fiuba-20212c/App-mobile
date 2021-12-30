@@ -86,7 +86,6 @@ export default PrincipalScreen = ({navigation}) => {
 
       const top = await getTop5()
       setTop5(top)
-
       
       const user = await getData(USER_INFO)
       if (user) {
@@ -156,12 +155,27 @@ export default PrincipalScreen = ({navigation}) => {
             (courses == null ? 
             <ActivityIndicator size="large" color={BASE_COLOR} />
             :
-            <Carousel 
-              data={courses.slice(1).slice(-5)} 
-              renderItem={_renderItem}
-              sliderWidth={SLIDER_WIDTH}
-              itemWidth={ITEM_WIDTH}
-            />)
+            (
+              courses.length == 0 ? 
+              <View style={{ 
+                flexDirection: 'row', 
+                justifyContent: 'center',
+                paddingTop: 20
+              }}>
+                <Text style={{
+                  color: 'gray',
+                  fontWeight: 'bold'
+                }}>No courses yet</Text>
+              </View>
+              :
+              <Carousel 
+                data={courses} 
+                renderItem={_renderItem}
+                sliderWidth={SLIDER_WIDTH}
+                itemWidth={ITEM_WIDTH}
+              />
+            )
+            )
           }
           <View style={PrincipalStyles.text}>
             <Text style={PrincipalStyles.section}>Top courses</Text>

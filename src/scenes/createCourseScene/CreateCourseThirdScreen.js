@@ -67,7 +67,6 @@ export default CreateCourseScreen = ({navigation, route}) => {
     createCourse(courseInfo)
     .then(r => {
       setCreating(false);
-      console.log(r);
       navigation.reset({
         index: 1,
         routes: [

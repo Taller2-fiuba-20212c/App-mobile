@@ -180,10 +180,12 @@ export default LoginScreen = ({navigation}) => {
             onPress={() => handleLogin()}
             title="Sign in"
           />
-          <NormalButton 
-            onPress={tryFacebookLogin}
-            title="Enter with Facebook"
-          />
+          <View style={{ paddingTop: 10 }}>
+            <NormalButton 
+              onPress={tryFacebookLogin}
+              title="Enter with Facebook"
+            />
+          </View>
         </View>
       }
 			<View style={{padding: 20}}>
