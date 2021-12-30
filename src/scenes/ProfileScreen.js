@@ -234,7 +234,7 @@ export default ProfileScreen = ({navigation, route}) => {
             paddingBottom: 20
           }}>
             {
-              userInfo.categories.slice().map((s, i) => (
+              userInfo.categories?.slice().map((s, i) => (
                 <View key={i} style={{
                   backgroundColor: BASE_COLOR,
                   borderRadius: 20,

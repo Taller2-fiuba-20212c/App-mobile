@@ -85,7 +85,7 @@ export default LoginScreen = ({navigation}) => {
           break;
         }
         case 422: {
-          navigation.navigate('RegisterScreen', { user: err.response.data.user })
+          navigation.navigate('RegisterScreen', { user: err.response.data.user, expo_token: token })
           break;
         }
         default: {
@@ -115,14 +115,13 @@ export default LoginScreen = ({navigation}) => {
     });
   }
 
-  const logIntoApplication = r => {
-    storeData(USER_INFO, JSON.stringify(r)).then(r => {
-      setAppAuthContext(prevState => ({ ...prevState, user: r }));
-      setLoading(false);
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'PrincipalScreen'}]
-      })
+  const logIntoApplication = async (r) => {
+    await storeData(USER_INFO, JSON.stringify(r));
+    setAppAuthContext(prevState => ({ ...prevState, user: r }));
+    setLoading(false);
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'PrincipalScreen'}]
     })
   }
 
@@ -190,7 +189,7 @@ export default LoginScreen = ({navigation}) => {
         <Text style={{textAlign: 'center'}}>
           <Text 
             style={UserStyles.signInUp} 
-            onPress={() => navigation.navigate('RegisterScreen')}
+            onPress={() => navigation.navigate('RegisterScreen', { expo_token: token })}
           >Sign up </Text>
           |
           <Text 

@@ -20,7 +20,8 @@ export default function ChatsListScreen ({ navigation }) {
           title: 'Chat'
         });
         
-        if (appAuthContext.user.uid) {
+        console.log(appAuthContext);
+        if (appAuthContext.user?.uid) {
             getChats(appAuthContext.user.uid)
             .then(chats => setConversations(chats))
             .catch(e => {

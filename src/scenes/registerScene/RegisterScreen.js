@@ -5,7 +5,7 @@ import {
 } from './../../components'
 import RegisterStyles from './RegisterStyles'
 import { BASE_COLOR, USER_INFO, ROLES_REGISTER, MIN_USER_PASSWORD_LENGTH } from './../../consts'
-import { register, storeData } from './../../model'
+import { login, register, storeData } from './../../model'
 
 export default RegisterScreen = ({navigation, route}) => {
   const initialState = {
@@ -69,14 +69,22 @@ export default RegisterScreen = ({navigation, route}) => {
     setLoading(true);
     await register(
       userInfo.email, userInfo.password, userInfo.role, 
-      userInfo.name, userInfo.lastname, route.params?.user.uid
+      userInfo.name, userInfo.lastname, route.params?.user?.uid
     )
     .then(r => {
-      setLoading(false);
-      storeData(USER_INFO, JSON.stringify(r));
-      navigation.navigate('ExtraInfoScreen', {
-        userInfo: r
-      });
+      login(userInfo.email, userInfo.password, route.params?.expo_token)
+      .then(loggedUser => {
+        setLoading(false);
+        storeData(USER_INFO, JSON.stringify(loggedUser));
+        navigation.navigate('ExtraInfoScreen', {
+          userInfo: loggedUser
+        });
+      })
+      .catch(e => {
+        console.log(e);
+        handleError(e);
+        setLoading(false);
+      })
     })
     .catch(err => {
       console.log(err.response)
