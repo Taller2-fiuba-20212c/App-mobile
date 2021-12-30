@@ -11,8 +11,8 @@ export default CourseScreen = ({route, navigation}) => {
   const [loading, setLoading] = useState(true)
   const [course, setCourse] = useState(route.params.course);
   const [creator, setCreator] = useState(null);
+  const [colaborators, setColaborators] = useState([])
   const [visible, setVisible] = useState(false);
-  const [userRole, setUserRole] = useState('');
   const [alertInfo, setAlertInfo] = useState({
     title: '',
     msg: ''
@@ -22,30 +22,50 @@ export default CourseScreen = ({route, navigation}) => {
     suscripted: false,
     colaborator: false,
   });
+  const [uid, setUid] = useState('')
 
   const updatePermissions = (userData, courseData) => {
     setUserPermission({
       ...userPermission, 
       owner: userData.uid == courseData.creatorId,
-      suscripted: courseData.students.includes(userData.uid),
+      // suscripted: courseData.students.includes(userData.uid),
+      suscripted: true,
       colaborator: courseData.collaborators.includes(userData.uid)
     });
 
-    // Para probrar
-    // setUserPermission({
-    //   ...userPermission, 
-    //   owner: true
-    // });
+    setUid(userData.uid);
+  }
+
+  const buildCollabs = async (collabsId) => {
+    try {
+      let collabsInfo = []
+      for (let c of collabsId) {
+        const collabInfo = await getUser(c)
+        collabsInfo.push(collabInfo);
+      }
+      
+      return collabsInfo
+    } catch (e) {
+      console.error(e)
+      throw e;
+    }
   }
 
   useEffect(() => {
     if (route.params?.course) {
       setCourse(route.params.course);
+      buildCollabs(route.params.course.collaborators).then(r => {
+        setColaborators(r);
+      })
+      .catch(err => console.log(err.response));
+      
       getUser(route.params.course.creatorId).then((r) => {
         setCreator(r);
       }).catch(err => console.log(err.response));
       getData(USER_INFO).then((r) => {
-        setUserRole(r.role)
+        if (!r) {
+          return
+        }
         updatePermissions(r, route.params.course);
         if (r.uid == route.params.course.creatorId) {
           navigation.setOptions({
@@ -89,19 +109,34 @@ export default CourseScreen = ({route, navigation}) => {
   }
 
   const createExam = () => {
-    // if (course.units.length == 0) {
-    //   setAlertInfo({
-    //     title: NORMAL_ERROR_TITLE, 
-    //     msg: getErrorPermissionMsg('at least 1 unit created', 'add an exam')
-    //   })
+    if (course.units.length == 0) {
+      setAlertInfo({
+        title: NORMAL_ERROR_TITLE, 
+        msg: getErrorPermissionMsg('at least 1 unit created', 'add an exam')
+      })
 
-    //   setVisible(true)
-    //   return
-    // }
+      setVisible(true)
+      return
+    } else if (course.units.every(u => u.exam)){
+      setAlertInfo({
+        title: NORMAL_ERROR_TITLE, 
+        msg: "There's no more units to add an exam"
+      })
+
+      setVisible(true)
+      return
+    }
     navigation.navigate('CreateExamScreen', {
       courseId: course.id,
       creatorId: course.creatorId,
-      unitsNames: course.units.map(u => u.name)
+      unitsNames: course.units.filter(u => u.exam == null).map(u => u.name)
+    })
+  }
+
+  const handleAddCollaborators = () => {
+    navigation.navigate('AddCollaboratorsScreen', {
+      cid: course.id,
+      collaborators: course.collaborators
     })
   }
 
@@ -158,6 +193,7 @@ export default CourseScreen = ({route, navigation}) => {
                         key={i} 
                         number={i} 
                         cid = {course.id}
+                        uid = {uid}
                         userPermission={userPermission}
                       />
                     ))
@@ -171,6 +207,20 @@ export default CourseScreen = ({route, navigation}) => {
                   : 
                   null
                 }
+              </View>
+            }
+            {
+              (userPermission.owner || userPermission.colaborator) &&
+              <View style={{ paddingHorizontal: 20, paddingTop: 10 }}>
+                <NormalButton title='Watch exams' onPress={() => navigation.navigate('ListExamsScreen', { 
+                  exams: course.units.filter(u => u.exam != null).map(u => {
+                    return {
+                      unitName: u.name,
+                      exam: u.exam
+                    }
+                  }),
+                  cid: course.id
+                })} />
               </View>
             }
             <View style={CourseStyles.text}>
@@ -194,8 +244,9 @@ export default CourseScreen = ({route, navigation}) => {
                 <Avatar
                   rounded
                   title={getAvatarTitle(creator.name, creator.lastname)}
+                  source={creator.image ? { uri: creator.image } : null}
                   containerStyle={{ 
-                    backgroundColor: BASE_COLOR 
+                    backgroundColor: creator.image ? 'white' : BASE_COLOR 
                   }}
                 />
                 <ListItem.Content>
@@ -204,6 +255,51 @@ export default CourseScreen = ({route, navigation}) => {
                 </ListItem.Content>
                 <ListItem.Chevron/>
               </ListItem>
+            }
+            {
+              userPermission.owner ?
+              <View style={{ paddingHorizontal: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text style={CourseStyles.section}>Collaborators</Text>
+                  <View style={{ flexDirection: 'row' }}>
+                    <NormalButton title='Add Collaborators' onPress={() => handleAddCollaborators()}/>
+                  </View>
+              </View>
+              :
+              course.collaborators.length != 0 &&
+              <View style={{ paddingHorizontal: 20 }}>
+                <Text style={CourseStyles.section}>Collaborators</Text>
+              </View>
+            }
+            {
+              course.collaborators.length == colaborators.length ?
+              colaborators.map((c,j) => (
+                <ListItem 
+                  key={j}
+                  containerStyle={{paddingHorizontal: 20}}
+                  onPress={() => {
+                    uid == c.uid ?
+                    navigation.navigate('ProfileScreen')
+                    :
+                    navigation.navigate('UserScreen', {userInfo: c})
+                  }}
+                >
+                  <Avatar
+                    rounded
+                    title={getAvatarTitle(c.name, c.lastname)}
+                    source={c.image ? { uri: c.image } : null}
+                    containerStyle={{ 
+                      backgroundColor: c.image ? 'white' : BASE_COLOR 
+                    }}
+                  />
+                  <ListItem.Content>
+                    <ListItem.Title>{c.name + ' ' + c.lastname}</ListItem.Title>
+                    <ListItem.Subtitle>{capitalize(c.role)}</ListItem.Subtitle>
+                  </ListItem.Content>
+                  <ListItem.Chevron/>
+                </ListItem>
+              ))
+              :
+              <ActivityIndicator size="large" color={BASE_COLOR} />
             }
             <View style={CourseStyles.text}>
               <Text style={CourseStyles.section}>Category</Text>

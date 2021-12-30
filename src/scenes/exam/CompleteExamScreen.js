@@ -41,10 +41,12 @@ export default CompleteExamScreen = ({navigation, route}) => {
           lastModificationDate: now.toISOString()
         }
       }),
+      description: exam.description,
       creatorId: examResolution.creatorId,
       creationDate: now.toISOString(),
       lastModificationDate: now.toISOString()
     }
+    
     addExamResolution(
       route.params.cid, 
       route.params.unitName,
@@ -53,8 +55,10 @@ export default CompleteExamScreen = ({navigation, route}) => {
       }
     )
     .then(r => {
-      console.log(r);
       setSending(false);
+      navigation.navigate('CourseScreen', {
+        course: r
+      })
     })
     .catch(err => {
       console.error(err.response)
@@ -128,11 +132,6 @@ export default CompleteExamScreen = ({navigation, route}) => {
                               fontWeight: 'bold',
                               fontSize: 16
                             }}>{(i + 1) + '. ' + u.question.question}</Text>
-                            <Text style={{
-                              color: 'gray', 
-                              fontWeight: 'bold',
-                              fontSize: 16
-                            }}>Points: {u.maxGrade}</Text>
                           </View>
                         }
                         placeholder='Answer'

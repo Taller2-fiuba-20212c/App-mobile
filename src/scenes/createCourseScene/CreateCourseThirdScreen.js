@@ -59,7 +59,9 @@ export default CreateCourseScreen = ({navigation, route}) => {
       creationDate: today.toISOString(),
       lastModificationDate: today.toISOString(),
       published: 'false',
-      units: []
+      units: [],
+      collaborators: [],
+      students: []
     }
 
     createCourse(courseInfo)

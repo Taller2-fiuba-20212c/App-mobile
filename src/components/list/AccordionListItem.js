@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import { Text, View } from 'react-native'
+import React, {useState, useEffect} from 'react'
+import { Text, View, ActivityIndicator } from 'react-native'
 import { YoutubeVideo } from './../video'
 import { ListItem, Icon } from 'react-native-elements';
 import { BASE_COLOR, ERROR_COLOR } from '../../consts';
@@ -7,21 +7,31 @@ import { BASE_COLOR, ERROR_COLOR } from '../../consts';
 export default AccordionListItem = (props) => {
   const [expanded, setExpanded] = useState(false);
   const item = props.item;
+  const uid = props.uid;
   const edit = props.edit == null ? false : props.edit;
   const navigation = props.navigation;
   const userPermission = props.userPermission;
+  const [loading, setLoading] = useState(true);
+  const [corrected, setCorrected] = useState(false);
+
+  useEffect(() => {
+    setCorrected(item.exam?.examResolutions.some(e => e.creatorId == uid && e.grade != null))
+    setLoading(false);
+  }, [props])
 
   const handlePressExam = () => {
-    if (userPermission.suscripted) {
-      navigation.navigate('CompleteExamScreen', {
-        exam: item.exam,
-        title: item.exam.name,
-        unitName: item.name,
-        cid: props.cid
-      })
-    } else if (userPermission.colaborator){
+    navigation.navigate('CompleteExamScreen', {
+      exam: item.exam,
+      title: item.exam.name,
+      unitName: item.name,
+      cid: props.cid
+    })
+  }
 
-    }
+  const handlePressWatchCorrection = () => {
+    navigation.navigate('WatchCorrectionExamScreen', {
+      examResolution: item.exam.examResolutions.find(e => e.creatorId == uid)
+    })
   }
   
   const renderUnit = (item) => {
@@ -39,30 +49,39 @@ export default AccordionListItem = (props) => {
             />
           </View>
           :
-          <ListItem 
-            style={{paddingLeft: 20}} 
-            onPress={() => {
-              navigation.navigate('TextClassScreen', {
-                title: item.name,
-                text: item.content.text
-              })
-            }}
-          >
-            <ListItem.Content>
-              <ListItem.Title>Texto</ListItem.Title>
-            </ListItem.Content>
-          </ListItem>
+          <View style={{ paddingHorizontal: 55, paddingBottom: 10}}>
+            <NormalButton 
+              title={'Watch content'}  
+              onPress={() => {
+                navigation.navigate('TextClassScreen', {
+                  title: item.name,
+                  text: item.content.text
+                })
+              }}
+            />
+          </View>
         }
         {
-          item.exam &&
-          <ListItem 
-            disabled={userPermission.owner}
-            onPress={() => handlePressExam()}
-          >
-            <ListItem.Content>
-              <ListItem.Title>Exam</ListItem.Title>
-            </ListItem.Content>
-          </ListItem>
+          item.exam && 
+          userPermission.suscripted &&
+          (loading ?
+          <ActivityIndicator size="large" color={BASE_COLOR} />
+          :
+          <View style={{ paddingHorizontal: 55 }}>
+            {
+              item.exam?.examResolutions.some(e => e.creatorId == uid) ?
+              <NormalButton 
+                disabled={!corrected}
+                title={'Watch correction'}
+                onPress={() => handlePressWatchCorrection()} 
+              />
+              :
+              <NormalButton 
+                title={'Complete exam'}
+                onPress={() => handlePressExam()} 
+              />
+            }
+          </View>)
         }
       </View> 
     )

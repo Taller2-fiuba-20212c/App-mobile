@@ -25,6 +25,13 @@ export const addCategory = async (uid, category) => {
   });
 }
 
+export const deleteCategory = async (uid, category) => {
+  return deleteDataFromURL(`users/${uid}/deleteCategory`, {}, 
+  { 
+    category: category
+  });
+}
+
 export const modifyUser = async (uid, userInfo) => {
   return putDataToURL(`/users/edit/${uid}`, {}, userInfo);
 }
@@ -40,6 +47,10 @@ export const deleteUser = async (email, password, name, lastname) => {
 
 export const getUser = async (userId) => {
   return fetchFromURL(`/users/get/${userId}`);
+}
+
+export const searchUsers = async (params) => {
+  return fetchFromURL(`/users`, params);
 }
 
 export const getCourses = async () => {
@@ -70,6 +81,10 @@ export const addExam = async (cid, unitName, body) => {
   return putDataToURL(`/courses/${cid}/addExam`, {unitName}, body);
 }
 
+export const addCollaborators = async (cid, collabs) => {
+  return putDataToURL(`/courses/${cid}/addCollaborators`, {}, collabs);
+}
+
 export const addExamResolution = async (cid, unitName, body) => {
   return putDataToURL(`/courses/${cid}/addExamResolution`, {unitName}, body);
 }
@@ -92,11 +107,6 @@ export const updateCourse = async (course) => {
 }
 
 export const searchCourses = async (search) => {
-  console.log({
-    randomText: search.text,
-    suscription: search.subType,
-    category: search.catTypes.toString(),
-  })
   return fetchFromURL('/courses/searchByText', {
     randomText: search.text,
     suscription: search.subType,

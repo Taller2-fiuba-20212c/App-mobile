@@ -4,7 +4,7 @@ import { NormalButton, NormalInput, Alert } from './../../components'
 import { addExamResolution } from './../../model'
 import { BASE_COLOR, USER_INFO } from './../../consts'
 
-export default MarkExamScreen = ({navigation, route}) => {
+export default WatchCorrectionExamScreen = ({navigation, route}) => {
   const [sending, setSending] = useState(false);
   const [examResolution, setExamResolution] = useState(route.params.examResolution)
 
@@ -93,7 +93,7 @@ export default MarkExamScreen = ({navigation, route}) => {
           flex: 1,
           justifyContent: 'space-between'
         }}>
-          <View style={{ paddingTop: 20 }}>
+          {/* <View style={{ paddingTop: 20 }}>
             <Text style={{
               fontSize: 16,
             }}>{route.params.description}</Text>
@@ -160,7 +160,7 @@ export default MarkExamScreen = ({navigation, route}) => {
                 title="Send correction"
               />
             }
-          </View>
+          </View> */}
         </View>
         <Alert 
           isVisible={visible}
