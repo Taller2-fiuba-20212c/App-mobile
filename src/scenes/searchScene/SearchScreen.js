@@ -2,12 +2,12 @@ import React, {useLayoutEffect, useState, useEffect} from 'react';
 import { View, Text, Pressable, ScrollView, ActivityIndicator } from 'react-native'
 import { SearchBar, Icon, BottomSheet, Divider, Slider, ListItem } from 'react-native-elements'
 import { CheckBoxList, LongCardCourse } from '../../components'
-import { useFocusEffect } from '@react-navigation/native';
 import { BASE_COLOR, SUBCRIPTIONS_TYPES, CATEGORIES_TYPES, USER_INFO } from '../../consts';
 import SearchStyles from './SearchStyles'
-import { searchCourses, getRecommendations, getData } from './../../model'
+import { getRecommendations, getData } from './../../model'
 
 export default SearchScreen = ({navigation}) => {
+  const [isUser, setIsUser] = useState(false)
   const [searchText, setSearchText] = useState('');
   const [isVisible, setIsVisible] = useState(false);
   const [applyEnable, setApplyEnable] = useState(false);
@@ -76,17 +76,20 @@ export default SearchScreen = ({navigation}) => {
 
       getData(USER_INFO)
       .then(user => {
-        getRecommendations(user.uid, user.country, '')
-        .then(c => {
-          setByCountry(c)
-        })
-        .catch(err => console.log(err.response));
-
-        getRecommendations(user.uid, '', user.categories.map(c => c.description))
-        .then(c => {
-          setByCategories(c)
-        })
-        .catch(err => console.log(err.response));
+        if (user) {
+          setIsUser(true)
+          getRecommendations(user.uid, user.country, '')
+          .then(c => {
+            setByCountry(c)
+          })
+          .catch(err => console.log(err.response));
+  
+          getRecommendations(user.uid, '', user.categories.map(c => c.description))
+          .then(c => {
+            setByCategories(c)
+          })
+          .catch(err => console.log(err.response));
+        }
       })
     });
 
@@ -149,8 +152,9 @@ export default SearchScreen = ({navigation}) => {
   return(
     <View>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View>
-          {
+        {
+          isUser &&
+          <View>
             <View>
               <View style={{
                 paddingVertical: 10,
@@ -192,8 +196,6 @@ export default SearchScreen = ({navigation}) => {
               <ActivityIndicator size="large" color={BASE_COLOR} />
             }
             </View>
-          }
-          {
             <View>
               <View style={{
                 paddingVertical: 10,
@@ -235,8 +237,8 @@ export default SearchScreen = ({navigation}) => {
                 <ActivityIndicator size="large" color={BASE_COLOR} />
               }
             </View>
-          }
-        </View>
+          </View>
+        }
       </ScrollView>
       <BottomSheet 
         onBackButtonPress={() => cancel()}

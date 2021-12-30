@@ -110,6 +110,7 @@ export default LoginScreen = ({navigation}) => {
     })
     .catch(e => {
       setLoading(false)
+      console.log(e.response)
       handleError(e)
     });
   }

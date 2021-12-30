@@ -136,20 +136,24 @@ export default PrincipalScreen = ({navigation}) => {
         :
         <ScrollView showsVerticalScrollIndicator={false} >
         <View style={PrincipalStyles.container}>
-          <View style={PrincipalStyles.YourCoursesContainer}>
-            <Text style={PrincipalStyles.section}>Your courses</Text>
-            {
-              isProf ? 
-              <NormalButton 
-                title="Add course"
-                onPress={() => goToCreateCourse()}
-              />
-              :
-              null
-            }
-          </View>
           {
-            courses == null ? 
+            isUser &&
+            <View style={PrincipalStyles.YourCoursesContainer}>
+              <Text style={PrincipalStyles.section}>Your courses</Text>
+              {
+                isProf ? 
+                <NormalButton 
+                  title="Add course"
+                  onPress={() => goToCreateCourse()}
+                />
+                :
+                null
+              }
+            </View>
+          }
+          {
+            isUser && 
+            (courses == null ? 
             <ActivityIndicator size="large" color={BASE_COLOR} />
             :
             <Carousel 
@@ -157,7 +161,7 @@ export default PrincipalScreen = ({navigation}) => {
               renderItem={_renderItem}
               sliderWidth={SLIDER_WIDTH}
               itemWidth={ITEM_WIDTH}
-            />
+            />)
           }
           <View style={PrincipalStyles.text}>
             <Text style={PrincipalStyles.section}>Top courses</Text>
