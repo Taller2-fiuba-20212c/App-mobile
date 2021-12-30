@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { Text, View, ScrollView, ActivityIndicator } from 'react-native'
+import { Text, View, ScrollView, ActivityIndicator, BackHandler } from 'react-native'
 import { Image, PricingCard, ListItem, Avatar, Icon, Switch } from 'react-native-elements';
 import IconB from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NormalButton, AccordionListItem, Alert } from '../../components'
@@ -301,6 +301,12 @@ export default CourseScreen = ({route, navigation}) => {
               :
               <ActivityIndicator size="large" color={BASE_COLOR} />
             }
+            <View style={CourseStyles.text}>
+              <Text style={CourseStyles.section}>Country</Text>
+            </View>
+            <View style={CourseStyles.text}>
+              <Text style={CourseStyles.description}>{course.country}</Text>
+            </View>
             <View style={CourseStyles.text}>
               <Text style={CourseStyles.section}>Category</Text>
             </View>

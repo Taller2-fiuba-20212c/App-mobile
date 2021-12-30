@@ -2,26 +2,24 @@ import React, {useLayoutEffect, useState, useEffect} from 'react';
 import { View, Text, Pressable, ScrollView, ActivityIndicator } from 'react-native'
 import { SearchBar, Icon, BottomSheet, Divider, Slider, ListItem } from 'react-native-elements'
 import { CheckBoxList, LongCardCourse } from '../../components'
-import { useFocusEffect } from '@react-navigation/native';
-import { BASE_COLOR, SUBCRIPTIONS_TYPES, CATEGORIES_TYPES, USER_INFO } from '../../consts';
+import { BASE_COLOR, SUBCRIPTIONS_TYPES, CATEGORIES_TYPES, WIDTH_SCREEN } from '../../consts';
 import SearchStyles from './SearchStyles'
-import { searchCourses, getRecommendations, getData } from './../../model'
+import { searchCourses } from './../../model'
 
-export default SearchScreen = ({navigation}) => {
-  const [searchText, setSearchText] = useState('');
+export default SearchResultsScreen = ({navigation, route}) => {
+  const [searchText, setSearchText] = useState(route.params.filters.text);
   const [isVisible, setIsVisible] = useState(false);
   const [applyEnable, setApplyEnable] = useState(false);
-  const [byCountry, setByCountry] = useState(null);
-  const [byCategories, setByCategories] = useState(null);
+  const [noResults, setNoResults] = useState(false);
 
   const initialFilters = {
-    subType: SUBCRIPTIONS_TYPES[3],
-    catTypes: [],
+    subType: route.params.filters.subType,
+    catTypes: route.params.filters.catTypes,
   }
   const [filters, setFilters] = useState(initialFilters);
 
-  const [subTypeSelected, setSubTypeSelected] = useState(SUBCRIPTIONS_TYPES[3]);
-  const [categoriesSelected, setCategoriesSelected] = useState([]);
+  const [subTypeSelected, setSubTypeSelected] = useState(route.params.filters.subType);
+  const [categoriesSelected, setCategoriesSelected] = useState(route.params.filters.catTypes);
 
   const compareArrays = (array1, array2) => {
     const array2Sorted = array2.slice().sort();
@@ -65,48 +63,52 @@ export default SearchScreen = ({navigation}) => {
     setIsVisible(true);
   };
 
+  const [result, setResult] = useState(null);
+  const [searching, setSearching] = useState(true);
+
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      setFilters(initialFilters)
-      setSubTypeSelected(SUBCRIPTIONS_TYPES[3])
-      setCategoriesSelected([])
-      setByCountry(null)
-      setByCategories(null)
-      setSearchText('')
+    handleSearchCourses()
+  }, [])
 
-      getData(USER_INFO)
-      .then(user => {
-        getRecommendations(user.uid, user.country, '')
-        .then(c => {
-          setByCountry(c)
-        })
-        .catch(err => console.log(err.response));
+  const filter = (courses) => {
+    let filtered = [];
+    for (let i = 0; i <= SUBCRIPTIONS_TYPES.indexOf(filters.subType); i++) {
+      filtered = filtered.concat(courses.filter(
+        c => c.suscriptionIncluded[c.suscriptionIncluded.length - 1] == SUBCRIPTIONS_TYPES[i]
+      ))
+    }
 
-        getRecommendations(user.uid, '', user.categories.map(c => c.description))
-        .then(c => {
-          setByCategories(c)
-        })
-        .catch(err => console.log(err.response));
-      })
-    });
-
-    return unsubscribe;
-  }, [navigation])
+    return filtered
+  }
 
   const handleSearchCourses = () => {
-    navigation.navigate('SearchResultsScreen', {
-      filters: {
-        ...filters,
-        text: searchText,
-      }
+    setSearching(true);
+    searchCourses({
+      ...filters,
+      subType: SUBCRIPTIONS_TYPES[0],
+      text: searchText,
     })
+    .then(r => {
+      const result = filter(r);
+      if(result.length == 0) {
+        setNoResults(true);
+      } else {
+        setNoResults(false);
+        setResult(result);
+      }
+      setSearching(false);
+    })
+    .catch(err => {
+      console.log(err.response)
+      setSearching(false);
+    });
   }
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: true,
       headerTitle: () => (
-        <View style={SearchStyles.header}>
+        <View style={{ width: WIDTH_SCREEN * 0.65 }}>
           <SearchBar
             containerStyle={{
               backgroundColor: 'white',
@@ -121,7 +123,6 @@ export default SearchScreen = ({navigation}) => {
             inputStyle={{
               color: 'black'
             }}
-            autoCapitalize='none'
             returnKeyType='search'
             onSubmitEditing={handleSearchCourses}
             showLoading={true}
@@ -148,96 +149,39 @@ export default SearchScreen = ({navigation}) => {
 
   return(
     <View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View>
-          {
-            <View>
-              <View style={{
-                paddingVertical: 10,
-                paddingHorizontal: 20
-              }}>
-                <Text style={{
-                  fontWeight: 'bold',
-                  fontSize: 28,
-                }}>Courses near to you</Text>
-              </View>
-            {
-              byCountry ? 
-              (byCountry.length == 0 ?
-              <View style={{ 
-                flexDirection: 'row', 
-                justifyContent: 'center',
-                paddingBottom: 20
-              }}>
-                <Text style={{
-                  color: 'gray',
-                  fontWeight: 'bold'
-                }}>Sorry, there's no courses near to you</Text>
-              </View>
-              :
-              byCountry.slice(0,5).map((l, i) => (
-                <ListItem 
-                  key={i} 
-                  containerStyle={{ 
-                    padding: 0,
-                    paddingVertical: 5
-                  }}
-                >
-                  <ListItem.Content>
-                    <LongCardCourse navigation={navigation} course={l}/>
-                  </ListItem.Content>
-                </ListItem>
-              )))
-              :
-              <ActivityIndicator size="large" color={BASE_COLOR} />
-            }
-            </View>
-          }
-          {
-            <View>
-              <View style={{
-                paddingVertical: 10,
-                paddingHorizontal: 20
-              }}>
-                <Text style={{
-                  fontWeight: 'bold',
-                  fontSize: 28,
-                }}>Courses with your preferences</Text>
-              </View>
-              {
-                byCategories ?
-                (byCategories.length == 0 ?
-                <View style={{ 
-                  flexDirection: 'row', 
-                  justifyContent: 'center',
-                  paddingBottom: 20
-                }}>
-                  <Text style={{
-                    color: 'gray',
-                    fontWeight: 'bold'
-                  }}>Sorry, there's no courses for you</Text>
-                </View>
-                :
-                byCategories.slice(0,5).map((l, i) => (
-                  <ListItem 
-                    key={i} 
-                    containerStyle={{ 
-                      padding: 0,
-                      paddingVertical: 5
-                    }}
-                  >
-                    <ListItem.Content>
-                      <LongCardCourse navigation={navigation} course={l}/>
-                    </ListItem.Content>
-                  </ListItem>
-                )))
-                :
-                <ActivityIndicator size="large" color={BASE_COLOR} />
-              }
-            </View>
-          }
+      {
+        searching ? 
+        <ActivityIndicator size="large" color={BASE_COLOR} />
+        : 
+        noResults ?
+        <View style={{ 
+          flexDirection: 'row', 
+          justifyContent: 'center',
+        }}>
+          <Text style={{
+            color: 'gray',
+            fontWeight: 'bold'
+          }}>No results found</Text>
         </View>
-      </ScrollView>
+        :
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {
+            result && result.map((l, i) => (
+              <ListItem 
+                key={i} 
+                containerStyle={{ 
+                  padding: 0,
+                  paddingVertical: 5
+                }}
+              >
+                <ListItem.Content>
+                  <LongCardCourse navigation={navigation} course={l} />
+                </ListItem.Content>
+              </ListItem>
+            ))
+          }
+        </ScrollView>
+      }
       <BottomSheet 
         onBackButtonPress={() => cancel()}
         modalProps={{

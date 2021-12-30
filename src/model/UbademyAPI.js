@@ -89,6 +89,14 @@ export const getTop5 = async () => {
   return fetchFromURL('/courses/getTop5Courses')
 }
 
+export const getRecommendations = async (uid, country, categories) => {
+  return fetchFromURL('/courses/searchCoursesByCountryAndCategory', {
+    userId: uid,
+    country: country,
+    category: categories.toString(),
+  })
+}
+
 export const getCourse = async (id) => {
   return fetchFromURL('/courses/get', {id: id});
 }

@@ -1,10 +1,10 @@
-import React, {useLayoutEffect, useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { Text, View, ScrollView, ActivityIndicator } from 'react-native'
 import { ListItem, Icon } from 'react-native-elements'
 import Carousel from 'react-native-snap-carousel';
 import { ShortCardCourse, LongCardCourse } from './../../components'
 import { BASE_COLOR, WIDTH_SCREEN, USER_INFO } from './../../consts';
-import { getCourses, getData, getTop5 } from './../../model'
+import { getCourses, getData, getTop5, getRecommendations } from './../../model'
 import PrincipalStyles from './PrincipalStyles'
 import OfferSubscription from './OfferSubscription'
 
@@ -16,17 +16,19 @@ export default PrincipalScreen = ({navigation}) => {
   const [top5, setTop5] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isProf, setIsProf] = useState(false)
+  const [isUser, setIsUser] = useState(false)
   const [visible, setVisible] = useState(false);
 
   const handleSuscriptionOffer = () => {
     setVisible(true)
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     navigation.setOptions({
       headerShown: true,
       title: 'Ubademy',
       headerRight: () => (
+        isUser &&
         <View style={{flexDirection: 'row'}}>
           <Icon 
             name='shopping-cart'
@@ -51,25 +53,34 @@ export default PrincipalScreen = ({navigation}) => {
         </View>
       ),
     });
-  });
+  }, [isUser]);
+
+  const getCoursesNeeded = async () => {
+    try {
+      setTop5(null);
+      setCourses(null);
+
+      const top = await getTop5()
+      setTop5(top)
+
+      const c = await getCourses()
+      setCourses(c)
+
+      const user = await getData(USER_INFO)
+      if (user) {
+        setIsProf(user.role == 'PROFESSOR');
+        setIsUser(true);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      setCourses(null);
-      setTop5(null);
-      getTop5()
-      .then((r) => {
-        setTop5(r)
-      })
-      .catch((e) => console.log(e.response))
-  
-      getCourses().then((r) => setCourses(r));
-      getData(USER_INFO).then((user) => {
-        if (user) {
-          setIsProf(user.role == 'PROFESSOR');
-        }
-        setLoading(false);
-      })
+      getCoursesNeeded()
+      .then((r) => setLoading(false))
+      .catch(e => console.log(e.response))
     });
 
     return unsubscribe;
