@@ -7,6 +7,7 @@ import { BASE_COLOR, WIDTH_SCREEN, MAX_UNITS, USER_INFO, SUBCRIPTIONS_TYPES, DEF
 import { getAvatarTitle, capitalize, getErrorPermissionMsg, getUser, getData, subscribeCourse, unsubscribeCourse } from '../../model'
 import CourseStyles from './CourseStyles'
 import OfferSubscription from './../principalScene/OfferSubscription'
+
 const PRICES = [1,2,3,5]
 
 export default CourseScreen = ({route, navigation}) => {
@@ -34,7 +35,6 @@ export default CourseScreen = ({route, navigation}) => {
       ...userPermission, 
       owner: userData.uid == courseData.creatorId,
       suscripted: courseData.students.includes(userData.uid),
-      // suscripted: true,
       colaborator: courseData.collaborators.includes(userData.uid)
     });
 

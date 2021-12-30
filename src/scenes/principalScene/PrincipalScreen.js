@@ -4,7 +4,7 @@ import { ListItem, Icon } from 'react-native-elements'
 import Carousel from 'react-native-snap-carousel';
 import { ShortCardCourse, LongCardCourse } from './../../components'
 import { BASE_COLOR, WIDTH_SCREEN, USER_INFO } from './../../consts';
-import { getCourses, getData, storeData, getTop5, unsubscribe } from './../../model'
+import { getUserCourses, getData, getTop5 } from './../../model'
 import PrincipalStyles from './PrincipalStyles'
 import OfferSubscription from './OfferSubscription'
 import AskUnsubscription from './AskUnsubscription'
@@ -87,11 +87,11 @@ export default PrincipalScreen = ({navigation}) => {
       const top = await getTop5()
       setTop5(top)
 
-      const c = await getCourses()
-      setCourses(c)
-
+      
       const user = await getData(USER_INFO)
       if (user) {
+        const c = await getUserCourses(user.uid)
+        setCourses(c)
         setIsProf(user.role == 'PROFESSOR');
         setIsUser(true);
         setUid(user.uid)

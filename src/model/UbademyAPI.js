@@ -53,6 +53,10 @@ export const getCourses = async () => {
   return fetchFromURL('/courses');
 }
 
+export const getUserCourses = async (uid) => {
+  return fetchFromURL('/courses/getUserCourses', {userId: uid});
+}
+
 export const searchUsersLike = async (name) => {
   return fetchFromURL(`/users`, { name });
 }
