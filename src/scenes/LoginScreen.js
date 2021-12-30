@@ -111,6 +111,7 @@ export default LoginScreen = ({navigation}) => {
     .then(logIntoApplication)
     .catch(e => {
       setLoading(false)
+      console.log(e.response)
       handleError(e)
     });
   }
@@ -160,11 +161,14 @@ export default LoginScreen = ({navigation}) => {
 				<Text style={UserStyles.title}>Login</Text>
 			</View>
 			<View>
-        <EmailInput onChangeText={(value) => handleChangeText(value, "email")} />
+        <EmailInput 
+          onChangeText={(value) => handleChangeText(value, "email")} 
+        />
 			</View>
 			<View>
         <PasswordInput 
           onChangeText={(value) => handleChangeText(value, "password")} 
+          autoCapitalize='none'
         />
 			</View>
       {

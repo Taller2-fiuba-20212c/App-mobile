@@ -120,6 +120,8 @@ export default CompleteExamScreen = ({navigation, route}) => {
                     exam.examQuestions.map((u,i) => (
                       <NormalInput 
                         key={i}
+                        numberOfLines={3}
+                        multiline={true}
                         label={
                           <View style={{
                             flex:1, 

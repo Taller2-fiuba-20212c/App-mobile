@@ -1,12 +1,13 @@
-import React, {useLayoutEffect, useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { Text, View, ScrollView, ActivityIndicator } from 'react-native'
 import { ListItem, Icon } from 'react-native-elements'
 import Carousel from 'react-native-snap-carousel';
 import { ShortCardCourse, LongCardCourse } from './../../components'
 import { BASE_COLOR, WIDTH_SCREEN, USER_INFO } from './../../consts';
-import { getCourses, getData, getTop5 } from './../../model'
+import { getUserCourses, getData, getTop5 } from './../../model'
 import PrincipalStyles from './PrincipalStyles'
 import OfferSubscription from './OfferSubscription'
+import AskUnsubscription from './AskUnsubscription'
 
 const SLIDER_WIDTH = WIDTH_SCREEN;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
@@ -16,28 +17,53 @@ export default PrincipalScreen = ({navigation}) => {
   const [top5, setTop5] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isProf, setIsProf] = useState(false)
+  const [isUser, setIsUser] = useState(false)
   const [visible, setVisible] = useState(false);
+  const [uid, setUid] = useState(null)
+  const [userHasSubscription, setUserHasSubscription] = useState(false)
+
+  const [askVisible, setAskVisible] = useState(false)
 
   const handleSuscriptionOffer = () => {
     setVisible(true)
   }
 
-  useLayoutEffect(() => {
+  const handleUnsubscription = () => {
+    setAskVisible(true)
+  }
+
+  useEffect(() => {
     navigation.setOptions({
       headerShown: true,
       title: 'Ubademy',
       headerRight: () => (
+        isUser &&
         <View style={{flexDirection: 'row'}}>
-          <Icon 
-            name='shopping-cart'
-            size={24}
-            type='FontAwesome'
-            color={BASE_COLOR}
-            containerStyle={{
-              paddingRight: 20
-            }}
-            onPress={() => handleSuscriptionOffer()}
-          />
+          {
+            userHasSubscription ?
+            <Icon 
+              name='remove-shopping-cart'
+              size={24}
+              type='MaterialIcons'
+              color={BASE_COLOR}
+              containerStyle={{
+                paddingRight: 20
+              }}
+              onPress={() => handleUnsubscription()}
+            />
+            :
+            <Icon 
+              name='shopping-cart'
+              size={24}
+              type='FontAwesome'
+              color={BASE_COLOR}
+              containerStyle={{
+                paddingRight: 20
+              }}
+              onPress={() => handleSuscriptionOffer()}
+            />
+            
+          }
           <Icon 
             name='chatbubble-ellipses'
             size={24}
@@ -51,25 +77,36 @@ export default PrincipalScreen = ({navigation}) => {
         </View>
       ),
     });
-  });
+  }, [isUser, userHasSubscription]);
+
+  const getCoursesNeeded = async () => {
+    try {
+      setTop5(null);
+      setCourses(null);
+
+      const top = await getTop5()
+      setTop5(top)
+
+      
+      const user = await getData(USER_INFO)
+      if (user) {
+        const c = await getUserCourses(user.uid)
+        setCourses(c)
+        setIsProf(user.role == 'PROFESSOR');
+        setIsUser(true);
+        setUid(user.uid)
+        setUserHasSubscription(user.subscription != undefined)
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      setCourses(null);
-      setTop5(null);
-      getTop5()
-      .then((r) => {
-        setTop5(r)
-      })
-      .catch((e) => console.log(e.response))
-  
-      getCourses().then((r) => setCourses(r));
-      getData(USER_INFO).then((user) => {
-        if (user) {
-          setIsProf(user.role == 'PROFESSOR');
-        }
-        setLoading(false);
-      })
+      getCoursesNeeded()
+      .then((r) => setLoading(false))
+      .catch(e => console.log(e.response))
     });
 
     return unsubscribe;
@@ -99,20 +136,24 @@ export default PrincipalScreen = ({navigation}) => {
         :
         <ScrollView showsVerticalScrollIndicator={false} >
         <View style={PrincipalStyles.container}>
-          <View style={PrincipalStyles.YourCoursesContainer}>
-            <Text style={PrincipalStyles.section}>Your courses</Text>
-            {
-              isProf ? 
-              <NormalButton 
-                title="Add course"
-                onPress={() => goToCreateCourse()}
-              />
-              :
-              null
-            }
-          </View>
           {
-            courses == null ? 
+            isUser &&
+            <View style={PrincipalStyles.YourCoursesContainer}>
+              <Text style={PrincipalStyles.section}>Your courses</Text>
+              {
+                isProf ? 
+                <NormalButton 
+                  title="Add course"
+                  onPress={() => goToCreateCourse()}
+                />
+                :
+                null
+              }
+            </View>
+          }
+          {
+            isUser && 
+            (courses == null ? 
             <ActivityIndicator size="large" color={BASE_COLOR} />
             :
             <Carousel 
@@ -120,7 +161,7 @@ export default PrincipalScreen = ({navigation}) => {
               renderItem={_renderItem}
               sliderWidth={SLIDER_WIDTH}
               itemWidth={ITEM_WIDTH}
-            />
+            />)
           }
           <View style={PrincipalStyles.text}>
             <Text style={PrincipalStyles.section}>Top courses</Text>
@@ -148,8 +189,15 @@ export default PrincipalScreen = ({navigation}) => {
         </View>
         <OfferSubscription 
           isVisible={visible}
+          uid={uid}
           onBackdropPress={() => setVisible(false)}
           onButtonPress={() => setVisible(false)}
+        />
+        <AskUnsubscription
+          isVisible={askVisible}
+          uid={uid}
+          onBackdropPress={() => setAskVisible(false)}
+          onButtonPress={() => setAskVisible(false)}
         />
         </ScrollView>
       }

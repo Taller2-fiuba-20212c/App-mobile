@@ -58,6 +58,14 @@ export const getCourses = async () => {
   return fetchFromURL('/courses');
 }
 
+export const getUserCourses = async (uid) => {
+  return fetchFromURL('/courses/getUserCourses', {userId: uid});
+}
+
+export const getStudents = async (cid) => {
+  return fetchFromURL('/courses/getStudents', {id: cid});
+}
+
 export const searchUsersLike = async (name) => {
   return fetchFromURL(`/users`, { name });
 }
@@ -94,6 +102,14 @@ export const getTop5 = async () => {
   return fetchFromURL('/courses/getTop5Courses')
 }
 
+export const getRecommendations = async (uid, country, categories) => {
+  return fetchFromURL('/courses/searchCoursesByCountryAndCategory', {
+    userId: uid,
+    country: country,
+    category: categories.toString(),
+  })
+}
+
 export const getCourse = async (id) => {
   return fetchFromURL('/courses/get', {id: id});
 }
@@ -117,4 +133,22 @@ export const searchCourses = async (search) => {
 
 export const createCourse = async (course) => {
   return postDataToURL('/courses', {}, JSON.stringify(course));
+}
+
+export const subscribe = async (uid, subscription) => {
+  return postDataToURL(`/users/${uid}/subscribe`, {}, {
+    subscription: subscription.toUpperCase()
+  });
+}
+
+export const unsubscribe = async (uid) => {
+  return postDataToURL(`/users/${uid}/cancelSubscription`, {}, {});
+}
+
+export const subscribeCourse = async (cid, uid) => {
+  return putDataToURL(`/courses/${cid}/addStudents`, {}, [uid]);
+}
+
+export const unsubscribeCourse = async (cid, uid) => {
+  return putDataToURL(`/courses/${cid}/removeStudent`, {}, {studentId: uid});
 }

@@ -38,6 +38,7 @@ export default PasswordInput = (props) => {
       placeholder={
         props.confirm ? 'Confirm password' : 'Password'
       }
+      autoCapitalize='none'
       secureTextEntry={visibility} 
       iconName='lock' 
       rightIcon={props.hideVisibility ? null : eyeIcon}

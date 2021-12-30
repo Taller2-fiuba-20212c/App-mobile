@@ -52,6 +52,10 @@ export default ListExamsScreen = ({navigation, route}) => {
     findCreators(creatorsId)
     .then(r => setCreators(r))
     .catch(e => console.log(e.response))
+
+    return () => {
+      setCreators(new Map())
+    }
   }, [])
 
   const handleFilter = (name) => {
@@ -93,6 +97,7 @@ export default ListExamsScreen = ({navigation, route}) => {
           inputStyle={{
             color: 'black'
           }}
+          autoCapitalize='none'
           returnKeyType='search'
           showLoading={true}
           round={true}
@@ -132,6 +137,7 @@ export default ListExamsScreen = ({navigation, route}) => {
             examResolution: e.examResolution,
             title: e.name,
             description: e.description,
+            minimumGrade: e.minGrade,
             owner: creators.get(e.creatorId),
             cid: route.params.cid,
             unitName: e.unitName
