@@ -4,13 +4,18 @@ export const login = async (email, password, expo_token) => {
   return postDataToURL(`/auth/login`, {}, { email: email, password: password, expo_token });
 }
 
-export const register = async (email, password, role, name, lastname) => {
+export const socialLogin = async (token, method) => {
+  return postDataToURL(`/auth/social`, {}, { token, method });
+}
+
+export const register = async (email, password, role, name, lastname, uid = undefined) => {
   return postDataToURL(`/users/create`, {}, { 
     email: email, 
     password: password,
     name: name, 
     role: role,
     lastname: lastname,
+    uid: uid
   });
 }
 
