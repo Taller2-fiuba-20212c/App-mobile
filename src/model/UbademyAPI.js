@@ -122,8 +122,12 @@ export const createCourse = async (course) => {
   return postDataToURL('/courses', {}, JSON.stringify(course));
 }
 
-export const subscribe = async (uid ,subscription) => {
+export const subscribe = async (uid, subscription) => {
   return postDataToURL(`/users/${uid}/subscribe`, {}, {
     subscription: subscription.toUpperCase()
   });
+}
+
+export const unsubscribe = async (uid) => {
+  return postDataToURL(`/users/${uid}/cancelSubscription`, {}, {});
 }

@@ -4,9 +4,10 @@ import { ListItem, Icon } from 'react-native-elements'
 import Carousel from 'react-native-snap-carousel';
 import { ShortCardCourse, LongCardCourse } from './../../components'
 import { BASE_COLOR, WIDTH_SCREEN, USER_INFO } from './../../consts';
-import { getCourses, getData, getTop5, getRecommendations } from './../../model'
+import { getCourses, getData, storeData, getTop5, unsubscribe } from './../../model'
 import PrincipalStyles from './PrincipalStyles'
 import OfferSubscription from './OfferSubscription'
+import AskUnsubscription from './AskUnsubscription'
 
 const SLIDER_WIDTH = WIDTH_SCREEN;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
@@ -19,9 +20,16 @@ export default PrincipalScreen = ({navigation}) => {
   const [isUser, setIsUser] = useState(false)
   const [visible, setVisible] = useState(false);
   const [uid, setUid] = useState(null)
+  const [userHasSubscription, setUserHasSubscription] = useState(false)
+
+  const [askVisible, setAskVisible] = useState(false)
 
   const handleSuscriptionOffer = () => {
     setVisible(true)
+  }
+
+  const handleUnsubscription = () => {
+    setAskVisible(true)
   }
 
   useEffect(() => {
@@ -31,16 +39,31 @@ export default PrincipalScreen = ({navigation}) => {
       headerRight: () => (
         isUser &&
         <View style={{flexDirection: 'row'}}>
-          <Icon 
-            name='shopping-cart'
-            size={24}
-            type='FontAwesome'
-            color={BASE_COLOR}
-            containerStyle={{
-              paddingRight: 20
-            }}
-            onPress={() => handleSuscriptionOffer()}
-          />
+          {
+            !userHasSubscription ?
+            <Icon 
+              name='remove-shopping-cart'
+              size={24}
+              type='MaterialIcons'
+              color={BASE_COLOR}
+              containerStyle={{
+                paddingRight: 20
+              }}
+              onPress={() => handleUnsubscription()}
+            />
+            :
+            <Icon 
+              name='shopping-cart'
+              size={24}
+              type='FontAwesome'
+              color={BASE_COLOR}
+              containerStyle={{
+                paddingRight: 20
+              }}
+              onPress={() => handleSuscriptionOffer()}
+            />
+            
+          }
           <Icon 
             name='chatbubble-ellipses'
             size={24}
@@ -54,7 +77,7 @@ export default PrincipalScreen = ({navigation}) => {
         </View>
       ),
     });
-  }, [isUser]);
+  }, [isUser, userHasSubscription]);
 
   const getCoursesNeeded = async () => {
     try {
@@ -72,6 +95,7 @@ export default PrincipalScreen = ({navigation}) => {
         setIsProf(user.role == 'PROFESSOR');
         setIsUser(true);
         setUid(user.uid)
+        setUserHasSubscription(user.subscription != undefined)
       }
     } catch (e) {
       throw e;
@@ -164,6 +188,12 @@ export default PrincipalScreen = ({navigation}) => {
           uid={uid}
           onBackdropPress={() => setVisible(false)}
           onButtonPress={() => setVisible(false)}
+        />
+        <AskUnsubscription
+          isVisible={askVisible}
+          uid={uid}
+          onBackdropPress={() => setAskVisible(false)}
+          onButtonPress={() => setAskVisible(false)}
         />
         </ScrollView>
       }
