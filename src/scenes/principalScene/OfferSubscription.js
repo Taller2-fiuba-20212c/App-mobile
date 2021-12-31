@@ -3,7 +3,7 @@ import { ActivityIndicator } from 'react-native'
 import { BASE_COLOR, SUBCRIPTIONS_TYPES, WIDTH_SCREEN } from '../../consts'
 import { Alert } from './../../components'
 import { Overlay, Button, PricingCard } from 'react-native-elements'
-import { subscribe, storeData } from '../../model'
+import { subscribe, storeData, getData } from '../../model'
 import { USER_INFO } from '../../consts'
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 
