@@ -91,7 +91,7 @@ export default EditCourseScreen = ({route, navigation}) => {
       })
     })
     .catch(err => {
-      console.error(err.response.data)
+      console.log(err.response.data)
       setSaving(false)
     })
   }

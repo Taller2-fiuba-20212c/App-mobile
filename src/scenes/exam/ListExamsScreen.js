@@ -36,7 +36,7 @@ export default ListExamsScreen = ({navigation, route}) => {
       
       return creatorsInfo
     } catch (e) {
-      console.error(e)
+      console.log(e)
       throw e;
     }
   }

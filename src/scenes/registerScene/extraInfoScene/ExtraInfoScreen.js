@@ -62,7 +62,7 @@ export default ExtraInfoScreen = ({ navigation, route }) => {
 
       return
     } catch (e) {
-      console.error(e)
+      console.log(e)
       throw e;
     }
   }

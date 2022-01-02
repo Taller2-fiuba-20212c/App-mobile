@@ -135,7 +135,7 @@ export default ModifyUserScreen = ({navigation}) => {
       })
     })
     .catch((err) => {
-      console.error(err.response)
+      console.log(err.response)
       handleError(err)
       setLoading(false)
     });

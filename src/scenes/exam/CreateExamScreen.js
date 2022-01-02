@@ -97,7 +97,7 @@ export default CreateExamScreen = ({navigation, route}) => {
       })
     })
     .catch(err => {
-      console.error(err.response)
+      console.log(err.response)
       setCreating(false)
     })
   }

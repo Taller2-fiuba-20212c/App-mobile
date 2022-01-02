@@ -32,7 +32,7 @@ export default WelcomeScreen = ({navigation}) => {
         <AppLoading
           startAsync={loged}
           onFinish={() => handleStart()}
-          onError={(e) => console.error(e)}
+          onError={(e) => console.log(e)}
         />
       </View>
     </View>

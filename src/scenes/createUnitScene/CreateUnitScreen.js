@@ -70,7 +70,7 @@ export default CreateUnitScreen = ({route, navigation}) => {
           navigation.navigate('CourseScreen', {
             course: r
           })
-        }).catch((err) => console.error(err.response));
+        }).catch((err) => console.log(err.response));
       }
       return
     }
@@ -90,7 +90,7 @@ export default CreateUnitScreen = ({route, navigation}) => {
       navigation.navigate('CourseScreen', {
         course: r
       })
-    }).catch((err) => console.error(err.response));
+    }).catch((err) => console.log(err.response));
   }
 
   return (

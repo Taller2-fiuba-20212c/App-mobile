@@ -52,7 +52,7 @@ export default CourseScreen = ({route, navigation}) => {
       
       return collabsInfo
     } catch (e) {
-      console.error(e)
+      console.log(e)
       throw e;
     }
   }

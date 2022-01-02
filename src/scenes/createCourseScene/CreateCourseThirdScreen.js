@@ -82,7 +82,7 @@ export default CreateCourseScreen = ({navigation, route}) => {
       })
     })
     .catch(e => {
-      console.error(e.response)
+      console.log(e.response)
       setCreating(false);
     })
   }
