@@ -38,13 +38,17 @@ export default RegisterScreen = ({navigation, route}) => {
       default: {
         let msg;
         let title;
-        if (err.response.data?.errors[0].param == 'email') {
-          title = 'Sorry'
-          msg = err.response.data.errors[0].msg;
-        } else {
-          title = 'Something went wrong';
-          msg = '';
+        if (!err.response.data.errors) {
+          setAlertInfo({
+            title: 'Something went wrong',
+            msg: ''
+          });
+
+          break;
         }
+        title = 'Sorry'
+        msg = err.response.data.errors[0].msg;
+
         setAlertInfo({
           title: title,
           msg: msg
@@ -56,7 +60,24 @@ export default RegisterScreen = ({navigation, route}) => {
     setVisible(true)
   }
 
-  const createNewUser = async () => {
+  const fetchCreateUser = async () => {
+    try {
+      await register(
+        userInfo.email, userInfo.password, userInfo.role, 
+        userInfo.name, userInfo.lastname, route.params?.user?.uid
+      )
+      
+      let loggedUser = await login(userInfo.email, userInfo.password, route.params?.expo_token)
+  
+      await storeData(USER_INFO, JSON.stringify(loggedUser));
+  
+      return loggedUser
+    } catch (e) {
+      throw e
+    }
+  }
+
+  const createNewUser = () => {
     if (userInfo.password.length < MIN_USER_PASSWORD_LENGTH) {
       setAlertInfo({
         title: 'Sorry!',
@@ -67,29 +88,15 @@ export default RegisterScreen = ({navigation, route}) => {
     }
 
     setLoading(true);
-    await register(
-      userInfo.email, userInfo.password, userInfo.role, 
-      userInfo.name, userInfo.lastname, route.params?.user?.uid
-    )
-    .then(r => {
-      login(userInfo.email, userInfo.password, route.params?.expo_token)
-      .then(loggedUser => {
-        setLoading(false);
-        storeData(USER_INFO, JSON.stringify(loggedUser));
-        navigation.navigate('ExtraInfoScreen', {
-          userInfo: loggedUser
-        });
-      })
-      .catch(e => {
-        console.log(e);
-        handleError(e);
-        setLoading(false);
-      })
-    })
-    .catch(err => {
-      console.log(err.response)
+
+    fetchCreateUser()
+    .then(r => navigation.navigate('ExtraInfoScreen', {
+      userInfo: loggedUser
+    }))
+    .catch(e => {
+      console.log(e.response);
+      handleError(e);
       setLoading(false);
-      handleError(err)
     })
   } 
 
