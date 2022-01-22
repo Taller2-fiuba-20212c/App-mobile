@@ -17,7 +17,10 @@ export default function ChatsListScreen ({ navigation }) {
     useEffect(() => {
         navigation.setOptions({
           headerShown: true,
-          title: 'Chat'
+          title: 'Chat',
+          headerStyle: {
+            backgroundColor: BASE_COLOR,
+          },
         });
         
         console.log(appAuthContext);
