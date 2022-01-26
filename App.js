@@ -67,7 +67,7 @@ function TabScreen() {
       <Tab.Screen name="Home" component={PrincipalScreen} />
       <Tab.Screen name="Search" component={SearchScreen} />
       <Tab.Screen name="User" component={ProfileScreen} />
-      <Tab.Screen name="ChatsStack" component={ChatStack} />
+      {/* <Tab.Screen name="ChatsStack" component={ChatStack} /> */}
     </Tab.Navigator>
    );
 }
@@ -103,6 +103,7 @@ function MyStack() {
       <Stack.Screen name="CreateCourseThirdScreen" component={CreateCourseThirdScreen}/>
       <Stack.Screen name="RegisterScreen" component={RegisterScreen}/>
       <Stack.Screen name="PrincipalScreen" component={TabScreen} />
+      <Tab.Screen name="ChatsStack" component={ChatStack} />
       <Stack.Screen name="UserScreen" component={UserScreen}/>
       <Stack.Screen name="CourseScreen" 
         component={CourseScreen}

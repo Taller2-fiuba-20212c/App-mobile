@@ -16,16 +16,9 @@ export default function ChatScreen ({ navigation, route }) {
         navigation.setOptions({
           headerShown: true,
           title: `${route.params.user.name} ${route.params.user.lastname}`,
-          headerLeft: () => (
-            <Icon 
-              name='arrowleft'
-              size={24}
-              type='antdesign'
-              onPress={() => navigation.goBack()}
-              color={BASE_COLOR}
-              containerStyle={{ paddingLeft: 20 }}
-            />
-          ),
+          headerStyle: {
+            backgroundColor: BASE_COLOR,
+          },
         });
 
         notificationListener.current = Notifications.addNotificationReceivedListener(notification => {

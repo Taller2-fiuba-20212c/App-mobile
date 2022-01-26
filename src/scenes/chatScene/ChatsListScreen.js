@@ -68,6 +68,18 @@ export default function ChatsListScreen ({ navigation }) {
                 {conversations === undefined ?
                     <ActivityIndicator size="large" color={BASE_COLOR} />
                 :
+                    conversations.length == 0 ?
+                    <View style={{ 
+                      flexDirection: 'row', 
+                      justifyContent: 'center',
+                      paddingVertical: 20
+                    }}>
+                      <Text style={{
+                        color: 'gray',
+                        fontWeight: 'bold'
+                      }}>No conversations yet</Text>
+                    </View>
+                    :
                     conversations.map(c => 
                         <ListItem key={`chat-${c.user.uid}`} bottomDivider onPress={() => openChat(c.user)}>
                             <Avatar title={c.user.name} source={{ uri: c.user.image == null ? "https://es.fxmag.com/images/users/default.png" : c.user.image }} />
