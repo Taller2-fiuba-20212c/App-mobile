@@ -1,5 +1,5 @@
 # Ubademy
-An coureses app-mobile.
+An courses app-mobile.
 
 ## User manual
 [User manual.pdf](https://github.com/Taller2-fiuba-20212c/App-mobile/files/8007359/Manual.de.Usuario.Mobile.pdf)
